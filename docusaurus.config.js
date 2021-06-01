@@ -15,7 +15,7 @@ module.exports = {
       title: 'NEAR SDK docs',
       logo: {
         alt: 'NEAR logo',
-        src: 'img/logo.svg',
+        src: 'img/near_logo.svg',
       },
       items: [
         {
