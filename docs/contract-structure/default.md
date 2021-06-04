@@ -2,7 +2,7 @@
 sidebar_position: 5
 ---
 
-# Default vs non-default
+# Default vs Non-Default
 
 TODO
 

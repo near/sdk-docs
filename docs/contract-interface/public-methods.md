@@ -2,6 +2,6 @@
 sidebar_position: 1
 ---
 
-# Public method types
+# Public Method Types
 
 TODO
