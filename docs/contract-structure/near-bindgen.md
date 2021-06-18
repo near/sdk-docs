@@ -36,6 +36,8 @@ In this example, the `Counter` struct represents the smart contract state and an
 - Any `pub` functions will be callable externally from any account/contract.
 - Functions that take `&self` or `self` will be read-only and do not write the updated state to storage
 - Functions that take `&mut self` allow for mutating state, and state will always be written back at the end of the function call
+- Exposed functions can omit reading and writing to state if `self` is not included in the function params
+  - This can be useful for some static functionality or returning data embedded in the contract code
 - If the function has a return value, it will be serialized and attached as a result through `env::value_return`
 
 <!-- TODO include link to near_bindgen docs, when they aren't empty -->
