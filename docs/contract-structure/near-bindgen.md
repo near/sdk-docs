@@ -34,8 +34,10 @@ In this example, the `Counter` struct represents the smart contract state and an
 
 `#[near_bindgen]` also annotates the `impl` for `Counter` and this will generate any necessary boilerplate to expose the functions. The core interactions that are important to keep in mind:
 - Any `pub` functions will be callable externally from any account/contract.
-- Functions that take `&self` or `self` will be read-only and do not write the updated state to storage
-- Functions that take `&mut self` allow for mutating state, and state will always be written back at the end of the function call
+  - For more information, see [public methods](../contract-interface/public-methods.md)
+- `self` can be used in multiple ways to control the [mutability of the contract](../contract-interface/contract-mutability.md):
+  - Functions that take `&self` or `self` will be read-only and do not write the updated state to storage
+  - Functions that take `&mut self` allow for mutating state, and state will always be written back at the end of the function call
 - Exposed functions can omit reading and writing to state if `self` is not included in the function params
   - This can be useful for some static functionality or returning data embedded in the contract code
 - If the function has a return value, it will be serialized and attached as a result through `env::value_return`
@@ -69,9 +71,10 @@ pub struct Counter {
 
 ## Payable Methods
 
-We can allow methods to accept token transfer together with the function call. This is done so that contracts can define a fee in tokens that needs to be payed when they are used. By the default the methods are not payable and they will panic if someone will attempt to transfer tokens to them during the invocation. This is done for safety reason, in case someone accidentally transfers tokens during the function call.
+Methods can be annotated with `#[payable]` to allow tokens to be transferred with the method invocation. For more information, see [payable methods](../contract-interface/payable-methods.md).
 
 To declare a function as payable, use the `#[payable]` annotation as follows:
+
 ```rust
 #[payable]
 pub fn my_method(&mut self) {
@@ -79,11 +82,11 @@ pub fn my_method(&mut self) {
 }
 ```
 
-And this will allow the `my_method` function to be called and transfer balance to the contract.
-
 ## Private Methods
 
-Usually, when a contract has to have a callback for a remote cross-contract call, this callback method should only be called by the contract itself. It's to avoid someone else calling it and messing the state. Pretty common pattern is to have an assert that validates that the direct caller (predecessor account ID) matches to the contract's account (current account ID). Macro `#[private]` simplifies it, by making it a single line macro instead and improves readability.
+Some methods need to be exposed to allow the contract to call a method on itself through a promise, but want to disallow any other contract to call it. For this, use the `#[private]` annotation to panic when this method is called externally. See [private methods](../contract-interface/payable-methods.md) for more information.
+
+This annotation can be applied to any method through the following:
 
 ```rust
 #[private]
@@ -91,16 +94,3 @@ pub fn my_method(&mut self) {
 ...
 }
 ```
-
-Which is equivalent to:
-
-```rust
-pub fn my_method(&mut self ) {
-    if env::current_account_id() != env::predecessor_account_id() {
-        near_sdk::env::panic("Method method is private".as_bytes());
-    }
-...
-}
-```
-
-Now with this annotation, only the account of the contract itself can call this method, either directly or through a promise.
