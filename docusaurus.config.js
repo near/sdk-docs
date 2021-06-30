@@ -22,13 +22,6 @@ module.exports = {
         srcDark: 'img/near_logo_white.svg',
       },
       items: [
-        // {
-        //   type: 'doc',
-        //   docId: 'intro',
-        //   position: 'left',
-        //   label: 'Rust SDK',
-        // },
-        // { to: '/blog', label: 'Blog', position: 'left' },
         {
           href: 'https://docs.rs/near-sdk/',
           label: 'docs.rs',
@@ -49,15 +42,6 @@ module.exports = {
     footer: {
       style: 'dark',
       links: [
-        // {
-        //   title: 'Docs',
-        //   items: [
-        //     {
-        //       label: 'Tutorial',
-        //       to: '/docs/intro',
-        //     },
-        //   ],
-        // },
         {
           title: 'Community',
           items: [
@@ -78,10 +62,6 @@ module.exports = {
         {
           title: 'More',
           items: [
-            // {
-            //   label: 'Blog',
-            //   to: '/blog',
-            // },
             {
               label: 'SDK GitHub',
               href: 'https://github.com/near/sdk-docs',
@@ -102,12 +82,6 @@ module.exports = {
             'https://github.com/near/sdk-docs/edit/main/',
           routeBasePath: '/',
         },
-        // blog: {
-        //   showReadingTime: true,
-        //   // Please change this to your repo.
-        //   editUrl:
-        //     'https://github.com/near/sdk-docs/edit/master/blog/',
-        // },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
         },
