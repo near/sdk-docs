@@ -1,33 +1,40 @@
 /** @type {import('@docusaurus/types').DocusaurusConfig} */
 module.exports = {
   title: 'NEAR SDK docs',
-  tagline: 'NEAR Rust SDK documentation',
-  // TODO update site
-  url: 'https://your-docusaurus-test-site.com',
+  tagline: 'Write smart contracts to run on the NEAR blockchain!',
+  // TODO update to custom domain in future
+  url: 'https://sdk-g4yv.onrender.com/',
   baseUrl: '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
   organizationName: 'NEAR',
-  projectName: 'sdk-docs', // Usually your repo name.
+  projectName: 'sdk-docs',
   themeConfig: {
+    colorMode: {
+      defaultMode: 'dark',
+    },
     navbar: {
-      title: 'NEAR SDK docs',
+      title: '',
       logo: {
         alt: 'NEAR logo',
         src: 'img/near_logo.svg',
+        srcDark: 'img/near_logo_white.svg',
       },
       items: [
         {
-          type: 'doc',
-          docId: 'intro',
-          position: 'left',
-          label: 'Rust SDK',
+          href: 'https://docs.rs/near-sdk/',
+          label: 'docs.rs',
+          position: 'right',
         },
-        { to: '/blog', label: 'Blog', position: 'left' },
+        {
+          href: 'https://github.com/near/near-sdk-rs',
+          label: 'Rust SDK GitHub',
+          position: 'right',
+        },
         {
           href: 'https://github.com/near/sdk-docs',
-          label: 'GitHub',
+          label: 'Docs GitHub',
           position: 'right',
         },
       ],
@@ -35,15 +42,6 @@ module.exports = {
     footer: {
       style: 'dark',
       links: [
-        {
-          title: 'Docs',
-          items: [
-            {
-              label: 'Tutorial',
-              to: '/docs/intro',
-            },
-          ],
-        },
         {
           title: 'Community',
           items: [
@@ -65,17 +63,13 @@ module.exports = {
           title: 'More',
           items: [
             {
-              label: 'Blog',
-              to: '/blog',
-            },
-            {
-              label: 'GitHub',
+              label: 'SDK GitHub',
               href: 'https://github.com/near/sdk-docs',
             },
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
+      copyright: `${new Date().getFullYear()} NEAR Protocol | All rights reserved | hello@near.org`,
     },
   },
   presets: [
@@ -84,15 +78,9 @@ module.exports = {
       {
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
-          // Please change this to your repo.
           editUrl:
-            'https://github.com/near/sdk-docs/edit/master/',
-        },
-        blog: {
-          showReadingTime: true,
-          // Please change this to your repo.
-          editUrl:
-            'https://github.com/near/sdk-docs/edit/master/blog/',
+            'https://github.com/near/sdk-docs/edit/main/',
+          routeBasePath: '/',
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
