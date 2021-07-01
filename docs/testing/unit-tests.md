@@ -27,7 +27,7 @@ mod tests {
     fn my_test() {
 	let context = get_context(false);
         testing_env!(context);
-	// ... Write test here
+	    // ... Write test here
     }
 }
 ```
@@ -39,3 +39,5 @@ The `testing_env!` macro will initialize the blockchain interface with the `VMCo
 > Note: This `testing_env!` and `VMContext` is only used for testing outside of `wasm` environments. When running the built contract on a network in a `wasm` environment, the context from the blockchain will be used through host functions on the runtime.
 
 To test read-only function calls, set `is_view` to `true` on the `VMContext`. This will test to verify that function calls which just read state do not try to modify state through unit tests. In the above example, `true` should be passed into the `get_context` call, which initializes the context as read-only.
+
+You will want to use `testing_env!` each time you need to update this context such as mocking the `predecessor_accound_id` to simulate the functions being called by or only allowing view operations as mentioned above. Each time this is done, a new mocked blockchain will be initialized, while keeping the existing state.
