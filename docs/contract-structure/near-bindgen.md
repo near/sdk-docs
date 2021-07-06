@@ -53,9 +53,9 @@ By default, the `Default::default()` implementation of a contract will be used t
 impl Counter {
     #[init]
     pub fn new(value: u64) -> Self {
-	log!("Custom counter initialization!");
+        log!("Custom counter initialization!");
         Self { value }
-  }
+    }
 }
 ```
 
