@@ -12,7 +12,7 @@ The collections within `near-sdk` are designed to split the data into chunks and
 
 It is important to keep in mind that when using `std::collections`, that each time state is loaded, all entries in the data structure will be read eagerly from storage and deserialized. This will come at a large cost for any non-trivial amount of data, so to minimize the amount of gas used the SDK collections should be used in most cases.
 
-The most up to date collections and their documentation can be found [in the rust docs](https://docs.rs/near-sdk/3.1.0/near_sdk/collections/index.html).
+The most up to date collections and their documentation can be found [in the rust docs](https://docs.rs/near-sdk/latest/near_sdk/collections/index.html).
 <!-- TODO include/update link for store module to replace collections mod when docs updated -->
 
 The following data structures that exist in the SDK are as follows:
