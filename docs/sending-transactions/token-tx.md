@@ -6,7 +6,7 @@ sidebar_position: 1
 
 Transactions can be sent asynchronously from a contract through a [`Promise`](https://docs.rs/near-sdk/latest/near_sdk/struct.Promise.html). These promises will schedule execution and either execute in parallel or be awaited before resuming the method execution. The most simple transaction to send from a contract is a token transfer.
 
-Sending a simple transfer is as simple as the following:
+Transferring NEAR tokens (Ⓝ) to another account is as simple as the following:
 
 ```rust
 let amount: u128 = 80;
