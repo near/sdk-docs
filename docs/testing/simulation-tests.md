@@ -34,6 +34,20 @@ Unlike unit tests (which often live in the `src/lib.rs` file of the contract), s
       └── main.rs     ⟵ simulation test file
 ```
 
+The `Cargo.toml` file will need to have two items to run simulation tests.
+
+1. The library target's `crate-type` must include `rlib`. See the Rust docs for more information about the <a href="https://doc.rust-lang.org/cargo/reference/cargo-targets.html#library" target="_blank">manifest's library target</a>. See the example below:
+
+```toml reference
+https://github.com/near-examples/rust-counter/blob/8fdffcd780c3dff8d84aa54c774dfbca66ad8289/contract/Cargo.toml#L7-L8
+```
+
+2. Under the <a href="https://doc.rust-lang.org/cargo/reference/specifying-dependencies.html#development-dependencies" target="_blank">development dependencies</a>, adding the <a href="https://crates.io/crates/near-sdk-sim" target="_blank">simulation test crate</a>.
+
+```toml reference
+https://github.com/near-examples/rust-counter/blob/8fdffcd780c3dff8d84aa54c774dfbca66ad8289/contract/Cargo.toml#L13-L14
+```
+
 The `main.rs` file above will contain the simulation tests. These will be run alongside the other tests using the typical test command:
 
     cargo test -- --nocapture
