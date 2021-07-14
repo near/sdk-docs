@@ -10,7 +10,13 @@ module.exports = {
   favicon: 'img/favicon.ico',
   organizationName: 'NEAR',
   projectName: 'sdk-docs',
+  themes: [
+    '@saucelabs/theme-github-codeblock'
+  ],
   themeConfig: {
+    prism: {
+      additionalLanguages: ['rust'],
+    },
     colorMode: {
       defaultMode: 'dark',
     },
