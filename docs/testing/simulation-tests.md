@@ -4,7 +4,7 @@ sidebar_position: 2
 
 # Simulation Tests
 
-**Note**: simulation tests are being deprecated in favor of [the Sandbox](sandbox.md). Until the Sandbox is ready, simulation tests are still a useful approach to the types of testing described on this page. Please note, however, that there will not be ongoing development for it.  
+**Note**: simulation tests are being deprecated in favor of [the Sandbox](https://docs.near.org/docs/develop/contracts/sandbox). Until the Sandbox is ready, simulation tests are still a useful approach to the types of testing described on this page. Please note, however, that there will not be ongoing development for it.  
 
 ## Unit tests vs. simulation tests
 
