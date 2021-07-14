@@ -79,7 +79,7 @@ Please visit the <a href="https://docs.rs/near-sdk-sim/latest/near_sdk_sim" targ
 ## Use contract in simulation test
 
 :::info
-**Quirk**: behind the scenes, simulation tests will create an import object using Pascal casing. The format is **StructnameContract**. A number of smart contracts call their primary struct (the one decorated with [`#[near_bindgen]`](/contract-structure/near-bindgen)) `Contract`. Hence the Pascal case object becomes ContractContract.
+**Quirk**: behind the scenes, simulation tests will create an import object using Pascal casing. The format is **StructnameContract**. A number of smart contracts call their primary struct (the one decorated with [#[near_bindgen]](/contract-structure/near-bindgen)) `Contract`. Hence the Pascal case object becomes ContractContract.
 :::
 
 Contracts like this will often assign a different name as shown below:
