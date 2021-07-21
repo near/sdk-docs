@@ -6,7 +6,7 @@ title: "Upgrading Contracts: Production App Basics"
 
 # Production App Basics
 
-When deploying new code to production contracts, you obviously can't destroy old account state, as you do [during rapid prototyping](./prototyping). So how to you prevent the dreaded error?
+When deploying new code to production contracts, you obviously can't destroy old account state, as you do [during rapid prototyping](./prototyping.md). So how to you prevent the dreaded error?
 
     Cannot deserialize the contract state.
 
@@ -14,7 +14,7 @@ You can use a couple different approaches, depending on the complexity of your c
 
 ## Migration method
 
-For cases like [the change to the `rust-status-message` contract](https://github.com/near-examples/rust-status-message/commit/a39e1fc55ee018b631e3304ba6f0884b7558873e) that we looked at [previously](./prototyping), a simple migration method is all you need.
+For cases like [the change to the `rust-status-message` contract](https://github.com/near-examples/rust-status-message/commit/a39e1fc55ee018b631e3304ba6f0884b7558873e) that we looked at [previously](./prototyping.md), a simple migration method is all you need.
 
 As a reminder, the goal was to change this:
 
@@ -30,10 +30,10 @@ https://github.com/near-examples/rust-status-message/blob/a39e1fc55ee018b631e330
 
 This change seems _almost_ backwards-compatible:
 
-* it renames a field while keeping the [persistent collection](../contract-structure/collections) prefix, `r`, the same
+* it renames a field while keeping the [persistent collection](../contract-structure/collections.md) prefix, `r`, the same
 * it adds a new field
 
-In fact, if the contract state was serialized to a self-describing data format such as JSON, it _might_ be backwards-compatible _[TODO: fact check]_, and you could upgrade your contract without encountering any errors. But [Borsh](../contract-interface/serialization-interface) needs a little help figuring out how to match the old state to the new contract structure. How to help it?
+In fact, if the contract state was serialized to a self-describing data format such as JSON, it _might_ be backwards-compatible _[TODO: fact check]_, and you could upgrade your contract without encountering any errors. But [Borsh](../contract-interface/serialization-interface.md) needs a little help figuring out how to match the old state to the new contract structure. How to help it?
 
 First, keep the old `struct` around for at least one deploy:
 

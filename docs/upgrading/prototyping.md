@@ -10,13 +10,13 @@ When you change the interface of a contract and re-deploy it, you may see this e
 
     Cannot deserialize the contract state.
 
-This happens more when using [Borsh](../contract-interface/serialization-interface) than JSON serialization. Why? With JSON, your [semver](https://semver.org/) mental model applies: if you make a change that wouldn't result in a major-version upgrade, such as adding a new key to an existing data structure, then your contract upgrade usually works just fine. But with Borsh, even such safe-seeming changes result in a different serialization for the entire contract, so the NEAR runtime can't figure out how fetch the contract's state based on the current contract code.
+This happens more when using [Borsh](../contract-interface/serialization-interface.md) than JSON serialization. Why? With JSON, your [semver](https://semver.org/) mental model applies: if you make a change that wouldn't result in a major-version upgrade, such as adding a new key to an existing data structure, then your contract upgrade usually works just fine. But with Borsh, even such safe-seeming changes result in a different serialization for the entire contract, so the NEAR runtime can't figure out how fetch the contract's state based on the current contract code.
 
 How can you avoid such errors?
 
 When you're still in the Research & Development phase, building a prototype and deploying it locally or on [testnet](https://docs.near.org/docs/concepts/networks), you can just delete all previous contract state when you make a breaking change. See below for a couple ways to do this.
 
-When you're ready to deploy a more stable contract, there are a couple [production strategies](./production-basics) that will help you update contract state without deleting it all. And once your contract graduates from "trusted mode" (when maintainers control a [Full Access key](https://docs.near.org/docs/concepts/account#access-keys)) to community-governed mode (no more Full Access keys), you'll need to know how to upgrade your contract code itself [via a DAO vote](./via-dao-vote).
+When you're ready to deploy a more stable contract, there are a couple [production strategies](./production-basics.md) that will help you update contract state without deleting it all. And once your contract graduates from "trusted mode" (when maintainers control a [Full Access key](https://docs.near.org/docs/concepts/account#access-keys)) to community-governed mode (no more Full Access keys), you'll need to know how to upgrade your contract code itself [via a DAO vote](./via-dao-vote.md).
 
 
 ## Rapid Prototyping: Delete Everything All The Time
