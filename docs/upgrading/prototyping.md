@@ -16,7 +16,7 @@ How can you avoid such errors?
 
 When you're still in the Research & Development phase, building a prototype and deploying it locally or on [testnet](https://docs.near.org/docs/concepts/networks), you can just delete all previous contract state when you make a breaking change. See below for a couple ways to do this.
 
-For production contracts, the first thing to know is to [use Enums](./using-enums). This is the strategy you'll need when continuing development on a production contract that is in "trusted mode" (that is, when the contract still has a [Full Access key](https://docs.near.org/docs/concepts/account#access-keys) controlled by maintainers). And even if you remove all Full Access keys and upgrade the contract via a [DAO vote](./daos), you'll still need this "use Enums" strategy as a starting point.
+When you're ready to deploy a more stable contract, there are a couple [production strategies](./production-basics) that will help you update contract state without deleting it all. And once your contract graduates from "trusted mode" (when maintainers control a [Full Access key](https://docs.near.org/docs/concepts/account#access-keys)) to community-governed mode (no more Full Access keys), you'll need to know how to upgrade your contract code itself [via a DAO vote](./via-dao-vote).
 
 
 ## Rapid Prototyping: Delete Everything All The Time

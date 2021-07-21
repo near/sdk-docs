@@ -47,7 +47,9 @@ And add a `migrate` method to the main struct:
 https://github.com/near-examples/rust-status-message/blob/7f6afcc5ce414271fdf9bc750f666c062a6d697e/src/lib.rs#L48-L56
 ```
 
-Here's the full diff between the starting contract and the update + migration:
+:::note Need a refresher?
+<details>
+<summary>Click here to see the full diff between the starting contract and the update + migration.</summary>
 
 ```diff
 +#[derive(BorshDeserialize, BorshSerialize)]
@@ -108,8 +110,10 @@ Here's the full diff between the starting contract and the update + migration:
      }
  }
 ```
+</details>
+:::
 
-When you deploy your change, call the `migrate` method too:
+When you deploy your change, call the `migrate` method:
 
     near deploy \
       --wasmFile res/status_message.wasm \
