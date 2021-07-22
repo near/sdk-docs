@@ -10,7 +10,9 @@ When you change the interface of a contract and re-deploy it, you may see this e
 
     Cannot deserialize the contract state.
 
-This happens more when using [Borsh](../contract-interface/serialization-interface.md) than JSON serialization. Why? With JSON, your [semver](https://semver.org/) mental model applies: if you make a change that wouldn't result in a major-version upgrade, such as adding a new key to an existing data structure, then your contract upgrade usually works just fine. But with Borsh, even such safe-seeming changes result in a different serialization for the entire contract, so the NEAR runtime can't figure out how fetch the contract's state based on the current contract code.
+Why does this happen?
+
+When your contract is executed, the NEAR Runtime reads the serialized state from disk and attempts to load it using current contract code. When your code changes but the serialized state stays the same, it can't figure out how to do this.
 
 How can you avoid such errors?
 

@@ -28,12 +28,7 @@ into this:
 https://github.com/near-examples/rust-status-message/blob/a39e1fc55ee018b631e3304ba6f0884b7558873e/src/lib.rs#L9-L21
 ```
 
-This change seems _almost_ backwards-compatible:
-
-* it renames a field while keeping the [persistent collection](../contract-structure/collections.md) prefix, `r`, the same
-* it adds a new field
-
-In fact, if the contract state was serialized to a self-describing data format such as JSON, it _might_ be backwards-compatible _[TODO: fact check]_, and you could upgrade your contract without encountering any errors. But [Borsh](../contract-interface/serialization-interface.md) needs a little help figuring out how to match the old state to the new contract structure. How to help it?
+The NEAR Runtime looks at your current code as well as your contract's data, which is serialized and saved on-disk. When it executes the code, it tries to match these up. If you change the code but the data stays the same, it can't figure out how to do this. Previously we "solved" this by removing old serialized data. Now let's see how to update the data instead.
 
 First, keep the old `struct` around for at least one deploy:
 
@@ -200,7 +195,8 @@ impl From<UpgradableProposal> for Proposal {
         match proposal {
             UpgradableAccount::V2(proposal) => proposal,
             UpgradableAccount::V1(v1) => Proposal {
-                title: &v1.description[0..10],
+                // set title to first 10 chars of description
+                title: v1.description.get(..10).map(str::to_owned).unwrap_or_default(),
                 description: v1.description,
                 status: v1.status,
             }
