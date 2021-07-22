@@ -133,12 +133,101 @@ At this point, all contract state has been migrated, and you don't need to keep 
 
 ## Using Enums
 
-TODO
+In the example above, all contract state is stored in one simple struct. Many real-world contracts are more complex, often having one struct referenced by another. For example, a [DAO](https://whiteboardcrypto.com/what-is-a-dao/) contract might look something like this:
 
-## Migrating: all at once or incremental
+```rust
+#[derive(BorshSerialize, BorshDeserialize)]
+pub enum ProposalStatus {
+    Proposed,
+    Approved,
+    Rejected,
+}
 
-TODO
+#[derive(BorshSerialize, BorshDeserialize)]
+pub struct Proposal {
+    pub description: String,
+    pub status: ProposalStatus,
+}
 
-## Guidelines for writing upgradeable apps
+#[near_bindgen]
+#[derive(BorshSerialize, BorshDeserialize)]
+pub struct DAO {
+    pub proposals: LookupMap<u64, Proposal>,
+}
+```
 
-TODO
+:::note
+For a more complete DAO example, check out [SputnikDAO](https://github.com/near-daos/sputnik-dao-contract/blob/317ea4fb1e6eac8064ef29a78054b0586a3406c3/sputnikdao2/src/lib.rs), [Flux](https://github.com/fluxprotocol/amm/blob/3def886a7fbd2df4ba28e18f67e6ab12cd2eee0b/dao/src/lib.rs), and [others](https://github.com/search?q=near+dao).
+:::
+
+Say you want to update the structure of `Proposal` but keep `DAO` unchanged.
+
+The first thing to note is that the contract could be storing a huge number of proposals, which makes it impossible to migrate all of them in one transaction due to [the gas limit](https://docs.near.org/docs/concepts/gas#thinking-in-gas). In an off-chain script, you could query the full state of the contract and update every single one of them via multiple transactions. But that may be prohibitively expensive, so you might opt to upgrade proposals to the new structure during the next interaction with them, rather than all at once (this disperses the upgrade cost to users of the contract).
+
+In either case, your contract can end up with proposals using the original structure and the new structure at the same time, and the `DAO` struct needs to know how to load both of them. How do you do that?
+
+Use [enums](https://doc.rust-lang.org/book/ch06-00-enums.html):
+
+```rust
+#[derive(BorshSerialize, BorshDeserialize)]
+pub enum ProposalStatus {
+    Proposed,
+    Approved,
+    Rejected,
+}
+
+#[derive(BorshSerialize, BorshDeserialize)]
+pub struct ProposalV1 {
+    pub description: String,
+    pub status: ProposalStatus,
+}
+
+#[derive(BorshSerialize, BorshDeserialize)]
+pub struct Proposal {
+    pub title: String,
+    pub description: String,
+    pub status: ProposalStatus,
+}
+
+#[derive(BorshSerialize, BorshDeserialize)]
+pub enum UpgradableProposal {
+    V1(ProposalV1),
+    V2(Proposal),
+}
+
+impl From<UpgradableProposal> for Proposal {
+    fn from(proposal: UpgradableProposal) -> Self {
+        match proposal {
+            UpgradableAccount::V2(proposal) => proposal,
+            UpgradableAccount::V1(v1) => Proposal {
+                title: &v1.description[0..10],
+                description: v1.description,
+                status: v1.status,
+            }
+        }
+    }
+}
+
+#[near_bindgen]
+#[derive(BorshSerialize, BorshDeserialize)]
+pub struct DAO {
+    pub proposals: LookupMap<u64, UpgradableProposal>,
+}
+```
+
+:::danger Untested Example
+The example above is not tested and may contain bugs or be incomplete.
+
+Someone (us? you??) needs to create a full example repository that clearly demonstrates this upgrade path, and link to it in the snippets above.
+
+In the meantime, you can see working examples and learn more about this pattern at the following links:
+
+* https://github.com/evgenykuzyakov/berryclub/commit/d78491b88cbb16a79c15dfc3901e5cfb7df39fe8
+* https://nomicon.io/ChainSpec/Upgradability.html
+* https://github.com/mikedotexe/rust-contract-upgrades/pulls
+:::
+
+
+## Writing Upgradable Contracts
+
+If you plan to upgrade your contracts throughout their lifetime, **start with enums**. Adding them only after you decide to upgrade is (usually) possible, but will result in harder-to-follow (and thus more error-prone) code.
