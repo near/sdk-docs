@@ -30,7 +30,6 @@ Where this would expose `some_method` from the WASM binary and allow it to be ca
 #[no_mangle]
 pub extern "C" fn some_method() {
     near_sdk::env::setup_panic_hook();
-    near_sdk::env::set_blockchain_interface(Box::new(near_blockchain::NearBlockchain {}));
     if near_sdk::env::attached_deposit() != 0 {
         near_sdk::env::panic("Method some_method doesn\'t accept deposit".as_bytes());
     }
@@ -68,7 +67,6 @@ In this example, the generated code will be the same as the previous example, ex
 #[no_mangle]
 pub extern "C" fn trait_method() {
     near_sdk::env::setup_panic_hook();
-    near_sdk::env::set_blockchain_interface(Box::new(near_blockchain::NearBlockchain {}));
     if near_sdk::env::attached_deposit() != 0 {
         near_sdk::env::panic("Method trait_method doesn\'t accept deposit".as_bytes());
     }
