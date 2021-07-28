@@ -35,6 +35,26 @@ pub fn sum_borsh(#[serializer(borsh)] a: u32, #[serializer(borsh)] b: u32) -> u3
 
 Where the `result_serializer(borsh)` annotation will override the default result serialization protocol from JSON to borsh and the `serializer(borsh)` annotations will override the parameter serialization.
 
+#### Example
+
+A simple demonstration of getting a [Borsh-serialized](https://borsh.io), base64-encoded value from a unit test:
+
+```rust reference
+https://github.com/mikedotexe/rust-status-message/blob/03781079d1716584d114bec294de00f5336cd20d/src/lib.rs#L106-L114
+```
+
+The following snippet shows a simple function that takes this value from a frontend or CLI. Note: this method doesn't have a return value, so the `#[result_serializer(borsh)]` isn't needed.
+
+```rust reference
+https://github.com/mikedotexe/rust-status-message/blob/03781079d1716584d114bec294de00f5336cd20d/src/lib.rs#L41-L55
+```
+
+To call this with NEAR CLI, use a command similar to this:
+
+    near call rust-status-message.demo.testnet set_status_borsh --base64 'DAAAAEFsb2hhIGhvbnVhIQ==' --accountId demo.testnet
+
+See more details in [this GitHub gist](https://gist.github.com/mfornet/d8a94af333a68d67affd8cb78464c7c0) from [Marcelo](https://twitter.com/mfornet94).
+
 ### JSON wrapper types
 
 To help with serializing certain types to JSON which have unexpected or inefficient default formats, there are some wrapper types in [`near_sdk::json_types`](https://docs.rs/near-sdk/3.1.0/near_sdk/json_types/index.html) that can be used.
