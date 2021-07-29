@@ -4,10 +4,48 @@ sidebar_position: 2
 
 # Callbacks
 
-<!-- What are callbacks -->
+NEAR Protocol is a sharded, proof-of-stake blockchain that behaves differently than proof-of-work blockchains. When interacting with a native Rust (compiled to Wasm) smart contract, cross-contract calls are asynchronous. Callbacks are used to either get the result of a cross-contract call or tell if a cross-contract call has succeeded or failed.
 
-<!-- What do #[callback] decorators do -->
+There are two techniques to write cross-contract calls: [high-level](https://github.com/near/near-sdk-rs/tree/master/examples/cross-contract-high-level) and [low-level](https://github.com/near/near-sdk-rs/tree/master/examples/cross-contract-low-level). This document will mostly focus on the high-level approach. There are two examples in the Rust SDK repository that demonstrate these, as linked above. Note that these examples use cross-contract calls "to itself." We'll show a more common example here, where a simple cross-contract call is made to a whitelist smart contract, returning whether an account is in the whitelist or not.
 
-<!-- Why do we need them and when should they be used -->
+The common pattern with cross-contract calls is to call a method on an external smart contract, use `.then` syntax to specify a callback, and then retrieve the result or status of the promise. The callback will typically live inside the same, calling smart contract. There's a special macro used for the callback function, which is [#[private]](https://docs.rs/near-sdk-core/latest/near_sdk_core/struct.AttrSigInfo.html#structfield.is_private). We'll see this pattern in the example below.
 
-TODO
+The following example demonstrates two common approaches to callbacks using the high-level cross-contract approach. When writing high-level cross-contract calls, special [traits](https://doc.rust-lang.org/rust-by-example/trait.html) are set up that serve as interfaces for the smart contract being called, and (typically) the current contract doing the calling, where callback logic will live. The second trait is, by convention, referred to as `ext_self`. Here are the two traits used in a simple example:
+
+```rust reference
+https://github.com/mikedotexe/cross-contract-view/blob/06bdb3222622c824b9f2fe0a53536e6914435580/src/lib.rs#L17-L26
+```
+
+After creating these traits, we'll show two simple functions that will make a cross-contract call to a whitelist smart contract, asking if the account `mike.testnet` is whitelisted. These methods will both return `true` using different approaches. First we'll look at the methods, then we'll look at the differences in callbacks. Note that for simplicity in this example, the values are hardcoded.
+
+```rust
+pub const XCC_GAS: Gas = 20000000000000;
+fn get_whitelist_contract() -> AccountId {
+    "whitelist.demo.testnet".to_string()
+}
+fn get_account_to_check() -> AccountId {
+    "mike.testnet".to_string()
+}
+```
+
+```rust reference
+https://github.com/mikedotexe/cross-contract-view/blob/06bdb3222622c824b9f2fe0a53536e6914435580/src/lib.rs#L32-L52
+```
+
+The syntax begins with `ext_whitelist::is_whitelisted(…` showing that we're using the trait to call the method `is_whitelisted`. However, the trait shows only one argument, but we've included four. The last three arguments are used behind the scenes and represent:
+
+1. The target smart contract account. (In this case, `whitelist.demo.testnet`.)
+2. An attached deposit of Ⓝ, in yoctoⓃ. (1 Ⓝ = 1000000000000000000000000 yoctoⓃ.)
+3. The amount of gas.
+
+The two methods in the snippet above are very similar, except they will call separate callbacks in the smart contract, `callback_promise_result` and `callback_arg_macro`. 
+
+```rust reference
+https://github.com/mikedotexe/cross-contract-view/blob/06bdb3222622c824b9f2fe0a53536e6914435580/src/lib.rs#L56-L75
+```
+
+These two callbacks show how a value can be obtained. The first method gets the value from the promise result, while the second uses a macro on the argument to cast the value into what's desired. Please note that at this time, the second approach may not catch errors as well as the first approach. See [this issue](https://github.com/near/near-sdk-rs/issues/155) for more details.
+
+The biggest difference between these two approaches is how the arguments are defined (or absent) in the traits shown earlier.
+
+And that's it! Understanding how to make a cross-contract call and receive a result is an important part of developing smart contracts on NEAR. Two interesting references for using cross-contract calls can be found in the [fungible token](https://github.com/near-examples/FT) and [non-fungible token](https://github.com/near-examples/NFT) examples.
