@@ -46,7 +46,7 @@ https://github.com/mikedotexe/rust-status-message/blob/03781079d1716584d114bec29
 The following snippet shows a simple function that takes this value from a frontend or CLI. Note: this method doesn't have a return value, so the `#[result_serializer(borsh)]` isn't needed.
 
 ```rust reference
-https://github.com/mikedotexe/rust-status-message/blob/03781079d1716584d114bec294de00f5336cd20d/src/lib.rs#L41-L55
+https://github.com/mikedotexe/rust-status-message/blob/03781079d1716584d114bec294de00f5336cd20d/src/lib.rs#L41-L54
 ```
 
 To call this with NEAR CLI, use a command similar to this:
