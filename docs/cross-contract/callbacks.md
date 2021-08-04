@@ -10,7 +10,7 @@ There are two techniques to write cross-contract calls: [high-level](https://git
 
 The common pattern with cross-contract calls is to call a method on an external smart contract, use `.then` syntax to specify a callback, and then retrieve the result or status of the promise. The callback will typically live inside the same, calling smart contract. There's a special macro used for the callback function, which is [#[private]](https://docs.rs/near-sdk-core/latest/near_sdk_core/struct.AttrSigInfo.html#structfield.is_private). We'll see this pattern in the example below.
 
-The following example demonstrates two common approaches to callbacks using the high-level cross-contract approach. When writing high-level cross-contract calls, special [traits](https://doc.rust-lang.org/rust-by-example/trait.html) are set up that serve as interfaces for the smart contract being called, and (typically) the current contract doing the calling, where callback logic will live. The second trait is, by convention, referred to as `ext_self`. Here are the two traits used in a simple example:
+The following example demonstrates two common approaches to callbacks using the high-level cross-contract approach. When writing high-level cross-contract calls, special [traits](https://doc.rust-lang.org/rust-by-example/trait.html) are set up as interfaces for the smart contract being called, and (typically) the current contract doing the calling (where callback logic will live). The second trait is, by convention, referred to as `ext_self`. Here are the two traits used in a simple example:
 
 ```rust reference
 https://github.com/mikedotexe/cross-contract-view/blob/06bdb3222622c824b9f2fe0a53536e6914435580/src/lib.rs#L17-L26
