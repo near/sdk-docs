@@ -19,7 +19,7 @@ There have been a few items that may add unwanted bytes to a contract's size whe
 1. See the section in best practices on [creating smaller binaries](/best-practices#compile-smaller-binaries) using `opt-level` in the Cargo manifest.
 2. Ensure that your manifest doesn't contain `rlib` unless it needs to. Some NEAR examples have included this:
 
-  :::caution Possibly adds unnecessary bloat
+  :::caution Adds unnecessary bloat
 
   ```toml
   [lib]
@@ -38,11 +38,11 @@ There have been a few items that may add unwanted bytes to a contract's size whe
   :::
 
 3. When using the Rust SDK, you may override the default JSON serialization to use [Borsh](https://borsh.io) instead. [See this page](/contract-interface/serialization-interface#overriding-serialization-protocol-default) for more information and an example.
-4. When using assertions or guards, avoid using the standard `assert` macros like [`assert!`](https://doc.rust-lang.org/std/macro.assert.html), [`assert_eq!`](https://doc.rust-lang.org/std/macro.assert_eq.html), or [`assert_ne!`](https://doc.rust-lang.org/std/macro.assert_ne.html) as these may add bloat for information regarding the line number of the error.
+4. When using assertions or guards, avoid using the standard `assert` macros like [`assert!`](https://doc.rust-lang.org/std/macro.assert.html), [`assert_eq!`](https://doc.rust-lang.org/std/macro.assert_eq.html), or [`assert_ne!`](https://doc.rust-lang.org/std/macro.assert_ne.html) as these may add bloat for information regarding the line number of the error. There are similar issues with `unwrap`, `expect`, and Rust's `panic!()` macro.
 
   Example of a standard assertion:
 
-  :::caution Possibly adds unnecessary bloat
+  :::caution Adds unnecessary bloat
 
   ```rust
   assert_eq!(contract_owner, predecessor_account, "ERR_NOT_OWNER");
@@ -57,6 +57,45 @@ There have been a few items that may add unwanted bytes to a contract's size whe
   if contract_owner == predecessor_account {
     env::panic(b"ERR_NOT_OWNER");
   }
+  ```
+  :::
+
+  Example of removing `expect`:
+
+  :::caution Adds unnecessary bloat
+
+  ```rust
+  let owner_id = self.owner_by_id.get(&token_id).expect("Token not found");
+  ```
+  :::
+
+  when it could be:
+
+  :::tip
+
+  ```rust
+  fn expect_token_found<T>(option: Option<T>) -> T {
+    option.unwrap_or_else(|| env::panic_str("Token not found"))
+  }
+  let owner_id = expect_token_found(self.owner_by_id.get(&token_id));  
+  ```
+  :::
+
+  Example of changing standard `panic!()`:
+
+  :::caution Adds unnecessary bloat
+
+  ```rust
+  panic!("ERR_MSG_HERE"); 
+  ```
+  :::
+
+  when it could be:
+
+  :::tip
+
+  ```rust
+  env::panic_str("ERR_MSG_HERE");  
   ```
   :::
 
