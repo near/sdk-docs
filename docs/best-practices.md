@@ -18,7 +18,7 @@ pub struct Contract {
 }
 ```
 
-Every time an external method is called, the entire structure has to be deserialized.
+Typically, when an external method is called the entire structure has to be deserialized. (Note that this doesn't happen when using `#[init]` or `#[init(ignore_state)]`, both of which are covered in the [`near_bindgen` section](/contract-structure/near-bindgen#initialization-methods) and [the upgradability section](https://sdk-g4yv.onrender.com/upgrading/production-basics#migration-method) respectively.)
 The serialized contract data is stored in [persistent storage] under the key `STATE`.
 
 Change methods ([see below](#view-vs-change-method)) serialize the main contract structure at the end and store the new value into storage.
