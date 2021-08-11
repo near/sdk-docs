@@ -23,24 +23,15 @@ The serialized contract data is stored in [persistent storage] under the key `ST
 
 Change methods ([see below](#view-vs-change-method)) serialize the main contract structure at the end and store the new value into storage.
 
-[Persistent collections](https://docs.rs/near-sdk/latest/near_sdk/collections) help store extra data in persistent storage outside of the main structure.
-NEAR SDK provides the following collections:
+[persistent storage]: https://nomicon.io/DataStructures/Account.html#storage
 
-- `Vector` - An iterable implementation of vector.
-- `LookupMap` - An non-iterable implementation of a map.
-- `LookupSet` - An non-iterable implementation of a set.
-- `UnorderedMap` - An iterable implementation of a map.
-- `UnorderedSet` - An iterable implementation of a set.
-- `TreeMap` - An iterable sorted map based on AVL-tree
-- `LazyOption` - An `Option` for a single value.
+## Generating unique prefixes for persistent collections
+
+Read more about persistent collections [from this documentation](/contract-structure/collections) or from [the Rust docs](https://docs.rs/near-sdk/latest/near_sdk/collections).
 
 Every instance of a persistent collection requires a unique storage prefix.
 The prefix is used to generate internal keys to store data in persistent storage.
 These internal keys need to be unique to avoid collisions (including collisions with key `STATE`).
-
-[persistent storage]: https://nomicon.io/DataStructures/Account.html#storage
-
-## Generating unique prefixes for persistent collections
 
 When a contract gets complicated, there may be multiple different
 collections that are not all part of the main structure, but instead part of a sub-structure or nested collections.
