@@ -76,20 +76,6 @@ impl Contract {
 
 For a traditional way of handling it, see [instructions below](#the-traditional-way-of-handling-unique-prefixes-for-persistent-collections)
 
-## Use `PanicOnDefault`
-
-By default `near_sdk` allows a contract to be initialized with default state.
-Usually, if you have an initializer, you will want to prevent this.
-There is a helper derive macro `PanicOnDefault` to do this, e.g.
-
-```rust
-#[near_bindgen]
-#[derive(BorshDeserialize, BorshSerialize, PanicOnDefault)]
-pub struct Contract {
-    pub data: String,
-}
-```
-
 ## Public vs private methods
 
 For methods in the implementation under `#[near_bindgen]`:
