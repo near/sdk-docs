@@ -76,38 +76,6 @@ impl Contract {
 
 For a traditional way of handling it, see [instructions below](#the-traditional-way-of-handling-unique-prefixes-for-persistent-collections)
 
-### Callbacks
-
-Callbacks have to be public methods exported from the contract, and need to be called using a function call.
-
-If you're using callbacks, make sure you check the predecessor to prevent someone else from calling it.
-
-There is a macro decorator `#[private]` that checks that the current account ID is equal to the predecessor account ID.
-
-```rust
-#[near_bindgen]
-impl Contract {
-    #[private]
-    pub fn resolve_transfer(&mut self) {
-        env::log_str("This is a callback");
-    }
-}
-```
-
-This is equivalent to:
-
-```rust
-#[near_bindgen]
-impl Contract {
-    pub fn resolve_transfer(&mut self) {
-        if env::current_account_id() != env::predecessor_account_id() {
-            near_sdk::env::panic(b"Method resolve_transfer is private");
-        }
-        env::log_str("This is a callback");
-    }
-}
-```
-
 ## Integer JSON types
 
 NEAR Protocol currently expects contracts to support JSON serialization. JSON can't handle large integers (above `2**53` bits).
