@@ -67,6 +67,87 @@ To help with serializing certain types to JSON which have unexpected or ineffici
 
 Because JavaScript only supports integers to value `2^53 - 1`, you will lose precision if deserializing the JSON integer is above this range. To counteract this, you can use the `I64`, `U64`, `I128`, and `U128` in place of the native types for these parameters or result to serialize the value as a string. By default, all integer types will serialize as an integer in JSON.
 
-Another example of a type you may want to override the default serialization of is `Vec<u8>` which represents bytes in Rust. By default, this will serialize as an array of integers, which is not compact and very hard to use. There is a wrapper type [`Base64VecU8`](https://docs.rs/near-sdk/3.1.0/near_sdk/json_types/struct.Base64VecU8.html) which serializes and deserializes to a [Base-64](https://en.wikipedia.org/wiki/Base64) string for more compact JSON serialization.
+You can convert from `U64` to `u64` and back using `std::convert::Into`, e.g.
+
+```rust
+#[near_bindgen]
+impl Contract {
+    pub fn mult(&self, a: U64, b: U64) -> U128 {
+        let a: u64 = a.into();
+        let b: u64 = b.into();
+        let product = u128::from(a) * u128::from(b);
+        product.into()
+    }
+}
+```
+
+You can also access inner values and using `.0`:
+
+```diff
+ #[near_bindgen]
+ impl Contract {
+     pub fn mult(&self, a: U64, b: U64) -> U128 {
+-        let a: u64 = a.into();
++        let a = a.0;
+-        let b: u64 = b.into();
++        let b = b.0;
+         let product = u128::from(a) * u128::from(b);
+         product.into()
+     }
+ }
+```
+
+And you can cast the lower-case `u` variants to upper-case `U` variants using `U64(...)` and `U128(...)`:
+
+```diff
+ #[near_bindgen]
+ impl Contract {
+     pub fn mult(&self, a: U64, b: U64) -> U128 {
+         let a = a.0;
+         let b = b.0;
+         let product = u128::from(a) * u128::from(b);
+-        product.into()
++        U128(product)
+     }
+ }
+```
+
+Combining it all:
+
+```rust
+#[near_bindgen]
+impl Contract {
+    pub fn mult(&self, a: U64, b: U64) -> U128 {
+        U128(u128::from(a.0) * u128::from(b.0))
+    }
+}
+```
 
 Although there are these JSON wrapper types included with the SDK, any custom type can be used, as long as it implements [`serde`](https://serde.rs/) serialize and deserialize respectively. All of these types just override the JSON format and will have a consistent `borsh` serialization and deserialization as the inner types.
+
+### Base64VecU8
+
+Another example of a type you may want to override the default serialization of is `Vec<u8>` which represents bytes in Rust. By default, this will serialize as an array of integers, which is not compact and very hard to use. There is a wrapper type [`Base64VecU8`](https://docs.rs/near-sdk/3.1.0/near_sdk/json_types/struct.Base64VecU8.html) which serializes and deserializes to a [Base-64](https://en.wikipedia.org/wiki/Base64) string for more compact JSON serialization.
+
+Example here:
+
+```rust
+#[near_bindgen]
+#[derive(BorshDeserialize, BorshSerialize, PanicOnDefault)]
+pub struct Contract {
+    // Notice, internally we store `Vec<u8>` 
+    pub data: Vec<u8>,
+}
+#[near_bindgen]
+impl Contract {
+    #[init]
+    pub fn new(data: Base64VecU8) -> Self {
+        Self {
+            data: data.into(),
+        }
+    }
+    pub fn get_data(self) -> Base64VecU8 {
+        self.data.into()
+    }
+}
+```
