@@ -76,49 +76,6 @@ impl Contract {
 
 For a traditional way of handling it, see [instructions below](#the-traditional-way-of-handling-unique-prefixes-for-persistent-collections)
 
-## View vs Change method
-
-`near_sdk` assumes that the method is a `view` if it uses `&self` or `self` and method is `change` if it has `&mut self`.
-
-View methods don't save the contract STATE at the end of the method execution.
-However, a view method COULD modify contract STATE or persistent collection state in-memory, knowing that all changes will be discarded after the method returns.
-
-Change methods will automatically save the modified STATE at the end of the method execution. They can also modify the state in persistent collections.
-
-Note: Change methods will also check that the function call doesn't have attached deposit, unless the method is marked with the `#[payable]` macro.
-
-```rust
-#[near_bindgen]
-impl Contract {
-    /// View method. Requires cloning the account id.
-    pub fn get_owner_id(&self) -> AccountId {
-        self.owner_id.clone()
-    }
-
-    /// View method. More efficient, but can't be reused internally, because it consumes self.
-    pub fn get_owner_id2(self) -> AccountId {
-        self.owner_id
-    }
-
-    /// Change method. Changes the state, and then saves the new state internally.
-    pub fn set_owner_id(&mut self, new_owner_id: AccountId) {
-        self.owner_id = new_owner_id;
-    }
-
-    /// View method that "modifies" state, for code structure or computational
-    /// efficiency reasons. Changes state in-memory, but does NOT save the new
-    /// state. If called internally by a change method, WILL result in updated
-    /// contract state.
-    pub fn update_stats(&self, account_id: AccountId, score: U64) -> Account {
-        let account = self.accounts.get(&account_id).expect("account not found");
-        account.total += score;
-        account
-    }
-}
-```
-
-For more information about `&self` versus `self` see the [rust book](https://doc.rust-lang.org/stable/book/ch05-03-method-syntax.html?highlight=capture%20self#defining-methods)
-
 ## Payable methods
 
 To mark a change method as a payable, you need to add the `#[payable]` macro decorator. This will allow this change method

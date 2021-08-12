@@ -10,7 +10,6 @@ It is important to only mark methods that should be called externally as public.
 
 A basic usage of this would look like the following:
 
-
 ```rust
 #[near_bindgen]
 impl MyContractStructure {
