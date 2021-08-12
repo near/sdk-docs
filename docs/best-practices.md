@@ -76,50 +76,6 @@ impl Contract {
 
 For a traditional way of handling it, see [instructions below](#the-traditional-way-of-handling-unique-prefixes-for-persistent-collections)
 
-## Public vs private methods
-
-For methods in the implementation under `#[near_bindgen]`:
-
-- `pub fn` makes a method public and exports it in a contract. It means anyone can call it.
-- `fn` makes the method internal, and it's not exported from the contract. No one can call it directly. It can only be called
-  within a contract directly (not through a promise).
-- `pub(crate) fn` also will make a method internal. It's helpful to use it when you have a method in a different module.
-
-```rust
-#[near_bindgen]
-impl Contract {
-    pub fn increment(&mut self) {
-        self.internal_increment();
-    }
-
-    fn internal_increment(&mut self) {
-        self.counter += 1;
-    }
-}
-```
-
-Another way of not exporting methods is by having a separate `impl Contract` section, that is not marked with `#[near_bindgen]`.
-
-```rust
-#[near_bindgen]
-impl Contract {
-    pub fn increment(&mut self) {
-        self.internal_increment();
-    }
-}
-
-impl Contract {
-    /// This methods is still not exported.
-    pub fn internal_increment(&mut self) {
-        self.counter += 1;
-    }
-}
-```
-
-While this style of public and private methods are familiar from other programming contexts, smart contracts also have a more unique need: public methods (exported as part of the contract interface; callable via [cross-contract calls](https://docs.near.org/docs/tutorials/contracts/cross-contract-calls)) that are only callable by the contract itself (such as [`ft_resolve_transfer`](https://nomicon.io/Standards/Tokens/FungibleTokenCore.html#reference-level-explanation) for Fungible Token contracts).
-
-We call such methods _callbacks_.
-
 ### Callbacks
 
 Callbacks have to be public methods exported from the contract, and need to be called using a function call.
