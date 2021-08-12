@@ -76,35 +76,6 @@ impl Contract {
 
 For a traditional way of handling it, see [instructions below](#the-traditional-way-of-handling-unique-prefixes-for-persistent-collections)
 
-## Upgrading a contract
-
-After `3.0.1` change, `#[init]` macro initializes the contract and verifies that the old state doesn't exist.
-It will panic if the old state (under key `STATE`) is present in the storage.
-
-But if you need to re-initialize the contract STATE, you need to use `#[init(ignore_state)]` instead.
-This will NOT check that the state exists and you can use it in case you need to upgrade contract and migrate state.
-
-```rust
-#[near_bindgen]
-impl Contract {
-    #[init(ignore_state)]
-    pub fn migrate_state(new_data: String) -> Self {
-        // Deserialize the state using the old contract structure.
-        let old_contract: OldContract = env::state_read().expect("Old state doesn't exist");
-        // Verify that the migration can only be done by the owner.
-        // This is not necessary, if the upgrade is done internally.
-        assert_eq!(
-            &env::predecessor_account_id(),
-            &old_contract.owner_id,
-            "Can only be called by the owner"
-        );
-
-        // Create the new contract using the data from the old contract.
-        Self { owner_id: old_contract.owner_id, data: old_contract.data, new_data }
-    }
-}
-```
-
 ## Use `PanicOnDefault`
 
 By default `near_sdk` allows a contract to be initialized with default state.
