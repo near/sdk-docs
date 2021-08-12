@@ -76,43 +76,6 @@ impl Contract {
 
 For a traditional way of handling it, see [instructions below](#the-traditional-way-of-handling-unique-prefixes-for-persistent-collections)
 
-## Payable methods
-
-To mark a change method as a payable, you need to add the `#[payable]` macro decorator. This will allow this change method
-to receive attached deposits. Otherwise, if a deposit is attached to a non-payable change method, the method will panic.
-
-```rust
-#[near_bindgen]
-impl Contract {
-    #[payable]
-    pub fn take_my_money(&mut self) {
-        env::log_str("Thanks!");
-    }
-
-    pub fn do_not_take_my_money(&mut self) {
-        env::log_str("Thanks!");
-    }
-}
-```
-
-This is equivalent to:
-
-```rust
-#[near_bindgen]
-impl Contract {
-    pub fn take_my_money(&mut self) {
-        env::log_str("Thanks!");
-    }
-
-    pub fn do_not_take_my_money(&mut self) {
-        if near_sdk::env::attached_deposit() != 0 {
-            near_sdk::env::panic(b"Method do_not_take_my_money doesn't accept deposit");
-        }
-        env::log_str("Thanks!");
-    }
-}
-```
-
 ## Enable overflow checks
 
 It's usually helpful to panic on integer overflow. To enable it, add the following into your `Cargo.toml` file:
