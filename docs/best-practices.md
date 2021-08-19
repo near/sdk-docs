@@ -113,58 +113,7 @@ impl Contract {
 }
 ```
 
-## Use high-level cross-contract API
 
-There is a helper macro that allows you to make cross-contract calls with the syntax `#[ext_contract(...)]`. It takes a Rust Trait and
-converts it to a module with static methods. Each of these static methods takes positional arguments defined by the Trait,
-then the `receiver_id`, the attached deposit and the amount of gas and returns a new `Promise`.
-
-For example, let's define a calculator contract Trait:
-
-```rust
-#[ext_contract(ext_calculator)]
-trait Calculator {
-    fn mult(&self, a: U64, b: U64) -> U128;
-
-    fn sum(&self, a: U128, b: U128) -> U128;
-}
-```
-
-It's equivalent to the following code:
-
-```rust
-mod ext_calculator {
-    pub fn mult(a: U64, b: U64, receiver_id: &AccountId, deposit: Balance, gas: Gas) -> Promise {
-        Promise::new(receiver_id.clone())
-            .function_call(
-                b"mult",
-                json!({ "a": a, "b": b }).to_string().as_bytes(),
-                deposit,
-                gas,
-            )
-    }
-
-    pub fn sum(a: U128, b: U128, receiver_id: &AccountId, deposit: Balance, gas: Gas) -> Promise {
-        // ...
-    }
-}
-```
-
-Let's assume the calculator is deployed on `calc.near`, we can use the following:
-
-```rust
-const CALCULATOR_ACCOUNT_ID: &str = "calc.near";
-const NO_DEPOSIT: Balance = 0;
-const BASE_GAS: Gas = 5_000_000_000_000;
-
-#[near_bindgen]
-impl Contract {
-    pub fn sum_a_b(&mut self, a: U128, b: U128) -> Promise {
-        let calculator_account_id: AccountId = CALCULATOR_ACCOUNT_ID.to_string();
-        ext_calculator::sum(a, b, &calculator_account_id, NO_DEPOSIT, BASE_GAS)
-    }
-}
-```
 
 ## Reuse crates from `near-sdk`
 
