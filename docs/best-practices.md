@@ -177,28 +177,6 @@ impl Contract {
 - `env::panic` directly calls the host method to panic the contract.
   It doesn't provide any other extra debugging information except for the passed message.
 
-## Compile smaller binaries
-
-When compiling a contract make sure to pass flag `-C link-arg=-s` to the rust compiler:
-
-```bash
-RUSTFLAGS='-C link-arg=-s' cargo build --target wasm32-unknown-unknown --release
-```
-
-Here is the parameters we use for the most examples in `Cargo.toml`:
-
-```toml
-[profile.release]
-codegen-units = 1
-opt-level = "s"
-lto = true
-debug = false
-panic = "abort"
-overflow-checks = true
-```
-
-You may want to experiment with using `opt-level = "z"` instead of `opt-level = "s"` to see if generates a smaller binary. See more details on this in [The Cargo Book Profiles section](https://doc.rust-lang.org/cargo/reference/profiles.html#opt-level).
-
 ## Use simulation testing
 
 **Note**: simulation testing is deprecated in favor of [Sandbox testing](https://github.com/near/sandbox).
