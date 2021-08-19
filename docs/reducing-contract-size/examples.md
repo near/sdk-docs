@@ -16,8 +16,31 @@ There have been a few items that may add unwanted bytes to a contract's size whe
 
 ## Small wins
 
-1. See the section in best practices on [creating smaller binaries](/best-practices#compile-smaller-binaries) using `opt-level` in the Cargo manifest.
-2. Ensure that your manifest doesn't contain `rlib` unless it needs to. Some NEAR examples have included this:
+### Using flags
+
+When compiling a contract make sure to pass flag `-C link-arg=-s` to the rust compiler:
+
+```bash
+RUSTFLAGS='-C link-arg=-s' cargo build --target wasm32-unknown-unknown --release
+```
+
+Here is the parameters we use for the most examples in `Cargo.toml`:
+
+```toml
+[profile.release]
+codegen-units = 1
+opt-level = "s"
+lto = true
+debug = false
+panic = "abort"
+overflow-checks = true
+```
+
+You may want to experiment with using `opt-level = "z"` instead of `opt-level = "s"` to see if generates a smaller binary. See more details on this in [The Cargo Book Profiles section](https://doc.rust-lang.org/cargo/reference/profiles.html#opt-level). You may also reference this [Shrinking .wasm Size](https://rustwasm.github.io/book/reference/code-size.html#tell-llvm-to-optimize-for-size-instead-of-speed) resource.
+
+### Removing `rlib` from the manifest
+
+Ensure that your manifest (`Cargo.toml`) doesn't contain `rlib` unless it needs to. Some NEAR examples have included this:
 
   :::caution Adds unnecessary bloat
 
