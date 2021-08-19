@@ -4,27 +4,6 @@ slug: /best-practices
 
 # Best practices
 
-## Main structure and persistent collections
-
-The main contract structure is marked with `#[near_bindgen]`. It has to be serializable and deserializable with [Borsh](https://borsh.io).
-
-```rust
-#[near_bindgen]
-#[derive(BorshDeserialize, BorshSerialize)]
-pub struct Contract {
-    pub data: String,
-    pub owner_id: AccountId,
-    pub value: u128,
-}
-```
-
-Typically, when an external method is called the entire structure has to be deserialized. (Note that this doesn't happen when using `#[init]` or `#[init(ignore_state)]`, both of which are covered in the [`near_bindgen` section](/contract-structure/near-bindgen#initialization-methods) and [the upgradability section](https://sdk-g4yv.onrender.com/upgrading/production-basics#migration-method) respectively.)
-The serialized contract data is stored in [persistent storage] under the key `STATE`.
-
-Change methods ([see below](#view-vs-change-method)) serialize the main contract structure at the end and store the new value into storage.
-
-[persistent storage]: https://nomicon.io/DataStructures/Account.html#storage
-
 ## Generating unique prefixes for persistent collections
 
 Read more about persistent collections [from this documentation](/contract-structure/collections) or from [the Rust docs](https://docs.rs/near-sdk/latest/near_sdk/collections).

@@ -80,7 +80,7 @@ pub fn update_stats(&self, account_id: AccountId, score: U64) -> Account {
 
 ## Mutable Functions
 
-Mutable functions allow for loading the existing state, modifying it, then rewriting the modified state at the end of the function call. This should be used for any transaction which modifies the contract state.
+Mutable functions allow for loading the existing state, modifying it, then rewriting the modified state at the end of the function call. This should be used for any transaction which modifies the contract state. Note that the serialized contract data is stored in persistent storage under the key `STATE`.
 
 An example of a mutable function is as follows:
 
