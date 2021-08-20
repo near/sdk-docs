@@ -28,6 +28,19 @@ impl Contract {
 }
 ```
 
+**Note**: as of the SDK version `4.0.0-pre.2`, there is a more lightweight version of the Rust `assert!` macro called `require!`.
+
+```rust
+#[near_bindgen]
+impl Contract {
+    pub fn set_fee(&mut self, new_fee: Fee) {
+        require!(env::predecessor_account_id() == self.owner_id, "Owner's method");
+        new_fee.assert_valid();
+        self.internal_set_fee(new_fee);
+    }
+}
+```
+
 ## Use `log!`
 
 Use logging for debugging and notifying user.
