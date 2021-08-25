@@ -46,7 +46,7 @@ If you would like to generate a new crate manually with `cargo new --lib <crate-
 
 ```toml
 [lib]
-crate-type = ["cdylib", "rlib"]
+crate-type = ["cdylib"]
 
 [profile.release]
 codegen-units = 1
