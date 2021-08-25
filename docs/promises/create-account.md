@@ -10,20 +10,20 @@ You want to [progressively onboard](https://www.youtube.com/watch?v=7mO4yN1zjbs&
 Since an account with no balance is almost unusable, you probably want to combine this with the token transfer from [the last page](./token-tk.md). Here's how to do it:
 
 ```rust
-use near_sdk::borsh::{self, BorshDeserialize, BorshSerialize};
-use near_sdk::{json_types::U128, near_bindgen, Balance, AccountId, Promise};
+use near_sdk::{env, near_bindgen, AccountId, Balance, Promise};
 
 const INITIAL_BALANCE: Balance = 250_000_000_000_000_000_000_000; // 2.5e23yN, 0.25N
 
 #[near_bindgen]
-#[derive(Default, BorshDeserialize, BorshSerialize)]
 pub struct Contract {}
 
 #[near_bindgen]
 impl Contract {
     #[private]
-    pub fn create_subaccount(&self, prefix: String) -> Promise {
-        let subaccount_id: AccountId = format!("{}.{}", prefix, env::current_account_id());
+    pub fn create_subaccount(prefix: String) -> Promise {
+        let subaccount_id: AccountId = format!("{}.{}", prefix, env::current_account_id())
+            .parse()
+            .unwrap();
         Promise::new(subaccount_id)
             .create_account()
             .add_full_access_key(env::signer_account_pk())
