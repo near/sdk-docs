@@ -35,7 +35,7 @@ pub struct Contract {}
 #[near_bindgen]
 impl Contract {
     #[private]
-    pub fn create_child_contract(prefix: AccountId, code: Vec[u8]) -> Promise {
+    pub fn create_child_contract(prefix: AccountId, code: Vec<u8>) -> Promise {
         let subaccount_id = AccountId::new_unchecked(
           format!("{}.{}", prefix, env::current_account_id())
         );
