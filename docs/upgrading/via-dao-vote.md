@@ -11,6 +11,6 @@ When you're ready, you can remove all Full Access keys. This means no one will b
 1. A method to store a proposed new version of the contract (as Wasm bytes, in an inspectable way so DAO members can verify that the bytes match a specific change to the source code). This function is safe, and could be called by anyone.
 2. Another method to actually deploy a proposed new version. This method should check that it is being called by your DAO contract. The account name of the DAO could be set in your contract's storage with a field like `owner_id`, so that it is itself upgradable via the same process.
 
-Here's [how Ref Finance does this](https://github.com/ref-finance/ref-contracts/blob/b3aa78e83f2459017c9301d1f1b8d1ba8bcf6e7e/ref-exchange/src/owner.rs#L52-L107), [how SputnikDAO does it](https://github.com/near-daos/sputnik-dao-contract/blob/317ea4fb1e6eac8064ef29a78054b0586a3406c3/sputnikdao2/src/types.rs#L114-L142), and some [other tips](https://hackmd.io/_UMem3SNSAeIqQASlRZahg).
+Here's [how Ref Finance does this](https://github.com/ref-finance/ref-contracts/blob/b3aa78e83f2459017c9301d1f1b8d1ba8bcf6e7e/ref-exchange/src/owner.rs#L52-L107), [how SputnikDAO does it](https://github.com/near-daos/sputnik-dao-contract/blob/a8fc9a8c1cbde37610e56e1efda8e5971e79b845/sputnikdao2/src/types.rs#L74-L142), and some [other tips](https://hackmd.io/_UMem3SNSAeIqQASlRZahg).
 
 That's all we have for now! This page is a stub. Sorry about that. Can you help?
