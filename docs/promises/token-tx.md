@@ -21,6 +21,15 @@ let account_id: AccountId = "example.near".parse().unwrap();
 Promise::new(account_id).transfer(amount);
 ```
 
+:::caution Prerelease!
+The `AccountId` behavior described throughout this document is a feature of `near-sdk-rs` **v4**. The functionality is [still possible](https://docs.rs/near-sdk/3.1.0/near_sdk/json_types/struct.ValidAccountId.html) using v3, but if you want to use the cleaner v4 syntax, use this in your `Cargo.toml`:
+
+```toml
+[dependencies]
+near-sdk = "4.0.0-pre2"
+```
+:::
+
 In the context of a full contract and function call, this could look like:
 
 ```rust
@@ -50,3 +59,4 @@ Most of this is boilerplate you're probably familiar with by now – imports, s
 Using near-cli, someone could invoke this function with a call like:
 
     near call $CONTRACT pay '{"amount": "1000000000000000000000000", "to": "example.near"}'
+

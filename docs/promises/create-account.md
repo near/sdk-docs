@@ -16,6 +16,15 @@ Promise::new("subaccount.example.near".parse().unwrap())
     .transfer(250_000_000_000_000_000_000_000); // 2.5e23yN, 0.25N
 ```
 
+:::caution Prerelease!
+The `AccountId` behavior described throughout this document, including the `parse().unwrap()` on the argument passed to `Promise::new`, is a feature of `near-sdk-rs` **v4**. The functionality is [still possible](https://docs.rs/near-sdk/3.1.0/near_sdk/json_types/struct.ValidAccountId.html) using v3, but if you want to use the cleaner v4 syntax, use this in your `Cargo.toml`:
+
+```toml
+[dependencies]
+near-sdk = "4.0.0-pre2"
+```
+:::
+
 In the context of a full contract:
 
 ```rust
