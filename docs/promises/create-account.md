@@ -7,7 +7,16 @@ sidebar_position: 3
 You might want to create an account from a contract for many reasons. One example:
 You want to [progressively onboard](https://www.youtube.com/watch?v=7mO4yN1zjbs&t=2s) users, hiding the whole concept of NEAR from them at the beginning, and automatically create accounts for them (these could be child accounts of your main contract, such as `user123.some-cool-game.near`).
 
-Since an account with no balance is almost unusable, you probably want to combine this with the token transfer from [the last page](./token-tk.md). Here's how to do it:
+Since an account with no balance is almost unusable, you probably want to combine this with the token transfer from [the last page](./token-tk.md). You will also need to give the account an access key. Here's how to do it:
+
+```rust
+Promise::new("subaccount.example.near".parse().unwrap())
+    .create_account()
+    .add_full_access_key(env::signer_account_pk())
+    .transfer(250_000_000_000_000_000_000_000); // 2.5e23yN, 0.25N
+```
+
+In the context of a full contract:
 
 ```rust
 use near_sdk::{env, near_bindgen, AccountId, Balance, Promise};
@@ -20,10 +29,10 @@ pub struct Contract {}
 #[near_bindgen]
 impl Contract {
     #[private]
-    pub fn create_subaccount(prefix: String) -> Promise {
-        let subaccount_id: AccountId = format!("{}.{}", prefix, env::current_account_id())
-            .parse()
-            .unwrap();
+    pub fn create_subaccount(prefix: AccountId) -> Promise {
+        let subaccount_id = AccountId::new_unchecked(
+          format!("{}.{}", prefix, env::current_account_id())
+        );
         Promise::new(subaccount_id)
             .create_account()
             .add_full_access_key(env::signer_account_pk())
