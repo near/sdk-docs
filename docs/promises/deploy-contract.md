@@ -14,12 +14,15 @@ If your goal is to deploy to a subaccount of your main contract like Mintbase or
 
 ```rust
 const CODE: &[u8] = include_bytes!("./path/to/compiled.wasm");
+
 Promise::new("subaccount.example.near".parse().unwrap())
     .create_account()
     .add_full_access_key(env::signer_account_pk())
     .transfer(3_000_000_000_000_000_000_000_000) // 3e24yN, 3N
     .deploy_contract(CODE.to_vec())
 ```
+
+Here's what a full contract might look like, showing a naïve way to pass `code` as an argument rather than hard-coding it with `include_bytes!`:
 
 ```rust
 use near_sdk::{env, near_bindgen, AccountId, Balance, Promise};
@@ -32,7 +35,7 @@ pub struct Contract {}
 #[near_bindgen]
 impl Contract {
     #[private]
-    pub fn create_child_contract(prefix: AccountId, code: &[u8]) -> Promise {
+    pub fn create_child_contract(prefix: AccountId, code: Vec[u8]) -> Promise {
         let subaccount_id = AccountId::new_unchecked(
           format!("{}.{}", prefix, env::current_account_id())
         );
@@ -45,4 +48,4 @@ impl Contract {
 }
 ```
 
-Where the `CODE` bytes can either be included in the contract code with `include_bytes!("<path to wasm file>")` or passed in through parameters (keep in mind transaction size is currently limited to 4MB).
+Why is this a naïve approach? It could run into issues because of the 4MB transaction size limit – the function above would deserialize and heap-allocate a whole contract. For many situations, the `include_bytes!` approach is preferable. If you really need to attach compiled Wasm as an argument, you might be able to copy the approach [used by Sputnik DAO v2](https://github.com/near-daos/sputnik-dao-contract/blob/317ea4fb1e6eac8064ef29a78054b0586a3406c3/sputnikdao2/src/types.rs#L74-L112).
