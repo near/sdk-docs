@@ -48,4 +48,4 @@ impl Contract {
 }
 ```
 
-Why is this a naïve approach? It could run into issues because of the 4MB transaction size limit – the function above would deserialize and heap-allocate a whole contract. For many situations, the `include_bytes!` approach is preferable. If you really need to attach compiled Wasm as an argument, you might be able to copy the approach [used by Sputnik DAO v2](https://github.com/near-daos/sputnik-dao-contract/blob/317ea4fb1e6eac8064ef29a78054b0586a3406c3/sputnikdao2/src/types.rs#L74-L112).
+Why is this a naïve approach? It could run into issues because of the 4MB transaction size limit – the function above would deserialize and heap-allocate a whole contract. For many situations, the `include_bytes!` approach is preferable. If you really need to attach compiled Wasm as an argument, you might be able to copy the approach [used by Sputnik DAO v2](https://github.com/near-daos/sputnik-dao-contract/blob/a8fc9a8c1cbde37610e56e1efda8e5971e79b845/sputnikdao2/src/types.rs#L74-L142).
