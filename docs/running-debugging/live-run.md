@@ -39,6 +39,11 @@ In order to launch a NEAR network locally, you'll need to compile `nearcore` loc
 
 By default, this will spawn four nodes validating in a single shard. RPC ports of each node will increase consecutively, starting with 3030. Access the 3030 node's status by http://localhost:3030/status. Replace "3030" with a given node's port to see its status.
 
+:::info Bug in nearup 
+`nearup run localnet` creates validator_key.json at ~/.near/localnet/node0/validator_key.json. You can work around this by running the following command:
+
+`cp ~/.near/localnet/node0/validator_key.json ~/.near/validator_key.json`
+:::
 
 <!-- Deploy contract through CLI/RPC -->
 ### Deploy and call a contract using `near-cli`
