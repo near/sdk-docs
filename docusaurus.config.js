@@ -14,6 +14,14 @@ module.exports = {
     '@saucelabs/theme-github-codeblock'
   ],
   themeConfig: {
+    algolia: {
+      appId: 'YOUR_APP_ID', //TODO: are we running our own DocSearh crawler? (info: https://docusaurus.io/docs/search#custom-application-id)
+      apiKey: "058929d1d423f0f46d3278a102d58bfd", //TODO: should it be the same as for docs.near.org
+      indexName: "near", //TODO: what is this?
+      placeholder: "Search the Docs...", //TODO: check it
+      contextualSearch: true, //TODO: do we need this?
+      searchParameters: {}, //TODO: this one is optional, delete?
+    },
     prism: {
       additionalLanguages: ['rust'],
     },
