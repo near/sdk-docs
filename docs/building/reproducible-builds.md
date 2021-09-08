@@ -5,7 +5,7 @@ sidebar_position: 2
 # Reproducible Builds
 Reproducible builds let different people build the same program and get the exact same outputs as one another. It helps users trust that deployed contracts are built correctly and correspond to the source code. To verify your contract user can build it themselves and check that the binaries are identical.
 
-## Problematics
+## Problem
 If you will build your contract on two different machines, most likely you will get two similar but not identical binaries. Your build artifact can be affected by the locale, timezone, build path, and billion other factors in your build environment. Rust community has a long story of fighting this issue but still, [it is not achieved yet](https://github.com/rust-lang/rust/labels/A-reproducibility).
 
 ## CI solution
