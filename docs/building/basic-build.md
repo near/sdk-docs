@@ -44,4 +44,4 @@ You can simpify this command by adding this flags to your `ProjectFolder/.cargo/
 rustflags = ["-C", "link-arg=-s"]
 ```
 
-You can find an example [here](https://github.com/near/near-sdk-rs/blob/072b47779fcb219f468977bd7e727b4a83d9bd44/examples/fungible-token/.cargo/config.toml).
+You can find an example [here](https://github.com/near/near-sdk-rs/blob/05e4539a8f3db86dd43b768ee9660dd4c8e7ea5c/examples/fungible-token/.cargo/config.toml).
