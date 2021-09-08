@@ -17,11 +17,11 @@ The current approach to minification is the following:
 4. Run `binaryen wasm-opt`, which cleans up the rest.
 
 ### Requirements to run the script:
-- install `wasm-snip` and `wasm-gc` with Cargo:
+- install [wasm-snip](https://docs.rs/wasm-snip/0.4.0/wasm_snip/) and [wasm-gc](https://docs.rs/crate/wasm-gc/0.1.6) with Cargo:
 ```bash
 cargo install wasm-snip wasm-gc
 ```
-- install `binaryen` and `wabt` on your system. For Ubuntu and other Debian based Linux distributions run:
+- install [binaryen](https://github.com/WebAssembly/binaryen) and [wabt](https://github.com/WebAssembly/wabt) on your system. For Ubuntu and other Debian based Linux distributions run:
 ```bash
 apt install binaryen wabt
 ```
