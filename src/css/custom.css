@@ -10,7 +10,8 @@
   --near-color-black: #000000;
   --near-color-slate: #4b4f54;
   --near-color-red: #ff585d;
-  --near-color-blue: #6ad1e3;
+  --near-color-blue: #00C1DE;
+  --near-color-royal-blue: #0072CE;
   --near-color-green: #00C08B;
   --near-color-yellow-light: #FAF8D1;
   --near-color-yellow: #F0EC74;
@@ -38,3 +39,33 @@
   margin: 0 calc(-1 * var(--ifm-pre-padding));
   padding: 0 var(--ifm-pre-padding);
 }
+
+a code {
+  color: var(--near-color-blue);
+}
+
+.admonition-note {
+  background-color: var(--near-color-gray);
+  border-color: var(--near-color-gray);
+}
+
+.admonition-tip {
+  background-color: var(--near-color-green);
+  border-color: var(--near-color-green);
+}
+
+.admonition-info {
+  background-color: var(--near-color-blue);
+  border-color: var(--near-color-blue);
+}
+
+.admonition-caution {
+  background-color: var(--near-color-yellow);
+  border-color: var(--near-color-yellow);
+}
+
+.admonition-danger {
+  background-color: var(--near-color-red);
+  border-color: var(--near-color-red);
+}
+
