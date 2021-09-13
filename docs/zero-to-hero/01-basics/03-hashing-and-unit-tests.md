@@ -24,13 +24,13 @@ As mentioned in the first section of this **Basics** chapter, our smart contract
 
 Let's write a unit test that acts as a helper during development. This unit test will sha256 hash the input **"near nomicon ref finance"** and print it in a human-readable, hex format.
 
-:::tip A note on the upcoming code
-The following code may look a bit unusual or advanced. Don't worry if you don't understand it at this time. For those who are curious, it uses [formatting traits](https://doc.rust-lang.org/std/fmt/#formatting-traits) and [iterators](https://doc.rust-lang.org/book/ch13-02-iterators.html).
-:::
-
 ```rust reference
-https://github.com/mikedotexe/crossword-snippets/blob/8f413c4c7b2327aeb8b8a8c1204796bc704bdf2c/src/lib.rs#L56-L69
+https://github.com/mikedotexe/crossword-snippets/blob/4212e4e3d2e9343d9ddbc4e7834c7200daac3c96/src/lib.rs#L59-L69
 ```
+
+:::info What is that {:?} thing?
+Take a look at different formatting traits that are covered in the [`std` Rust docs](https://doc.rust-lang.org/std/fmt/index.html#formatting-traits) regarding this. This is a `Debug` formatting trait and can prove to be useful during development.
+:::
 
 Run the unit tests with the command:
 
@@ -41,7 +41,7 @@ You'll see this output:
 ```
 …
 running 1 test
-Let's debug: "69C2FEB084439956193F4C21936025F14A5A5A78979D67AE34762E18A7206A0F"
+Let's debug: "69c2feb084439956193f4c21936025f14a5a5a78979d67ae34762e18a7206a0f"
 test tests::debug_get_hash ... ok
 
 test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
@@ -112,7 +112,7 @@ near create-account crossword.friend.testnet --masterAccount friend.testnet
 near deploy crossword.friend.testnet --wasmFile res/rust_template.wasm
 
 # Call the "new" method
-near call crossword.friend.testnet new '{"solution": "69C2FEB084439956193F4C21936025F14A5A5A78979D67AE34762E18A7206A0F"}' --accountId crossword.friend.testnet
+near call crossword.friend.testnet new '{"solution": "69c2feb084439956193f4c21936025f14a5a5a78979d67ae34762e18a7206a0f"}' --accountId crossword.friend.testnet
 ```
 
 Now the crossword solution, as a hash, is stored instead. If you try calling the last command again, you'll get the error message, thanks to the `#[init]` macro:
@@ -143,7 +143,7 @@ near create-account crossword.friend.testnet --masterAccount friend.testnet
 # Deploy
 near deploy crossword.friend.testnet --wasmFile res/rust_template.wasm \
   --initFunction 'new' \
-  --initArgs '{"solution": "69C2FEB084439956193F4C21936025F14A5A5A78979D67AE34762E18A7206A0F"}'
+  --initArgs '{"solution": "69c2feb084439956193f4c21936025f14a5a5a78979d67ae34762e18a7206a0f"}'
 ```
 
 Now that we're using Batch Actions, no one can call this `new` method before us.
@@ -163,3 +163,9 @@ We'll also modify our `guess_solution` to return a boolean value, which will als
 ```rust reference
 https://github.com/mikedotexe/crossword-snippets/blob/dddacfae738cb8974fd8e9da79758362f5403472/src/lib.rs#L19-L31
 ```
+
+The new method can be called with:
+
+    near view crossword.friend.testnet get_solution
+
+In the next section we'll add a simple frontend. Following chapters will illustrate more NEAR concepts built on top of this idea.
