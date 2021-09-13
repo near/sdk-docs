@@ -1,0 +1,80 @@
+---
+sidebar_position: 5
+sidebar_label: "Add simple frontend"
+title: "Add a simple frontend to the crossword puzzle that checks the solution's hash"
+---
+
+# Add a simple frontend
+
+This will be the final section in this chapter, where we'll add a simple frontend using React and [`near-api-js`](https://docs.near.org/docs/api/javascript-library) to communicate with the smart contract.
+
+There will be three main files we'll be working with:
+1. `src/index.js` will be the entry point, where NEAR network configuration will be set up, and the view-only call to `get_solution` will happen.
+2. `src/App.js` is then called and sets up the crossword table and checks to see if a solution has been found.
+3. `src/utils.js` is used to make a view-only call to the blockchain to get the solution, and other helper functions.
+
+## Entry point
+
+We'll go over a pattern that may look familiar to folks who have surveyed the [NEAR examples site](https://near.dev). We'll start with an asynchronous JavaScript function that sets up desired logic, then pass that to the React app.
+
+```js reference
+https://github.com/mikedotexe/crossword-frontend/blob/bec49e1444af69db546c5957c420905ab2992f29/src/index.js#L3-L22
+```
+
+Let's talk through the code above, starting with the imports.
+
+We import from:
+
+- `config.js` which, at the moment, is a common pattern. This file contains details on the different networks. (Which RPC endpoint to hit, which NEAR Wallet site to redirect to, which NEAR Explorer as well…)
+- `utils.js` for that view-only function call that will call `get_solution` to retrieve the correct solution hash when a person has completed the crossword puzzle correctly.
+- `hardcoded-data.js` is a file containing info on the crossword puzzle clues. This chapter has covered the crossword puzzle where the solution is **near nomicon ref finance**, and according to the chapter overview we've committed to serving *one* puzzle. We'll improve our smart contract later, allowing for multiple crossword puzzles, but for now it's hardcoded here.
+
+Next, we define an asynchronous function called `initCrossword` that will be called before passing data to the React app. It's often useful to set up a connection with the blockchain here, but in our case all we need to do is retrieve the crossword puzzle solution as a hash. Note that we're attempting to pass this environment variable `NEAR_ENV` into our configuration file. `NEAR_ENV` is used to designate the blockchain network (testnet, betanet, mainnet) and is also [used in NEAR CLI](https://docs.near.org/docs/tutorials/contracts/general/deploy-to-mainnet). 
+
+Lastly, we'll call `initCrossword` and, when everything is complete, pass data to the React app contained in `App.js`.
+
+## React app
+
+Here's a large portion of the `App.js` file, which will make use of a fork of a React crossword library by Jared Reisinger.
+
+```js reference
+https://github.com/mikedotexe/crossword-frontend/blob/bec49e1444af69db546c5957c420905ab2992f29/src/App.js#L3-L54
+```
+
+We'll discuss a few key points in the code above, but seeing as we're here to focus on a frontend connection to the blockchain, will brush over other parts that are library-specific.
+
+The two imports worth highlighting are:
+
+- `parseSolutionSeedPhrase` from the utility file we'll cover shortly. This will take the solution entered by the user and put it in the correct order according to the rules discussed in [the chapter overview](/zero-to-hero/basics/overview#how-it-works).
+- `sha256` will take the ordered solution from above and hash it. Then we'll compare that hash with the one retrieved from the smart contract.
+
+```js
+const [solutionFound, setSolutionFound] = useState(false);
+```
+
+We're using [React Hooks](https://reactjs.org/docs/hooks-state.html) here, setting up the variable `solutionFound` that will be changed when the player of the crossword puzzle enters the final letter of the crossword puzzle, having entries for all the letters on the board.
+
+The `onCrosswordComplete` and `checkSolution` blocks of code fire events to check the final solution entered by the user, hash it, and compare it to the `solutionHash` that was passed in from the view-only call in `index.js` earlier.
+
+Finally, we return the [JSX](https://reactjs.org/docs/introducing-jsx.html) for our app and render the crossword puzzle! In this basic case we'll change this heading to indicate when the user has completed the puzzle successfully:
+
+```html
+<h3>Status: { solutionFound }</h3>
+```
+
+## Utility functions
+
+We'll be using two utility functions here:
+
+- `parseSolutionSeedPhrase` which will take a completed crossword puzzle and place the answers in the proper order. (Ascending by number, across answers come before down ones.)
+- `viewMethodOnContract` makes the view-only call to the smart contract to retrieve the solution hash.
+
+We'll only focus on the second method:
+
+```js reference
+https://github.com/mikedotexe/crossword-frontend/blob/bec49e1444af69db546c5957c420905ab2992f29/src/utils.js#L8-L12
+```
+
+This API doesn't look warm and friendly yet. You caught us! We'd love some help to improve our API as [detailed in this issue](https://github.com/near/near-api-js/issues/612), but for now, this is a concise way to get data from a view-only method.
+
+We haven't had the frontend call a mutable method for our project yet. We'll get into that in the coming chapters when we'll want to have a prize sent to the first person to solve the puzzle.
