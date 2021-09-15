@@ -117,4 +117,5 @@ After running the last command to start the React app, you'll be given a link to
 ## Completed project
 
 Here's the final code for this chapter:
+
 https://github.com/near-examples/crossword-tutorial-chapter-1
