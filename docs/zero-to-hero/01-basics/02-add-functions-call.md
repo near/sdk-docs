@@ -115,16 +115,7 @@ Let's deploy the contact and then check this again.
 
 Ensure that in your command line application, you're in the directory that contains the `res` directory, then run:
 
-    near deploy crossword.friend.testnet --wasmFile res/rust_template.wasm
-
-:::info Note the filename
-Note the filename above is `rust_template.wasm` which assumes you have copy/pasted or cloned the contract from the minimal [Rust Template](https://github.com/near-examples/rust-template) covered in the previous section.
-
-**Where does this name come from?**
-
-The manifest (`Cargo.toml`) has a `name` key, and the resulting Wasm file will follow that pattern, converting all dashes into underscores.
-Learn more about the cargo manifest file from [the cargo docs](https://doc.rust-lang.org/cargo/reference/manifest.html).
-:::
+    near deploy crossword.friend.testnet --wasmFile res/my_crossword.wasm
 
 Congratulations, you've deployed the smart contract! Note that NEAR CLI will output a link to [NEAR Explorer](https://docs.near.org/docs/tools/near-explorer) where you can inspect details of the transaction.
 
