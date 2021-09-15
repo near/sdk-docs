@@ -109,7 +109,7 @@ near delete crossword.friend.testnet friend.testnet
 near create-account crossword.friend.testnet --masterAccount friend.testnet
 
 # Deploy
-near deploy crossword.friend.testnet --wasmFile res/rust_template.wasm
+near deploy crossword.friend.testnet --wasmFile res/my_crossword.wasm
 
 # Call the "new" method
 near call crossword.friend.testnet new '{"solution": "69c2feb084439956193f4c21936025f14a5a5a78979d67ae34762e18a7206a0f"}' --accountId crossword.friend.testnet
@@ -141,7 +141,7 @@ near delete crossword.friend.testnet friend.testnet
 near create-account crossword.friend.testnet --masterAccount friend.testnet
 
 # Deploy
-near deploy crossword.friend.testnet --wasmFile res/rust_template.wasm \
+near deploy crossword.friend.testnet --wasmFile res/my_crossword.wasm \
   --initFunction 'new' \
   --initArgs '{"solution": "69c2feb084439956193f4c21936025f14a5a5a78979d67ae34762e18a7206a0f"}'
 ```
@@ -164,7 +164,7 @@ We'll also modify our `guess_solution` to return a boolean value, which will als
 https://github.com/mikedotexe/crossword-snippets/blob/dddacfae738cb8974fd8e9da79758362f5403472/src/lib.rs#L19-L31
 ```
 
-The new method can be called with:
+The `get_solution` method can be called with:
 
     near view crossword.friend.testnet get_solution
 

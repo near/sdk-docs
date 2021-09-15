@@ -71,7 +71,23 @@ Smart contracts compile to WebAssembly (Wasm) so we'll add the toolchain for Rus
 
 ## Start writing Rust! 
 
-There's a basic repository that's helpful to clone or download [located here](https://github.com/near-examples/rust-template). Let's look at our main file, in `src/lib.rs`:
+There's a basic repository that's helpful to clone or download [located here](https://github.com/near-examples/rust-template). 
+
+The first thing we'll do is modify the manifest file at `Cargo.toml`:
+
+```diff
+[package]
+-  name = "rust-template"
++  name = "my-crossword"
+version = "0.1.0"
+- authors = ["Near Inc <hello@near.org>"]
++ authors = ["NEAR Friend <friend@example.com>"]
+edition = "2018"
+```
+
+By changing the `name` here, we'll be changing the compiled Wasm file's name after running the build script. (`build.sh` for OS X and Linux, `build.bat` for Windows.) After running the build script, we can expect to find out compiled Wasm smart contract in `res/my_crossword.wasm`.
+
+Now let's look at our main file, in `src/lib.rs`:
 
 ```rust reference
 https://github.com/near-examples/rust-template/blob/3f3a8cfa19eb4bd15ae1c410fed136c6c7ac97a0/src/lib.rs#L1-L38
