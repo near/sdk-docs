@@ -18,7 +18,7 @@ There will be three main files we'll be working with:
 We'll go over a pattern that may look familiar to folks who have surveyed the [NEAR examples site](https://near.dev). We'll start with an asynchronous JavaScript function that sets up desired logic, then pass that to the React app.
 
 ```js reference
-https://github.com/mikedotexe/crossword-frontend/blob/bec49e1444af69db546c5957c420905ab2992f29/src/index.js#L3-L22
+https://github.com/near-examples/crossword-tutorial-chapter-1/blob/3e497b4815600b8382614f76c7812520710f704d/src/index.js#L3-L22
 ```
 
 Let's talk through the code above, starting with the imports.
@@ -38,7 +38,7 @@ Lastly, we'll call `initCrossword` and, when everything is complete, pass data t
 Here's a large portion of the `App.js` file, which will make use of a fork of a React crossword library by Jared Reisinger.
 
 ```js reference
-https://github.com/mikedotexe/crossword-frontend/blob/bec49e1444af69db546c5957c420905ab2992f29/src/App.js#L3-L54
+https://github.com/near-examples/crossword-tutorial-chapter-1/blob/3e497b4815600b8382614f76c7812520710f704d/src/App.js#L3-L54
 ```
 
 We'll discuss a few key points in the code above, but seeing as we're here to focus on a frontend connection to the blockchain, will brush over other parts that are library-specific.
@@ -72,9 +72,49 @@ We'll be using two utility functions here:
 We'll only focus on the second method:
 
 ```js reference
-https://github.com/mikedotexe/crossword-frontend/blob/bec49e1444af69db546c5957c420905ab2992f29/src/utils.js#L8-L12
+https://github.com/near-examples/crossword-tutorial-chapter-1/blob/3e497b4815600b8382614f76c7812520710f704d/src/utils.js#L8-L12
 ```
 
 This API doesn't look warm and friendly yet. You caught us! We'd love some help to improve our API as [detailed in this issue](https://github.com/near/near-api-js/issues/612), but for now, this is a concise way to get data from a view-only method.
 
 We haven't had the frontend call a mutable method for our project yet. We'll get into that in the coming chapters when we'll want to have a prize sent to the first person to solve the puzzle.
+
+## Run the React app
+
+Let's run our frontend on testnet! We won't add any new concepts at this point in the chapter, but note that the [near examples](https://near.dev) typically create an account for you automatically with a NodeJS command. We covered the important pattern of creating a subaccount and deploying the smart contract to it, so let's stick with that pattern as we start up our frontend.
+
+```bash
+# Go into the directory containing the Rust smart contract we've been working on
+cd contract
+
+# Build (for Windows it's build.bat)
+./build.sh
+
+# Create fresh account if you wish, which is good practice
+near delete crossword.friend.testnet friend.testnet
+near create-account crossword.friend.testnet --masterAccount friend.testnet
+
+# Deploy
+near deploy crossword.friend.testnet --wasmFile res/my_crossword.wasm \
+  --initFunction 'new' \
+  --initArgs '{"solution": "69c2feb084439956193f4c21936025f14a5a5a78979d67ae34762e18a7206a0f"}'
+  
+# Return to the project root and start the React app
+cd ..
+env CONTRACT_NAME=crossword.friend.testnet npm run start
+```
+
+The last line sends the environment variable `CONTRACT_NAME` into the NodeJS script. This is picked up in the `config.js` file that's used to set up the contract account and network configuration:
+
+```js reference
+https://github.com/near-examples/crossword-tutorial-chapter-1/blob/3e497b4815600b8382614f76c7812520710f704d/src/config.js#L1
+```
+
+After running the last command to start the React app, you'll be given a link to a local website, like `https://localhost:1234`. When you visit the site you'll see the simple frontend that interacts with our smart contract:
+
+![Crossword puzzle frontend showing a filled out puzzle with clues on the right sidebar](../assets/basics-final-frontend.png)
+
+## Completed project
+
+Here's the final code for this chapter:
+https://github.com/near-examples/crossword-tutorial-chapter-1
