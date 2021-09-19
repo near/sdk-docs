@@ -107,7 +107,7 @@ What you'll see is something like this:
 }
 ```
 
-Note the `code_hash` here is all ones. This indicates that there no contract deployed to this account.
+Note the `code_hash` here is all ones. This indicates that there is no contract deployed to this account.
 
 Let's deploy the contact and then check this again.
 
