@@ -57,6 +57,8 @@ Instead, we'll be iterating on our smart contract by building it and running tes
 
 ### Install Rust using `rustup`
 
+Please see the directions from the [Rustup site](https://rustup.rs/#). For OS X or Unix, you may use:
+
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 
 (Taken from the [Rust installation guide](https://www.rust-lang.org/tools/install))
