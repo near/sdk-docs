@@ -13,6 +13,15 @@ module.exports = {
     '@saucelabs/theme-github-codeblock'
   ],
   themeConfig: {
+    algolia: {
+      appId: "QPBQ67WNIG",
+      apiKey: "b590ae1153bf574215ca1605c19eb1fe",
+      indexName: "near",
+      searchParameters: {
+        // search only on near-sdk.io
+        facetFilters: ["tags:sdk"]
+      }
+    },
     prism: {
       additionalLanguages: ['rust'],
     },
