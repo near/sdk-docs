@@ -2,8 +2,7 @@
 module.exports = {
   title: 'NEAR SDK docs',
   tagline: 'Write smart contracts to run on the NEAR blockchain!',
-  // TODO update to custom domain in future
-  url: 'https://sdk-g4yv.onrender.com/',
+  url: 'https://near-sdk.io/',
   baseUrl: '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
