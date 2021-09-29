@@ -14,9 +14,13 @@ module.exports = {
   ],
   themeConfig: {
     algolia: {
-      apiKey: "058929d1d423f0f46d3278a102d58bfd", //TODO: get the API key
-      indexName: "near-sdk-rs-docs", //TODO: create index with this name
-      placeholder: "Search the Docs...",
+      appId: "QPBQ67WNIG",
+      apiKey: "b590ae1153bf574215ca1605c19eb1fe",
+      indexName: "near",
+      searchParameters: {
+        // search only on near-sdk.io
+        facetFilters: ["tags:sdk"]
+      }
     },
     prism: {
       additionalLanguages: ['rust'],
