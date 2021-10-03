@@ -6,11 +6,11 @@ title: "Set up Rust, get a NEAR testnet account, NEAR CLI, and get a basic smart
 
 # Getting started
 
-In this tutorial we'll get a testnet account, use NEAR CLI to add a key to our computer's file system, and set up the basic skeleton of a Rust smart contract.
+In this section we'll get a testnet account, use NEAR CLI to add a key to our computer's file system, and set up the basic skeleton of a Rust smart contract.
 
 ## Getting a testnet account
 
-Visit [NEAR Wallet for testnet](https://wallet.testnet.near.org) and register for a free account. For the purposes of this tutorial, you may skip the option to add two-factor authentication if you wish.
+Visit [NEAR Wallet for testnet](https://wallet.testnet.near.org) and register for a free account. For the purposes of this tutorial, you may skip the option to add two-factor authentication.
 
 :::note What just happened?
 When you created your NEAR testnet account, a private key was created and placed into your browser's local storage. You may inspect this using developer tools and see it. 
@@ -28,7 +28,7 @@ You may now run:
 
     near
 
-to see various commands, which are covered [in detail here](https://docs.near.org/docs/tools/near-cli).
+to see various commands, which are fully covered in [the near-cli docs](https://docs.near.org/docs/tools/near-cli).
 
 We'll start by "logging in" with this command:
 
@@ -46,14 +46,7 @@ You can see the keys associated with your account by running following command, 
 
 ## Setting up Rust
 
-You may have found the [online Rust Book](https://doc.rust-lang.org/stable/book), which is a great resource for getting started with Rust. However, there are a key items that are different when it comes to blockchain development. Namely, that smart contracts are [technically libraries and not binaries](https://learning-rust.github.io/docs/a4.cargo,crates_and_basic_project_structure.html#Crate), but for now just know that we won't be using some commands commonly found in the Rust Book.
-
-:::caution We won't be using
-    cargo run
-during smart contract development.
-:::
-
-Instead, we'll be iterating on our smart contract by building it and running tests.
+You may have found the [online Rust Book](https://doc.rust-lang.org/stable/book), which is a great resource for getting started with Rust. However, there are a key items that are different when it comes to blockchain development. Namely, that smart contracts are [technically libraries and not binaries](https://learning-rust.github.io/docs/a4.cargo,crates_and_basic_project_structure.html#Crate). Because of this, we won't be using some commands commonly found in the Rust Book, such as `cargo run`. Instead, we'll be iterating on our smart contract by building it and running tests.
 
 ### Install Rust using `rustup`
 
@@ -87,7 +80,7 @@ version = "0.1.0"
 edition = "2018"
 ```
 
-By changing the `name` here, we'll be changing the compiled Wasm file's name after running the build script. (`build.sh` for OS X and Linux, `build.bat` for Windows.) After running the build script, we can expect to find out compiled Wasm smart contract in `res/my_crossword.wasm`.
+By changing the `name` here, we'll be changing the compiled Wasm file's name after running the build script. (`build.sh` for OS X and Linux, `build.bat` for Windows.) After running the build script, we can expect to find our compiled Wasm smart contract in `res/my_crossword.wasm`.
 
 Now let's look at our main file, in `src/lib.rs`:
 

@@ -26,7 +26,7 @@ Before moving on, let's talk about these changes and how to think about them, be
 
 `const PUZZLE_NUMBER: u8 = 1;`
 
-This is an in-memory value, meaning that when the smart contract is spun up and executed in the virtual machine, the value `1` is contained in the contract code. This differs from the next change, where a field is added to the struct containing the `#[near_bindgen]` macro. The field `crossword_solution` has the type of `String` and, like any other fields added to this struct, the value will live in **persistent storage**. With NEAR, storage is "paid for" via the native NEAR token (Ⓝ). It is not "state rent" but storage staking, paid once, and returned when storage is deleted. This helps incentivize users to keep their state clean, allowing for a more healthy chain. Read more about [storage staking here](https://docs.near.org/docs/concepts/storage-staking).
+This is an in-memory value, meaning that when the smart contract is spun up and executed in the virtual machine, the value `1` is contained in the contract code. This differs from persistent on-chain storage, which we'll discuss later.
 
 Let's now look at the three new functions:
 
@@ -36,7 +36,7 @@ pub fn get_puzzle_number(&self) -> u8 {
 }
 ```
 
-As is covered in the [mutability section of these docs](/contract-interface/contract-mutability), a "view-only" function will have open parenthesis around `&self` while "change methods" or mutable functions will have `&mut self`. In the function above, the `PUZZLE_NUMBER` is returned. A user may call this method using the proper RPC endpoint without signing any transaction, since it's read-only. Think of it like a GET request, but using RPC endpoints that are [documented here](https://docs.near.org/docs/api/rpc/contracts#call-a-contract-function).
+As is covered in the [mutability section of these docs](/contract-interface/contract-mutability), a "view-only" function takes an immutable reference to the contract (`&self`), while "change methods" or mutable functions take a mutable reference to the contract (`&mut self`). In the function above, the `PUZZLE_NUMBER` is returned. A user may call this method using the proper RPC endpoint without signing any transaction, since it's read-only. Think of it like a GET request, but using RPC endpoints that are [documented here](https://docs.near.org/docs/api/rpc/contracts#call-a-contract-function).
 
 Mutable functions, on the other hand, require a signed transaction. The first example is a typical approach where the user supplies a parameter that's assigned to a field:
 
@@ -48,7 +48,11 @@ pub fn set_solution(&mut self, solution: String) {
 
 The next time the smart contract is called, the contract's field `crossword_solution` will have changed.
 
-The second example is provided for demonstration purposes:
+:::info In-Memory Values vs. Persistent Storage
+Note the `crossword_solution` field is added to the struct containing the `#[near_bindgen]` macro. This field has the type of `String` and, like any other fields added to this struct, the value will live in **persistent storage**. With NEAR, storage is "paid for" via the native NEAR token (Ⓝ). It is not "state rent" but storage staking, paid once, and returned when storage is deleted. This helps incentivize users to keep their state clean, allowing for a more healthy chain. [Read more about storage staking here](https://docs.near.org/docs/concepts/storage-staking).
+:::
+
+Finally, let's take a look at the `guess_solution` change method:
 
 ```rust
 pub fn guess_solution(&mut self, solution: String) {
@@ -66,7 +70,7 @@ Well, logging is ultimately captured inside blocks added to the blockchain. (Mor
 
 ## Create a subaccount
 
-If you've followed from the previous section, you have NEAR CLI installed and a full-access key on your machine. While developing, it's a best practice to create a subaccount and deploy the contract to it. This makes it easy to quickly delete and recreate the subaccount, which wipes the state swiftly and starts from scratch. Let's use NEAR CLI to create a subaccount:
+If you've followed from the previous section, you have NEAR CLI installed and a full-access key on your machine. While developing, it's a best practice to create a subaccount and deploy the contract to it. This makes it easy to quickly delete and recreate the subaccount, which swiftly wipes the state and starts from scratch. Let's use NEAR CLI to create a subaccount:
 
     near create-account crossword.friend.testnet --masterAccount friend.testnet
 
@@ -78,15 +82,13 @@ It's possible to have the account `another.crossword.friend.testnet`, but this a
 `friend.testnet` **cannot** create `another.crossword.friend.testnet` because accounts may only create a subaccount that's "one level deeper." 
 :::
 
-We won't get into top-level accounts or implicit accounts, but you may read more [about that here](https://docs.near.org/docs/concepts/account).
+To learn more about NEAR's account system, [see the account docs here](https://docs.near.org/docs/concepts/account).
 
 Now that we have a key pair for our subaccount, we can deploy the contract to testnet and interact with it!
 
 ## Build the contract
 
-The skeleton of the Rust contract we copied from the previous section has a `build.sh` and `build.bat` file for OS X / Linux and Windows, respectively. For more details on building contracts, please see [this section](/building/basic-build).
-
-Run the build script and expect to see the compiled Wasm file copied to the `res` folder, instead of buried  in the default folder structure Rust sets up.
+The skeleton of the Rust project we copied from the previous section contains 2 build scripts: `build.sh` for OS X or Linux, and `build.bat` for Windows. This script compiles our contracts to WebAssembly, then copies the output Wasm files to the `res` directory. It's more convenient than digging around in Rust's default folder structure. For more details on building contracts, please see [this section](/building/basic-build).
 
 We're almost ready to deploy the smart contract to the account, but first let's take a look at the account we're going to deploy to. Remember, this is the subaccount we created earlier. To view the state easily with NEAR CLI, you may run this command:
 
@@ -123,7 +125,7 @@ Lastly, let's run this command again and notice that the `code_hash` is no longe
 
     near state crossword.friend.testnet
 
-**Note**: deploying a contract is often done on the command line. While it may be _technically_ possible to deploy via a frontend, the CLI is likely the best approach. If you're aiming to use a factory model, (where a smart contract deploys contract code to a subaccount) this isn't covered in the tutorial, but you may reference the [contracts in SputnikDAO](https://github.com/near-daos/sputnik-dao-contract). 
+**Note**: deploying a contract is often done on the command line. While it's _technically_ possible to deploy via a frontend, the CLI is likely the best approach. If you're aiming to use a factory model, (where a smart contract deploys contract code to a subaccount) this isn't covered in the tutorial, but you may reference the [contracts in SputnikDAO](https://github.com/near-daos/sputnik-dao-contract). 
 
 ## Call the contract methods
 
@@ -131,9 +133,9 @@ Let's first call the method that's view-only:
 
     near view crossword.friend.testnet get_puzzle_number
 
-Your command prompt will show the result is `1`. Since this method doesn't take any arguments, we don't pass any. We could have added `'{}'` to the end of the command as well.
+Your command prompt will show the result is `1`. Since this method doesn't take any arguments, we don't pass any. The CLI passes arguments as a JSON string, so we could have added `'{}'` to the end of the command as well.
 
-Next, we'll add a crossword solution as a string (later we'll do this in a better way) argument:
+Next, we'll add a crossword solution as a string. Later we'll modify this to be an encrypted string:
 
     near call crossword.friend.testnet set_solution '{"solution": "near nomicon ref finance"}' --accountId friend.testnet
 
@@ -153,9 +155,17 @@ Correct:
 
 You'll see something like this:
 
-![Command line shows log for successful solution guess](../assets/cli-guess-solution.png)
+```shell
+Receipt: F5sE8YNgxe7WqkpEg3Gb5eT9Mh8Q8FvFW6HwxTYvUEi1
+  Log [snippets.demo.testnet]: You guessed right!
+Transaction Id G4ezEbtXmwj6DCRccuygKUY2FUWVbFXhkTVNLgSxYGB6
+To see the transaction in the transaction explorer, please open this url in your browser
+https://explorer.testnet.near.org/transactions/G4ezEbtXmwj6DCRccuygKUY2FUWVbFXhkTVNLgSxYGB6
+```
 
-Notice the log we wrote is output as well as a link to NEAR Explorer.
+<!-- ![Command line shows log for successful solution guess](../assets/cli-guess-solution.png) -->
+
+Notice the log we wrote is output on line 2, as well as a link to NEAR Explorer.
 
 Incorrect:
 
@@ -174,16 +184,48 @@ Using NEAR CLI, the commands will look like this:
 
 The first command deletes `crossword.friend.testnet` and sends the rest of its NEAR to `friend.testnet`.
 
+:::caution Contract Deletion Limitations
+Contracts can be deleted with a storage of up to 50 KB, contracts larger than this will need to clear enough storage to get below 50 KB. For further reading: [docs](#).
+:::
+
 ## Wrapping up
 
-So far, we're writing a simplified version of smart contract and approaching the crossword puzzle in a novice way. Remember that blockchain is an open ledger, meaning everyone can see the state of smart contracts and transactions taking place. 
+So far, we're writing a simplified version of our smart contract and approaching the crossword puzzle in a novice way. Remember that blockchain is an open ledger, meaning everyone can see the state of smart contracts and transactions taking place.
 
 :::info How would you do that?
-You may hit an RPC endpoint corresponding to `view_state` and see for yourself. Note: this quick example serves as demonstration purposes, but note that the string being returned is Borsh-serialized and contains more info than just the letters.
+You may hit an RPC endpoint corresponding to `view_state` and see for yourself. Note that the string being returned (in `values`) is Borsh-serialized and contains more info than just the letters.
 
-    curl -d '{"jsonrpc": "2.0", "method": "query", "id": "see-state", "params": {"request_type": "view_state", "finality": "final", "account_id": "crossword.friend.testnet", "prefix_base64": ""}}' -H 'Content-Type: application/json' https://rpc.testnet.near.org
+```shell
+$> curl -d '{"jsonrpc": "2.0", "method": "query", "id": "see-state", "params": {"request_type": "view_state", "finality": "final", "account_id": "crossword.friend.testnet", "prefix_base64": ""}}' -H 'Content-Type: application/json' https://rpc.testnet.near.org
 
-![Screenshot of a terminal screen showing a curl request to an RPC endpoint that returns state of a smart contract](../assets/rpc-api-view-state.png)
+# Result formatted for readability.
+{
+  "jsonrpc": "2.0",
+  "result": {
+    "block_hash": "92fXXxEgskbATMwxaQobJGxzmmSr89L41fCJamLqGUsb",
+    "block_height": 62784890,
+    "proof": [],
+    "values": [
+      {
+        "key": "U1RBVEU=",
+        "proof": [],
+        "value": "GAAAAG5lYXIgbm9taWNvbiByZWYgZmluYW5jZQ=="
+      }
+    ]
+  },
+  "id":"see-state"
+}
+```
+
+Once we deserialize the string, we see the solution! Not exactly a secure puzzle at this stage.
+
+```shell
+$> base64 --decode <<< GAAAAG5lYXIgbm9taWNvbiByZWYgZmluYW5jZQ==
+
+near nomicon ref finance
+```
+
+<!-- ![Screenshot of a terminal screen showing a curl request to an RPC endpoint that returns state of a smart contract](../assets/rpc-api-view-state.png) -->
 
 More on this RPC endpoint in the [NEAR docs](https://docs.near.org/docs/api/rpc/contracts#view-contract-state).
 :::

@@ -6,12 +6,12 @@ title: "Add a simple frontend to the crossword puzzle that checks the solution's
 
 # Add a simple frontend
 
-This will be the final section in this chapter, where we'll add a simple frontend using React and [`near-api-js`](https://docs.near.org/docs/api/javascript-library) to communicate with the smart contract.
+This is the final section in this chapter, where we'll add a simple frontend using React and [`near-api-js`](https://docs.near.org/docs/api/javascript-library) to communicate with our smart contract.
 
-There will be three main files we'll be working with:
-1. `src/index.js` will be the entry point, where NEAR network configuration will be set up, and the view-only call to `get_solution` will happen.
-2. `src/App.js` is then called and sets up the crossword table and checks to see if a solution has been found.
-3. `src/utils.js` is used to make a view-only call to the blockchain to get the solution, and other helper functions.
+Throughout this section we'll work with three files in the `src` directory:
+1. `index.js` will be the entry point, where NEAR network configuration will be set up, and the view-only call to `get_solution` will happen.
+2. `App.js` is then called and sets up the crossword table and checks to see if a solution has been found.
+3. `utils.js` is used to make a view-only call to the blockchain to get the solution, and other helper functions.
 
 ## Entry point
 
@@ -119,3 +119,10 @@ After running the last command to start the React app, you'll be given a link to
 Here's the final code for this chapter:
 
 https://github.com/near-examples/crossword-tutorial-chapter-1
+
+:::info Further Reading
+Check out these resources to take your journey to the next level:
+- [NEAR for Senior Developers](https://hackmd.io/@nearly-learning/near-201)
+- [NEAR University](https://www.near.university/)
+- [NEAR Examples](https://examples.near.org/)
+:::
