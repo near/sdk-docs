@@ -121,8 +121,8 @@ Here's the final code for this chapter:
 https://github.com/near-examples/crossword-tutorial-chapter-1
 
 :::info Further Reading
-Check out these resources to take your journey to the next level:
-- [NEAR for Senior Developers](https://hackmd.io/@nearly-learning/near-201)
-- [NEAR University](https://www.near.university/)
-- [NEAR Examples](https://examples.near.org/)
+We've gone through the basics of creating a NEAR dapp with Rust and React. Beyond the links throughout this article, here are some more resources for learning about NEAR Protocol:
+- [NEAR Examples](https://examples.near.org/): A collection of example repos for things like fungible tokens, NFTs, and wallet integration. Clone them locally or run in-browser with GitPod.
+- [NEAR University](https://www.near.university/): Prefer to learn in a class setting? NEAR University offers live and self-paced workshops!
+- [NEAR for Senior Developers](https://hackmd.io/@nearly-learning/near-201): A more in-depth overview of NEAR Protocol, particularly helpful for Ethereum developers.
 :::
