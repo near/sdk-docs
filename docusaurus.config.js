@@ -85,6 +85,10 @@ module.exports = {
       ],
       copyright: `${new Date().getFullYear()} NEAR Protocol | All rights reserved | hello@near.org`,
     },
+    gtag: {
+      trackingID: 'G-NEHEBVDQKL',
+      anonymizeIP: true,
+    },
   },
   presets: [
     [
