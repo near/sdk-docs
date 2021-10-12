@@ -13,7 +13,7 @@ This section will modify the smart contract skeleton from the previous section. 
 Let's modify the contract to be:
 
 ```rust reference
-https://github.com/mikedotexe/crossword-snippets/blob/64ce2f80c1dcf9a6107f64dfa4a831ccb2f370ea/src/lib.rs#L2-L29
+https://github.com/mikedotexe/crossword-snippets/blob/64ce2f80c1dcf9a6107f64dfa4a831ccb2f370ea/src/lib.rs#L1-L29
 ```
 
 We've done a few things here:
