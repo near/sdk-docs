@@ -25,7 +25,15 @@ As mentioned in the first section of this **Basics** chapter, our smart contract
 Let's write a unit test that acts as a helper during development. This unit test will sha256 hash the input **"near nomicon ref finance"** and print it in a human-readable, hex format.
 
 ```rust reference
+https://github.com/mikedotexe/crossword-snippets/blob/4212e4e3d2e9343d9ddbc4e7834c7200daac3c96/src/lib.rs#L44-L49
+```
+
+```rust reference
 https://github.com/mikedotexe/crossword-snippets/blob/4212e4e3d2e9343d9ddbc4e7834c7200daac3c96/src/lib.rs#L59-L69
+```
+
+```rust reference
+https://github.com/mikedotexe/crossword-snippets/blob/4212e4e3d2e9343d9ddbc4e7834c7200daac3c96/src/lib.rs#L94-L94
 ```
 
 :::info What is that {:?} thing?
