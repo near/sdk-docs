@@ -62,6 +62,12 @@ The unit test above is meant for debugging and quickly running snippets of code.
 
 ## Write a regular unit test
 
+Part of writing unit tests is setting up a mock context.  Add this below `use near_sdk::{testing_env, AccountId};`
+
+```rust reference
+https://github.com/mikedotexe/crossword-snippets/blob/f77c6c026c3c7d06ffedb5d96ba083e47d4fd144/src/lib.rs#L52-L57
+```
+
 Let's add this unit test and analyze it:
 
 ```rust reference
