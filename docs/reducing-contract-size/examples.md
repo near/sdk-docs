@@ -42,23 +42,23 @@ You may want to experiment with using `opt-level = "z"` instead of `opt-level = 
 
 Ensure that your manifest (`Cargo.toml`) doesn't contain `rlib` unless it needs to. Some NEAR examples have included this:
 
-  :::caution Adds unnecessary bloat
+:::caution Adds unnecessary bloat
 
-  ```toml
-  [lib]
-  crate-type = ["cdylib", "rlib"]
-  ```
-  :::
+```toml
+[lib]
+crate-type = ["cdylib", "rlib"]
+```
+:::
 
   when it could be:
 
-  :::tip
+:::tip
 
-  ```toml
-  [lib]
-  crate-type = ["cdylib"]
-  ```
-  :::
+```toml
+[lib]
+crate-type = ["cdylib"]
+```
+:::
 
 3. When using the Rust SDK, you may override the default JSON serialization to use [Borsh](https://borsh.io) instead. [See this page](/contract-interface/serialization-interface#overriding-serialization-protocol-default) for more information and an example.
 4. When using assertions or guards, avoid using the standard `assert` macros like [`assert!`](https://doc.rust-lang.org/std/macro.assert.html), [`assert_eq!`](https://doc.rust-lang.org/std/macro.assert_eq.html), or [`assert_ne!`](https://doc.rust-lang.org/std/macro.assert_ne.html) as these may add bloat for information regarding the line number of the error. There are similar issues with `unwrap`, `expect`, and Rust's `panic!()` macro.
