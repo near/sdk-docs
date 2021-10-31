@@ -22,10 +22,16 @@ Learn more about hashing from [Evgeny Kapun](https://github.com/abacabadabacaba)
 
 As mentioned in the first section of this **Basics** chapter, our smart contract is technically a library as defined in the manifest file. For our purposes, a consequence of writing a library in Rust is not having a "main" function that runs. You may find many online tutorials where the command `cargo run` is used during development. We don't have this luxury, but we can use unit tests to interact with our smart contract. This is likely more convenient than building the contract, deploying to a blockchain network, and calling a method.
 
+We'll add a dependency to the [hex crate](https://crates.io/crates/hex) to make things easier. As you may remember, dependencies live in the manifest file.
+
+```rust reference
+https://github.com/mikedotexe/crossword-snippets/blob/2069dcfd5419570ba4b54321005f674bb6f84224/Cargo.toml#L10-L12
+```
+
 Let's write a unit test that acts as a helper during development. This unit test will sha256 hash the input **"near nomicon ref finance"** and print it in a human-readable, hex format.
 
 ```rust reference
-https://github.com/mikedotexe/crossword-snippets/blob/4212e4e3d2e9343d9ddbc4e7834c7200daac3c96/src/lib.rs#L59-L69
+https://github.com/mikedotexe/crossword-snippets/blob/2069dcfd5419570ba4b54321005f674bb6f84224/src/lib.rs#L45-L62
 ```
 
 :::info What is that {:?} thing?
