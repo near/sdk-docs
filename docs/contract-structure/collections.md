@@ -119,13 +119,15 @@ To access elements by index in `UnorderedSet` we can use `.as_vector()` that wil
 
 For `UnorderedMap` we need to get keys and values as `Vector` collections, using `.keys_as_vector()` and `.values_as_vector()` respectively.
 
-Example of pagination for `UnorderedMap`:
+Example of pagination for `UnorderedMap` and `UnorderedSet`:
 
 ```rust
 #[near_bindgen]
 #[derive(BorshDeserialize, BorshSerialize, PanicOnDefault)]
 pub struct Contract {
     pub status_updates: UnorderedMap<AccountId, String>,
+    
+    pub daos: UnorderedSet<AccountId>,
 }
 
 #[near_bindgen]
@@ -138,6 +140,16 @@ impl Contract {
         let values = self.status_updates.values_as_vector();
         (from_index..std::cmp::min(from_index + limit, self.status_updates.len()))
             .map(|index| (keys.get(index).unwrap(), values.get(index).unwrap()))
+            .collect()
+    }
+    
+    /// Retrieves multiple elements from the `UnorderedSet`.
+    /// - `from_index` is the index to start from.
+    /// - `limit` is the maximum number of elements to return.
+    pub fn get_daos(&self, from_index: u64, limit: u64) -> Vec<AccountId> {
+        let elements = self.daos.as_vector();
+        (from_index..std::cmp::min(from_index + limit, elements.len()))
+            .filter_map(|index| elements.get(index))
             .collect()
     }
 }
