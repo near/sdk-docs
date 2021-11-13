@@ -113,9 +113,3 @@ https://github.com/near-examples/crossword-tutorial-chapter-1/blob/3e497b4815600
 After running the last command to start the React app, you'll be given a link to a local website, like `https://localhost:1234`. When you visit the site you'll see the simple frontend that interacts with our smart contract:
 
 ![Crossword puzzle frontend showing a filled out puzzle with clues on the right sidebar](../assets/basics-final-frontend.png)
-
-## Completed project
-
-Here's the final code for this chapter:
-
-https://github.com/near-examples/crossword-tutorial-chapter-1

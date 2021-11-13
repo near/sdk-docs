@@ -26,3 +26,9 @@ As we implement the list above, we'll learn key concepts about NEAR:
 - more…
 
 Let's jump right in!
+
+## Completed project
+
+Here's the final code for this chapter:
+
+https://github.com/near-examples/crossword-tutorial-chapter-2
