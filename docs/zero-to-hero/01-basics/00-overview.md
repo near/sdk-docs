@@ -4,7 +4,7 @@ sidebar_label: "Overview"
 title: "Basics overview laying out what will be accomplished in this first section."
 ---
 
-import myImageUrl from '../assets/basics-crossword.jpg';
+import basicCrossword from '../assets/basics-crossword.jpg';
 
 # Basics overview
 
@@ -18,7 +18,7 @@ This first chapter of the crossword puzzle tutorial will introduce fundamental c
 
 ## How it works
 
-<img src={myImageUrl} alt="Example banner" width="600" />
+<img src={basicCrossword} alt="Basic crossword puzzle" width="600" />
 
 We'll have a rule about how to get the words in the proper order. We collect words in ascending order by number, and if there's and across and a down for a number, the across goes first.
 
