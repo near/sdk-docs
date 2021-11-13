@@ -16,6 +16,12 @@ This first chapter of the crossword puzzle tutorial will introduce fundamental c
 - The user solving the crossword puzzle will not be able to know the solution.
 - Only the author of the crossword puzzle smart contract can set the solution.
 
+## Completed project
+
+Here's the final code for this chapter:
+
+https://github.com/near-examples/crossword-tutorial-chapter-1
+
 ## How it works
 
 <img src={basicCrossword} alt="Basic crossword puzzle" width="600" />
