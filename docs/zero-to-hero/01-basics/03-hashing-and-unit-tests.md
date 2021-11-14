@@ -124,6 +124,8 @@ near call crossword.friend.testnet new '{"solution": "69c2feb084439956193f4c2193
 Now the crossword solution, as a hash, is stored instead. If you try calling the last command again, you'll get the error message, thanks to the `#[init]` macro:
 `The contract has already been initialized`
 
+## First use of Batch Actions
+
 This is close to what we want, but what if a person deploys their smart contract and **someone else** quickly calls the `new` function before them? We want to make sure the same person who deployed the contract sets the solution, and we can do this using Batch Actions. (Technical details covered in the spec for a [batch transaction here](https://nomicon.io/RuntimeSpec/Transactions.html?highlight=batch#batched-transaction).)
 
 :::info Batch Actions in use
