@@ -33,7 +33,7 @@ We're going to introduce several structs all at once. These structs are addressi
 In this chapter, we want the ability to add multiple, custom crossword puzzles. This means we'll be storing information about the clues in the contract state. Think of a grid where there are x and y coordinates for where a clue starts. We'll also want to specify:
 
 1. Clue number
-2. Whether it's across or down
+2. Whether it's **across** or **down**
 3. The length, or number of letters in the answer
 
 Let's dive right in, starting with our primary struct:
@@ -47,7 +47,7 @@ pub struct Crossword {
 }
 ```
 
-:::note Let's ignore a couple things…
+:::note Let's ignore a couple of things…
 For now, let's ignore the macros about the structs that begin with `derive` and `serde`.
 :::
 
