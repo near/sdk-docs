@@ -39,7 +39,7 @@ The only interesting wrinkle (and what may *seem like* an exception) is when a s
 In the last chapter we had a simple function called `guess_solution` that returned `true` if the solution was correct, and `false` otherwise. We'll be replacing that function with `submit_solution` as shown below:
 
 ```rust reference
-https://github.com/near-examples/crossword-tutorial-chapter-2/blob/0783bf88c8a8ce82703a4fc7c2aff7a904c35030/contract/src/lib.rs#L90-L122
+https://github.com/near-examples/crossword-tutorial-chapter-2/blob/e799a6404388d4693e894823fe7a8b0d0f9c2bcf/contract/src/lib.rs#L90-L122
 ```
 
 Note the last line in this function, which sends NEAR to the predecessor.
