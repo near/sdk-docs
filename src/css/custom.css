@@ -69,3 +69,23 @@ a code {
   border-color: var(--near-color-red);
 }
 
+figure {
+  margin: 0;
+}
+
+figcaption {
+  background-color: #3F4246;
+  color: #fff;
+  font-size: smaller;
+  padding: 3px;
+  text-align: center;
+  width: 600px;
+}
+
+figcaption.full-width {
+  width: auto;
+}
+
+figcaption a, .alert figcaption a {
+  color: #FFC860;
+}
