@@ -4,6 +4,8 @@ sidebar_label: "Store multiple puzzles"
 title: "Store multiple crossword puzzles using a specialized collection in NEAR called a LookupMap"
 ---
 
+import bookPagination from '../assets/paging-through-hashes-swing--pierced_staggg.near--pierced_stag.jpg';
+
 # Using collections
 
 As mentioned in the previous chapter, the [online Rust Book](https://doc.rust-lang.org/stable/book) is a great reference for folks getting started with Rust, but there are concepts that differ when we're dealing with the blockchain. One of these differences is the use of collections.
@@ -32,6 +34,12 @@ As you look at the list of specialized collections in the Rust SDK, you might no
 
 So why would we have two data structures here? Again, if we end up with a large number of puzzles, we might not be able to loop through all the puzzles, looking for ones that are unsolved. Because of the limit of gas execution per transaction, we must be conscious that there can be operations which will eventually exceed this limit. I suppose we could assume  that our `UnorderedSet` of unsolved puzzles wouldn't contain tens of thousands of puzzles. That's one way to avoid running into limits, but we could also learn how to utilize **pagination** through an iterable collection like an `UnorderedSet` which we'll get to later.
 
+<figure>
+    <img src={bookPagination} alt="Book showing pagination of hashes. Art created by pierced_staggg.near" width="600"/>
+    <figcaption>Think of our collection as having multiple pages of puzzle hashes.<br/>Art by <a href="https://twitter.com/pierced_stag" target="_blank">pierced_staggg.near</a></figcaption>
+</figure>
+<br/>
+
 As we remember from the previous chapter, every smart contract has a primary struct containing the `#[near_bindgen]` macro. Here's how our struct will look with the iterable and non-iterable NEAR collections:
 
 ```rust reference
@@ -56,7 +64,7 @@ Above, the `new` function is initializing the struct's fields by giving them a u
 
 Let's take a peek at how we'll add a new crossword puzzle. Note that there will be a new struct here, `Answer`, which we haven't defined yet. We'll also be introducing the concept of enums, like `PuzzleStatus::Solved` and `PuzzleStatus::Unsolved`. We'll be covering these in the next section.
 
-Unlike the previous chapter where there was only one crossword puzzle, we'll be inserting into our new collections.
+Unlike the previous chapter where there was only one crossword puzzle, we'll be inserting into our new collections, so let's create a `new_puzzle` method.
 
 ```rust reference
 https://github.com/near-examples/crossword-tutorial-chapter-2/blob/7736b2d1b368722bca52cf9411bd66d57e15da79/contract/src/lib.rs#L146-L161
