@@ -37,14 +37,6 @@ mod tests {
     use near_sdk::test_utils::{get_logs, VMContextBuilder};
     use near_sdk::{testing_env, AccountId};
 
-    // part of writing unit tests is setting up a mock context
-    // provide a `predecessor` here, it'll modify the default context
-    fn get_context(predecessor: AccountId) -> VMContextBuilder {
-        let mut builder = VMContextBuilder::new();
-        builder.predecessor_account_id(predecessor);
-        builder
-    }
-
     #[test]
     fn debug_get_hash() {
         // Basic set up for a unit test
@@ -93,10 +85,10 @@ The unit test above is meant for debugging and quickly running snippets of code.
 
 ## Write a regular unit test
 
-Let's add this unit test and analyze it:
+Let's add this unit test (inside the `mod tests {}` block, under our previous unit test) and analyze it:
 
 ```rust reference
-https://github.com/near-examples/crossword-tutorial-chapter-1/blob/94f42e75cf70ed2aafb9c29a1faa1e21f079a49e/contract/src/lib.rs#L71-L93
+https://github.com/near-examples/crossword-tutorial-chapter-1/blob/d7699cf35092024fe11719b68788436c82fe82af/contract/src/lib.rs#L63-L93
 ```
 
 The first few lines of code will be used commonly when writing unit tests. It uses the `VMContextBuilder` to create some basic context for a transaction, then sets up the testing environment.
