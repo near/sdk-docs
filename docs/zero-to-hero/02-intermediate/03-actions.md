@@ -6,6 +6,7 @@ title: "There are several Actions an account can do, including sending the winne
 
 import allActions from '../assets/crossword-actions.png';
 import transferNEAR from '../assets/transfer-brand-blue--qiqi04.near--blankworl.png';
+import yoctoNEAR from '../assets/yoctoNEAR-magnifying--jrbemint.near--JrbeMad.jpg';
 
 # Actions (including sending NEAR)
 
@@ -40,6 +41,25 @@ Similarly, when we use the `Transfer` Action to send the crossword puzzle winner
 
 The only interesting wrinkle (and what may *seem like* an exception) is when a subaccount is created using the `CreateAccount` Action. During that transaction, you may use Batch Actions to do several things like deploy a contract, transfer NEAR, add a key, call a function, etc. This is common in smart contracts that use a factory pattern, and we'll get to this in future chapters of this tutorial.
 :::
+
+## Define the prize amount
+
+Let's make it simple and hardcode the prize amount. This is how much NEAR will be given to the first person who solves the crossword puzzle, and will apply to all the crossword puzzles we add. We'll make this amount adjustable in future chapters.
+
+At the top of the `lib.rs` file we'll add this constant:
+
+```rust reference
+https://github.com/near-examples/crossword-tutorial-chapter-2/blob/1909630a10291081cb00b2780c1ae8889d98f620/contract/src/lib.rs#L10-L11
+```
+
+As the code comment mentions, this is 5 NEAR, but look at all those zeroes in the code!
+
+That's the value in yoctoNEAR. This concept is similar to other blockchains. Bitcoin's smallest unit is a satoshi and Ethereum's is a wei.
+
+<figure>
+    <img src={yoctoNEAR} alt="Depiction of bills of NEAR, coins for partial NEAR, and then a magnifying glass showing a tiny yoctoNEAR next to an ant. Art created by jrbemint.near"/>
+    <figcaption class="full-width">Art by <a href="https://twitter.com/JrbeMad" target="_blank">jrbemint.near</a></figcaption>
+</figure>
 
 ## Adding `Transfer`
 
