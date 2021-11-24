@@ -5,10 +5,17 @@ title: "There are several Actions an account can do, including sending the winne
 ---
 
 import allActions from '../assets/crossword-actions.png';
+import transferNEAR from '../assets/transfer-brand-blue--qiqi04.near--blankworl.png';
 
 # Actions (including sending NEAR)
 
 We're going to introduce a new Action: `Transfer`. In this chapter, we'd like the first person to solve the crossword puzzle to earn some prize money, sent in NEAR.
+
+<figure>
+    <img src={transferNEAR} alt="Two hands exchanging a coin emblazoned with the NEAR Protocol logo. Art created by qiqi04.near" width="400"/>
+    <figcaption class="small">Art by <a href="https://twitter.com/blankworl" target="_blank">qiqi04.near</a></figcaption>
+</figure>
+<br/>
 
 We've already used Actions in the [previous chapter](/zero-to-hero/basics/hashing-and-unit-tests#using-batch-actions), when we deployed and initialized the contract, which used the `DeployContract` and `FunctionCall` Action, respectively.
 

@@ -86,6 +86,10 @@ figcaption.full-width {
   width: auto;
 }
 
+figcaption.small {
+  width: 400px;
+}
+
 figcaption a, .alert figcaption a {
   color: #FFC860;
 }
