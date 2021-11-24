@@ -4,6 +4,9 @@ sidebar_label: "Add basic code, create a subaccount, and call methods"
 title: "Alter the smart contract, learning about basics of development"
 ---
 
+import teachingDeployment from '../assets/teaching--jeheycell.near--artcultureac.jpeg';
+import createAccount from '../assets/creating account with text--seanpineda.near--_seanpineda.png';
+
 # Modifying the contract
 
 This section will modify the smart contract skeleton from the previous section. This tutorial will start by writing a contract in a somewhat useless way in order to learn the basics. Once we've got a solid understanding, we'll iterate until we have a crossword puzzle.
@@ -64,7 +67,27 @@ Notice how we're not saving anything to state and only logging? Why does this ne
 
 Well, logging is ultimately captured inside blocks added to the blockchain. (More accurately, transactions are contained in chunks and chunks are contained in blocks. More info in the [Nomicon spec](https://nomicon.io/Architecture.html?highlight=chunk#blockchain-layer-concepts).) So while it is not changing the data in the fields of the struct, it does cost some amount of gas to log, requiring a signed transaction by an account that pays for this gas.
 
-## Create a subaccount
+---
+
+## Building and deploying
+
+Here's what we'll want to do:
+
+<figure>
+    <img src={teachingDeployment} alt="Teacher shows chalkboard with instructions on how to properly deploy a smart contract. 1. Build smart contract. 2. Create a subaccount (or delete and recreate if it exists) 3. Deploy to subaccount. 4. Interact. Art created by jeheycell.near"/>
+    <figcaption class="full-width">Art by <a href="https://twitter.com/artcultureac" target="_blank">jeheycell.near</a></figcaption>
+</figure>
+
+### Build the contract
+
+The skeleton of the Rust contract we copied from the previous section has a `build.sh` and `build.bat` file for OS X / Linux and Windows, respectively. For more details on building contracts, please see [this section](/building/basic-build).
+
+
+Run the build script and expect to see the compiled Wasm file copied to the `res` folder, instead of buried  in the default folder structure Rust sets up.
+
+    ./build.sh
+
+### Create a subaccount
 
 If you've followed from the previous section, you have NEAR CLI installed and a full-access key on your machine. While developing, it's a best practice to create a subaccount and deploy the contract to it. This makes it easy to quickly delete and recreate the subaccount, which wipes the state swiftly and starts from scratch. Let's use NEAR CLI to create a subaccount:
 
@@ -75,18 +98,22 @@ If you look again in your home directory's `.near-credentials`, you'll see a new
 :::info Subaccount nesting
 It's possible to have the account `another.crossword.friend.testnet`, but this account must be created by `crossword.friend.testnet`. 
 
-`friend.testnet` **cannot** create `another.crossword.friend.testnet` because accounts may only create a subaccount that's "one level deeper." 
+`friend.testnet` **cannot** create `another.crossword.friend.testnet` because accounts may only create a subaccount that's "one level deeper."
+
+See this visualization where two keys belonging to `mike.near` is able to create `new.mike.near`. We'll get into concepts around access keys later.
+
+<figure>
+    <img src={createAccount} alt="Depiction of create account where two figures put together a subaccount. Art created by seanpineda.near"/>
+    <figcaption class="full-width">Art by <a href="https://twitter.com/_seanpineda" target="_blank">seanpineda.near</a></figcaption>
+</figure>
+
 :::
 
 We won't get into top-level accounts or implicit accounts, but you may read more [about that here](https://docs.near.org/docs/concepts/account).
 
 Now that we have a key pair for our subaccount, we can deploy the contract to testnet and interact with it!
 
-## Build the contract
-
-The skeleton of the Rust contract we copied from the previous section has a `build.sh` and `build.bat` file for OS X / Linux and Windows, respectively. For more details on building contracts, please see [this section](/building/basic-build).
-
-Run the build script and expect to see the compiled Wasm file copied to the `res` folder, instead of buried  in the default folder structure Rust sets up.
+#### What's a codehash?
 
 We're almost ready to deploy the smart contract to the account, but first let's take a look at the account we're going to deploy to. Remember, this is the subaccount we created earlier. To view the state easily with NEAR CLI, you may run this command:
 
@@ -109,9 +136,9 @@ What you'll see is something like this:
 
 Note the `code_hash` here is all ones. This indicates that there is no contract deployed to this account.
 
-Let's deploy the contact and then check this again.
+Let's deploy the contract (to the subaccount we created) and then check this again.
 
-## Deploy the contract
+### Deploy the contract
 
 Ensure that in your command line application, you're in the directory that contains the `res` directory, then run:
 
@@ -125,7 +152,7 @@ Lastly, let's run this command again and notice that the `code_hash` is no longe
 
 **Note**: deploying a contract is often done on the command line. While it may be _technically_ possible to deploy via a frontend, the CLI is likely the best approach. If you're aiming to use a factory model, (where a smart contract deploys contract code to a subaccount) this isn't covered in the tutorial, but you may reference the [contracts in SputnikDAO](https://github.com/near-daos/sputnik-dao-contract). 
 
-## Call the contract methods
+### Call the contract methods (interact!)
 
 Let's first call the method that's view-only:
 

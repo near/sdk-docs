@@ -87,7 +87,7 @@ version = "0.1.0"
 edition = "2018"
 ```
 
-By changing the `name` here, we'll be changing the compiled Wasm file's name after running the build script. (`build.sh` for OS X and Linux, `build.bat` for Windows.) After running the build script, we can expect to find out compiled Wasm smart contract in `res/my_crossword.wasm`.
+By changing the `name` here, we'll be changing the compiled Wasm file's name after running the build script. (`build.sh` for OS X and Linux, `build.bat` for Windows.) After running the build script, we can expect to find our compiled Wasm smart contract in `res/my_crossword.wasm`.
 
 Now let's look at our main file, in `src/lib.rs`:
 

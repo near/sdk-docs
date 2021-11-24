@@ -25,13 +25,38 @@ As mentioned in the first section of this **Basics** chapter, our smart contract
 We'll add a dependency to the [hex crate](https://crates.io/crates/hex) to make things easier. As you may remember, dependencies live in the manifest file.
 
 ```rust reference
-https://github.com/mikedotexe/crossword-snippets/blob/2069dcfd5419570ba4b54321005f674bb6f84224/Cargo.toml#L10-L12
+https://github.com/near-examples/crossword-tutorial-chapter-1/blob/94f42e75cf70ed2aafb9c29a1faa1e21f079a49e/contract/Cargo.toml#L10-L12
 ```
 
-Let's write a unit test that acts as a helper during development. This unit test will sha256 hash the input **"near nomicon ref finance"** and print it in a human-readable, hex format.
+Let's write a unit test that acts as a helper during development. This unit test will sha256 hash the input **"near nomicon ref finance"** and print it in a human-readable, hex format. (We'll typically put unit tests at the bottom of the `lib.rs` file.)
 
-```rust reference
-https://github.com/mikedotexe/crossword-snippets/blob/2069dcfd5419570ba4b54321005f674bb6f84224/src/lib.rs#L45-L62
+```rust
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use near_sdk::test_utils::{get_logs, VMContextBuilder};
+    use near_sdk::{testing_env, AccountId};
+
+    // part of writing unit tests is setting up a mock context
+    // provide a `predecessor` here, it'll modify the default context
+    fn get_context(predecessor: AccountId) -> VMContextBuilder {
+        let mut builder = VMContextBuilder::new();
+        builder.predecessor_account_id(predecessor);
+        builder
+    }
+
+    #[test]
+    fn debug_get_hash() {
+        // Basic set up for a unit test
+        testing_env!(VMContextBuilder::new().build());
+
+        // Using a unit test to rapidly debug and iterate
+        let debug_solution = "near nomicon ref finance";
+        let debug_hash_bytes = env::sha256(debug_solution.as_bytes());
+        let debug_hash_string = hex::encode(debug_hash_bytes);
+        println!("Let's debug: {:?}", debug_hash_string);
+    }
+}
 ```
 
 :::info What is that {:?} thing?
@@ -71,7 +96,7 @@ The unit test above is meant for debugging and quickly running snippets of code.
 Let's add this unit test and analyze it:
 
 ```rust reference
-https://github.com/mikedotexe/crossword-snippets/blob/f77c6c026c3c7d06ffedb5d96ba083e47d4fd144/src/lib.rs#L69-L93
+https://github.com/near-examples/crossword-tutorial-chapter-1/blob/94f42e75cf70ed2aafb9c29a1faa1e21f079a49e/contract/src/lib.rs#L71-L93
 ```
 
 The first few lines of code will be used commonly when writing unit tests. It uses the `VMContextBuilder` to create some basic context for a transaction, then sets up the testing environment.
@@ -101,7 +126,7 @@ Let's have the solution be set once, right after deploying the smart contract.
 Here we'll use the [`#[init]` macro](https://docs.rs/near-sdk/latest/near_sdk/attr.init.html) on a function called `new`, which is a common pattern.
 
 ```rust reference
-https://github.com/mikedotexe/crossword-snippets/blob/8b60d463dddbb6b4993cdd73ce6ef7d3f6c1a38e/src/lib.rs#L14-L19
+https://github.com/near-examples/crossword-tutorial-chapter-1/blob/94f42e75cf70ed2aafb9c29a1faa1e21f079a49e/contract/src/lib.rs#L10-L17
 ```
 
 Let's call this method on a fresh contract.
@@ -169,7 +194,7 @@ In the next section we'll add a simple frontend for our single, hardcoded crossw
 We'll also modify our `guess_solution` to return a boolean value, which will also make things easier for our frontend.
 
 ```rust reference
-https://github.com/mikedotexe/crossword-snippets/blob/dddacfae738cb8974fd8e9da79758362f5403472/src/lib.rs#L19-L31
+https://github.com/near-examples/crossword-tutorial-chapter-1/blob/94f42e75cf70ed2aafb9c29a1faa1e21f079a49e/contract/src/lib.rs#L19-L34
 ```
 
 The `get_solution` method can be called with:
