@@ -5,6 +5,7 @@ title: "Adding a new puzzle now that we're using a collection that can contain m
 ---
 
 import blankCrossword from '../assets/chapter-2-crossword-blank.png';
+import teachingDeployment from '../assets/teaching-just-teacher--herogranada.near--GranadaHero.jpeg';
 
 # Adding a puzzle
 
@@ -23,6 +24,35 @@ Essentially, we're going to tell the smart contract enough information for an em
 <br/>
 
 (Note that we aren't showing the human-readable clues in the above screenshot, but we will provide that as well.)
+
+## Building and deploying
+
+Let's use the same steps we learned from the first chapter:
+
+<figure>
+    <img src={teachingDeployment} alt="Teacher shows chalkboard with instructions on how to properly deploy a smart contract. 1. Build smart contract. 2. Create a subaccount (or delete and recreate if it exists) 3. Deploy to subaccount. 4. Interact. Art created by herogranada.near" width="600"/>
+    <figcaption>Art by <a href="https://twitter.com/GranadaHero" target="_blank">herogranada.near</a></figcaption>
+</figure>
+<br/>
+
+Navigate to the `contract` directory, then run the build script for your system:
+
+    ./build.sh
+
+If following from the previous chapter, you'll likely have a subaccount already created. For the purpose of demonstration, we're calling the subaccount (where we deploy the contract) `crossword.friend.testnet` and the parent account is thus `friend.testnet`.
+
+Let's delete the subaccount and recreate it, to start from a blank slate:
+
+```bash
+# Delete the subaccount and send remaining balance to friend.testnet
+near delete crossword.friend.testnet friend.testnet
+# Create the subaccount again 
+near create-account crossword.friend.testnet --masterAccount friend.testnet
+# Deploy, calling the "new" method with the the parameter for owner_id
+near deploy crossword.friend.testnet --wasmFile res/crossword_tutorial_chapter_2.wasm --initFunction new --initArgs '{"owner_id": "crossword.friend.testnet"}'
+```
+
+Now we're ready to construct our new crossword puzzle and add it via the `new_puzzle` method. Let's start with the clues for this new puzzle.
 
 ## The clues
 
@@ -105,3 +135,9 @@ near call crossword.friend.testnet new_puzzle '{
   ]
 }' --accountId crossword.friend.testnet
 ```
+
+Note that our contract name and the account we're calling this from are both `crossword.friend.testnet`. That's because we added a check at the top of `new_puzzle` to make sure the predecessor is the `owner_id`. That
+
+Now our smart contract has information about this second crossword puzzle.
+
+Let's explore how to make our frontend have a login button and truly turn this into a decentralized app (dApp)!
