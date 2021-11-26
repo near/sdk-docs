@@ -92,7 +92,7 @@ The frontend code contains a check to see if the user has completed the crosswor
 let functionCallResult = await walletConnection.account().functionCall({
   contractId: nearConfig.contractName,
   methodName: 'submit_solution',
-  args: {solution_hash: seedPhrase, memo: "Yay I won!"},
+  args: {solution: seedPhrase, memo: "Yay I won!"},
   gas: DEFAULT_FUNCTION_CALL_GAS, // optional param, by the way
   attachedDeposit: 0,
   walletMeta: '', // optional param, by the way

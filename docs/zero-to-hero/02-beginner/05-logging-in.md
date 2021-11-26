@@ -48,7 +48,7 @@ The illustration below shows a keychain with a full-access key (the large, gold 
 
 ### Full-access keys
 
-Full-access keys are the ones you want to protect the most. They can transfer all the funds from your account, delete the account, or perform any of the other [Actions on NEAR](/zero-to-hero/intermediate/actions).
+Full-access keys are the ones you want to protect the most. They can transfer all the funds from your account, delete the account, or perform any of the other [Actions on NEAR](/zero-to-hero/beginner/actions).
 
 When we used the `near login` command in the [previous chapter](/zero-to-hero/basics/set-up-skeleton#creating-a-new-key-on-your-computer), that command asked the full-access key in the NEAR Wallet to use the `AddKey` Action to create another full-access key: the one we created locally on our computer. NEAR CLI uses that new key to deploy, make function calls, etc.
 
