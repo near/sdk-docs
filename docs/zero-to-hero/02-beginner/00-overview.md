@@ -1,7 +1,7 @@
 ---
 sidebar_position: 1
 sidebar_label: "Overview"
-title: "Highlights of some intermediate topics covered."
+title: "Highlights of some beginner topics covered."
 ---
 
 import chapter2Correct from '../assets/chapter-2-solve.gif';

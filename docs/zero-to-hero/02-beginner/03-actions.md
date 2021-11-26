@@ -66,7 +66,7 @@ That's the value in yoctoNEAR. This concept is similar to other blockchains. Bit
 In the last chapter we had a simple function called `guess_solution` that returned `true` if the solution was correct, and `false` otherwise. We'll be replacing that function with `submit_solution` as shown below:
 
 ```rust reference
-https://github.com/near-examples/crossword-tutorial-chapter-2/blob/e799a6404388d4693e894823fe7a8b0d0f9c2bcf/contract/src/lib.rs#L90-L122
+https://github.com/near-examples/crossword-tutorial-chapter-2/blob/83d4d8925e6d30e04e8e4cb5e9a0a6d3763fce40/contract/src/lib.rs#L90-L122
 ```
 
 Note the last line in this function, which sends NEAR to the predecessor.
@@ -77,7 +77,7 @@ The last line of the function above ends with a semicolon. If the semicolon were
 It would be perfectly fine to write the function like this:
 
 ```rust
-pub fn submit_solution(&mut self, solution_hash: String, memo: String) -> Promise {
+pub fn submit_solution(&mut self, solution: String, memo: String) -> Promise {
     // …
     // Transfer the prize money to the winner
     Promise::new(env::predecessor_account_id()).transfer(PRIZE_AMOUNT)
