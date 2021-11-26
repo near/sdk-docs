@@ -4,6 +4,8 @@ sidebar_label: "Overview"
 title: "Highlights of some intermediate topics covered."
 ---
 
+import chapter2Correct from '../assets/chapter-2-solve.gif';
+
 # Diving deeper
 
 In the last chapter we installed Rust and got up and running with a simple smart contract. The contract has a few issues, however, and isn't as powerful as we'd like it to be. For instance, we can only store one crossword puzzle in the smart contract, the frontend is  hardcoded, and we don't offer any incentives to the person who wins.
@@ -16,6 +18,11 @@ In this chapter we'll:
 - Give a prize (in NEAR tokens) to the first person to solve the puzzle
 - Explore using Rust structs and enums
 - more…
+
+<figure>
+    <img src={chapter2Correct} width="600" alt="A user fills in the last clue in a crossword puzzle and an overlay appears saying that a transaction is pending" />
+    <figcaption>A user solves the crossword puzzle, interacts with the blockchain, and gets a prize</figcaption>
+</figure>
 
 As we implement the list above, we'll learn key concepts about NEAR:
 
