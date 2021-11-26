@@ -93,3 +93,17 @@ figcaption.small {
 figcaption a, .alert figcaption a {
   color: #FFC860;
 }
+
+table {
+  border-radius: 19px;
+  border: 6px solid #A7A7A7;
+}
+
+table thead {
+  background-color: rgba(171,208,85, .5);
+  color: #fff;
+}
+
+table tr:nth-child(2n) {
+  background-color: rgba(171,208,85, 0.19);
+}
