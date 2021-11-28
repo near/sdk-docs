@@ -15,7 +15,9 @@ The linkdrop contract is deployed to the accounts `testnet` and `near`, which ar
 
 ## Testnet
 
-There’s ✌️nothing special✌️ about these accounts. When a user signs up for a testnet account on NEAR Wallet, they'll see this:
+There’s ✌️nothing special✌️ about these accounts.
+
+When a user signs up for a testnet account on NEAR Wallet, they'll see this:
 
 <img src={createTestnetAccount} width="400" />
 
@@ -27,11 +29,11 @@ There are two ways to create this subaccount:
 1. Use a full-access key for the account `testnet` to sign a transaction with the `CreateAccount` Action.
 2. Have a smart contract deployed to the `testnet` account that has a Promise executing the `CreateAccount` Action. (More info about writing a [`CreateAccount` Promise](/promises/create-account).)
 
-We could also use NEAR CLI to create a testnet account, as we'll show next.
+We could also use NEAR CLI to create a new account, as we'll show next.
 
 ## Mainnet
 
-On mainnet, the account `near` has the linkdrop contract deployed to it.
+On mainnet, the account `near` also has the linkdrop contract deployed to it.
 
 Using NEAR CLI, a person can create a mainnet account by calling the linkdrop contract, like shown below:
 
@@ -113,6 +115,10 @@ Understanding cross-contract calls and callbacks is quite important in smart con
 Since NEAR's transactions are asynchronous, the use of callbacks may be a new paradigm shift for smart contract developers from other ecosystems. 
 
 Feel free to dig into the linkdrop contract and play with the ideas presented in this section.
+
+There are two additional examples that are helpful to look at:
+1. [High-level cross-contract calls](https://github.com/near/near-sdk-rs/tree/master/examples/cross-contract-high-level) — this is similar what we've seen in the linkdrop contract.
+2. [Low-level cross-contract calls](https://github.com/near/near-sdk-rs/tree/master/examples/cross-contract-low-level) — a different approach where you don't use the traits we mentioned.
 :::
 
 ---
