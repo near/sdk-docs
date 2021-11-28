@@ -4,10 +4,11 @@ sidebar_label: "Cross-contract calls, etc."
 title: "Adding cross-contract calls, access key shuffling, etc."
 ---
 
+# Updating the contract
+
 import shuffleKeys from '../assets/shuffle-keys.gif';
 import clionSuggestion from '../assets/clion-suggestion.gif';
-
-# Updating the contract
+import carpenterAddingKey from '../assets/create-key-carpenter-near--carlcarlkarl.near--CarlCarlKarl.jpg';
 
 To reiterate, we'd like anyone to be able to participate in the crossword puzzle, even folks who don't have a NEAR account.
 
@@ -49,7 +50,13 @@ https://github.com/near-examples/crossword-tutorial-chapter-3/blob/85bfe37824f91
 
 Instead of hashing the plaintext, we simply check that the public key matches what we know the answer is. (The answer being the series of words representing the solution to the crossword puzzle, used as a seed phrase to create a key pair, including a public key.)
 
-Further down in the `submit_solution` method we'll follow our plan by adding a function-call access key (that only the winner has) and removing the access key that was discovered by the winner, so no one else can use it.
+Further down in the `submit_solution` method we'll follow our plan by **adding a function-call access key** (that only the winner has) and removing the access key that was discovered by the winner, so no one else can use it.
+
+<figure>
+    <img src={carpenterAddingKey} alt="Illustration of a carpenter who has created a key. Art by carlcarlkarl.near" width="400"/>
+    <figcaption class="small">Our smart contract is like this carpenter adding a key to itself.<br/>Art by <a href="https://twitter.com/CarlCarlKarl" target="_blank">carlcarlkarl.near</a></figcaption>
+</figure>
+<br/>
 
 ```rust reference
 https://github.com/near-examples/crossword-tutorial-chapter-3/blob/db4fb99c6fad52f48ed402be05524a4816d0c89f/contract/src/lib.rs#L182-L192
@@ -292,3 +299,15 @@ pub fn claim_reward(
             assert_eq!(signer_pk, puzzle_pk, "You're not the person who can claim this, or else you need to use your function-call access key, friend.");
         }
 ```
+
+## Wrapping up
+
+Once you understand cross-contract calls and callbacks and where the logic should go, you can build just about anything on NEAR.
+
+This might be a good time for a reminder that this crossword puzzle, which checks permissions to methods based on a public key, is a bit unusual. It's more common to have simple collections or mappings for allowed users, or utilize the `owner_id` field we set up. The account and access key system in NEAR is quite powerful, and hopefully this tutorial helps stretch the limits of what's possible, like the seamless onboarding we have with the crossword puzzle.
+
+Again, the final code for this chapter:
+
+https://github.com/near-examples/crossword-tutorial-chapter-3
+
+Happy hacking!

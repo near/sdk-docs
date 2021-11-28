@@ -6,6 +6,7 @@ title: "Adding a new puzzle now that we're using a collection that can contain m
 
 import blankCrossword from '../assets/chapter-2-crossword-blank.png';
 import teachingDeployment from '../assets/teaching-just-teacher--herogranada.near--GranadaHero.jpeg';
+import recreatingSubaccount from '../assets/erase-recreate-subaccount--3one9.near--3one92.gif';
 
 # Adding a puzzle
 
@@ -41,7 +42,15 @@ Navigate to the `contract` directory, then run the build script for your system:
 
 If following from the previous chapter, you'll likely have a subaccount already created. For the purpose of demonstration, we're calling the subaccount (where we deploy the contract) `crossword.friend.testnet` and the parent account is thus `friend.testnet`.
 
-Let's delete the subaccount and recreate it, to start from a blank slate:
+Let's delete the subaccount and recreate it, to start from a blank slate.
+
+<figure>
+    <img src={recreatingSubaccount} alt="Animation of an alien in space with a computer deleting and re-writing the account crossword.friend.testnet Art by 3one9.near" width="600"/>
+    <figcaption>Art by <a href="https://twitter.com/3one92" target="_blank">3one9.near</a></figcaption>
+</figure>
+<br/>
+
+Here's how to delete and recreate the subaccount using NEAR CLI:
 
 ```bash
 # Delete the subaccount and send remaining balance to friend.testnet
