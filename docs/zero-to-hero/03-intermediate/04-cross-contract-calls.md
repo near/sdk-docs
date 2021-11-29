@@ -299,15 +299,3 @@ pub fn claim_reward(
             assert_eq!(signer_pk, puzzle_pk, "You're not the person who can claim this, or else you need to use your function-call access key, friend.");
         }
 ```
-
-## Wrapping up
-
-Once you understand cross-contract calls and callbacks and where the logic should go, you can build just about anything on NEAR.
-
-This might be a good time for a reminder that this crossword puzzle, which checks permissions to methods based on a public key, is a bit unusual. It's more common to have simple collections or mappings for allowed users, or utilize the `owner_id` field we set up. The account and access key system in NEAR is quite powerful, and hopefully this tutorial helps stretch the limits of what's possible, like the seamless onboarding we have with the crossword puzzle.
-
-Again, the final code for this chapter:
-
-https://github.com/near-examples/crossword-tutorial-chapter-3
-
-Happy hacking!
