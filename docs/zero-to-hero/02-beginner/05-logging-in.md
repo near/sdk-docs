@@ -151,7 +151,7 @@ In other ecosystems, the idea of "logging in" with a web3 wallet uses this offli
 
 NEAR keys can also sign and verify messages in this manner. In fact, there are a couple simple examples of how to achieve this in the [`near-api-js` cookbook](https://github.com/near/near-api-js/blob/master/examples/cookbook/utils/verify-signature.js).
 
-There are potential drawbacks to this offline signing technique. For instance, if you wish to log out of an application (or retract your participation) you must put trust in someone else's backend. Or worse, what if a malicious person intercepts your signed message, and you wish to kick them out? We quickly see that using a web3 wallet for signed typed data runs into limitations.
+There are potential drawbacks to this offline signing technique, particularly if a signed message gets intercepted by a malicious party. They might be able to send this signature to a backend and log in on your behalf. Because this all takes place offline, there's no mechanism on-chain to revoke your login or otherwise control access. We quickly see that using a web3 wallet for signed typed data runs into limitations.
 
 So signing a message is fine, but what if we could do better?
 
