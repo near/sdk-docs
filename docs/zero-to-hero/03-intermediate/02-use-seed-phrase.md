@@ -4,8 +4,6 @@ sidebar_label: "Seed phrase logic"
 title: "Implementing the seed phrase logic from the necessary libraries"
 ---
 
-import puzzleFrontrun from '../assets/puzzle-frontrun.png';
-
 # Seed phrase and key derivation
 
 There are two things we'll want to do:
