@@ -7,6 +7,7 @@ title: "There are several Actions an account can do, including sending the winne
 import allActions from '../assets/crossword-actions.png';
 import transferNEAR from '../assets/transfer-brand-blue--qiqi04.near--blankworl.png';
 import yoctoNEAR from '../assets/yoctoNEAR-magnifying--jrbemint.near--JrbeMad.jpg';
+import signerPredecessorCurrent from '../assets/predecessor-signer-current--sixxx.near--FranzOniiChan.png';
 
 # Actions (including sending NEAR)
 
@@ -94,7 +95,12 @@ When writing a smart contract you'll commonly want to use `env` and the details 
 
 There are more functions detailed in the [SDK reference docs](https://docs.rs/near-sdk/latest/near_sdk/env/index.html).
 
-Let's cover three commonly-used functions regarding accounts:
+Let's cover three commonly-used functions regarding accounts: predecessor, signer, and current account.
+
+<figure>
+    <img src={signerPredecessorCurrent} alt="Illustration of Alice sending a transaction to a smart contract named Banana, which does a cross-contract call to the smart contract Cucumber. Art created by sixxx.near"/>
+    <figcaption class="full-width">Alice sends a transaction to the contract on banana.near, which does a cross-contract call to cucumber.near.<br/>From the perspective of a contract on cucumber.near, we see a list of the predecessor, signer, and current account.<br/>Art by <a href="https://twitter.com/FranzOniiChan" target="_blank">sixxx.near</a></figcaption>
+</figure><br/><br/>
 
 1. [predecessor account](https://docs.rs/near-sdk/latest/near_sdk/env/fn.predecessor_account_id.html) — `env::predecessor_account_id()`
 
