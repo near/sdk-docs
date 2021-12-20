@@ -4,6 +4,8 @@ sidebar_label: "Hash the solution, unit tests, and an init method"
 title: "Introduction to basic hashing and adding unit tests"
 ---
 
+import batchCookieTray from '../assets/batch-of-actions--dobulyo.near--w_artsu.jpg';
+
 # Hash the solution, add basic unit tests
 
 In the previous section, we stored the crossword solution as plain text as a `String` type on the smart contract. If we're trying to hide the solution from the users, this isn't a great approach as it'll be public to anyone looking at the state. Let's instead hash our crossword solution and store that instead. There are different ways to hash data, but let's use `sha256` which is one of the hashing algorithms available in [the Rust SDK](https://docs.rs/near-sdk/latest/near_sdk/env/fn.sha256.html).
@@ -143,7 +145,12 @@ Now the crossword solution, as a hash, is stored instead. If you try calling the
 
 ## First use of Batch Actions
 
-This is close to what we want, but what if a person deploys their smart contract and **someone else** quickly calls the `new` function before them? We want to make sure the same person who deployed the contract sets the solution, and we can do this using Batch Actions. (Technical details covered in the spec for a [batch transaction here](https://nomicon.io/RuntimeSpec/Transactions.html?highlight=batch#batched-transaction).)
+This is close to what we want, but what if a person deploys their smart contract and **someone else** quickly calls the `new` function before them? We want to make sure the same person who deployed the contract sets the solution, and we can do this using Batch Actions. Besides, why send two transactions when we can do it in one? (Technical details covered in the spec for a [batch transaction here](https://nomicon.io/RuntimeSpec/Transactions.html?highlight=batch#batched-transaction).)
+
+<figure>
+    <img src={batchCookieTray} alt="Cookie sheet representing a transaction, where cookies are Deploy and FunctionCall Actions. Art created by dobulyo.near."/>
+    <figcaption className="full-width">Art by <a href="https://twitter.com/w_artsu" target="_blank">dobulyo.near</a></figcaption>
+</figure><br/>
 
 :::info Batch Actions in use
 Batch Actions are common in this instance, where we want to deploy and call an initialization function. They're also common when using a factory pattern, where a subaccount is created, a smart contract is deployed to it, a key is added, and a function is called.

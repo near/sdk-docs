@@ -6,6 +6,7 @@ title: "Alter the smart contract, learning about basics of development"
 
 import teachingDeployment from '../assets/teaching--jeheycell.near--artcultureac.jpeg';
 import createAccount from '../assets/creating account with text--seanpineda.near--_seanpineda.png';
+import chalkboardErase from '../assets/erasing-subaccount-chalkboard--iambon.near--JohnreyBona.mp4';
 
 # Modifying the contract
 
@@ -75,7 +76,7 @@ Here's what we'll want to do:
 
 <figure>
     <img src={teachingDeployment} alt="Teacher shows chalkboard with instructions on how to properly deploy a smart contract. 1. Build smart contract. 2. Create a subaccount (or delete and recreate if it exists) 3. Deploy to subaccount. 4. Interact. Art created by jeheycell.near"/>
-    <figcaption class="full-width">Art by <a href="https://twitter.com/artcultureac" target="_blank">jeheycell.near</a></figcaption>
+    <figcaption className="full-width">Art by <a href="https://twitter.com/artcultureac" target="_blank">jeheycell.near</a></figcaption>
 </figure>
 
 ### Build the contract
@@ -104,7 +105,7 @@ See this visualization where two keys belonging to `mike.near` is able to create
 
 <figure>
     <img src={createAccount} alt="Depiction of create account where two figures put together a subaccount. Art created by seanpineda.near"/>
-    <figcaption class="full-width">Art by <a href="https://twitter.com/_seanpineda" target="_blank">seanpineda.near</a></figcaption>
+    <figcaption className="full-width">Art by <a href="https://twitter.com/_seanpineda" target="_blank">seanpineda.near</a></figcaption>
 </figure>
 
 :::
@@ -193,6 +194,15 @@ As you can imagine, the above command will show something similar, except the lo
 ## Reset the account's contract and state
 
 We'll be iterating on this smart contract during this tutorial, and in some cases it's best to start fresh with the NEAR subaccount we created. The pattern to follow is to **delete** the account (sending all remaining testnet Ⓝ to a recipient) and the **create the account** again.
+
+<video autoPlay controls loop>
+    <source src={chalkboardErase} type="video/mp4" />
+    Sorry, your browser doesn't support embedded videos.
+</video>
+
+<figure>
+    <figcaption>Deleting a recreating a subaccount will clear the state and give us a fresh start.<br/>Animation by <a href="https://twitter.com/JohnreyBona" target="_blank">iambon.near</a></figcaption>
+</figure>
 
 Using NEAR CLI, the commands will look like this:
 
