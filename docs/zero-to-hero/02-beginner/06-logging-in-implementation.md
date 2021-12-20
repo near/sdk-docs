@@ -170,7 +170,6 @@ After you solve the crossword puzzle you'll see a screen with a link to NEAR Exp
 
 <figure>
     <img src={explorerTransfer} alt="Screenshot from the NEAR Explorer highlighting a place in the transaction where 5 NEAR is sent to mike.testnet"/>
-    <figcaption class="full-width">Think of our collection as having multiple pages of puzzle hashes.<br/>Art by <a href="https://twitter.com/pierced_stag" target="_blank">pierced_staggg.near</a></figcaption>
 </figure>
 <br/>
 
