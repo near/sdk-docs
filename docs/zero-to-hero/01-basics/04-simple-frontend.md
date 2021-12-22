@@ -4,9 +4,17 @@ sidebar_label: "Add simple frontend"
 title: "Add a simple frontend to the crossword puzzle that checks the solution's hash"
 ---
 
+import nearReactFriends from '../assets/near-and-react--dakila.near--rodolf_dtbbx.png';
+
 # Add a simple frontend
 
 This will be the final section in this chapter, where we'll add a simple frontend using React and [`near-api-js`](https://docs.near.org/docs/api/javascript-library) to communicate with the smart contract.
+
+<figure>
+    <img src={nearReactFriends} alt="Two characters hanging out, NEAR and React. Art created by dakila.near" width="600"/>
+    <figcaption>Dynamic duo of NEAR as the backend and React as a frontend.<br/>Art by <a href="https://twitter.com/rodolf_dtbbx" target="_blank">dakila.near</a></figcaption>
+</figure>
+<br/>
 
 There will be three main files we'll be working with:
 1. `src/index.js` will be the entry point, where NEAR network configuration will be set up, and the view-only call to `get_solution` will happen.

@@ -5,6 +5,7 @@ title: "How to think about structs and enums when writing a Rust smart contract 
 ---
 
 import basicCrossword from '../assets/basics-crossword.jpg';
+import enumBox from '../assets/enum-a-d-block--eizaconiendo.near--eiza_coniendo.png';
 
 # Structs and enums
 
@@ -19,6 +20,14 @@ Remember that there will be only one struct that gets the [`#[near_bindgen]` mac
 ### Enums
 
 Enums are short for enumerations, and can be particularly useful if you have entities in your smart contract that transition to different states. For example, say you have a series of blockchain games where players can join, battle, and win. There might be an enumeration for  `AcceptingPlayers`, `GameInProgress`, and `GameCompleted`. Enums are also used to define discrete types of concept, like months in a year.
+
+For our crossword puzzle, one example of an enum is the direction of the clue: either across (A) or down (D) as illustrated below. These are the only two options.
+
+<figure>
+    <img src={enumBox} alt="Children's toy of a box that has blocks that only fit certain shapes, resembling the letters A and D. Art created by eizaconiendo.near" width="600"/>
+    <figcaption>Art by <a href="https://twitter.com/eiza_coniendo" target="_blank">eizaconiendo.near</a></figcaption>
+</figure>
+<br/>
 
 Rust has an interesting feature where enums can contain additional data. You can see [examples of that here](https://doc.rust-lang.org/rust-by-example/custom_types/enum.html).
 

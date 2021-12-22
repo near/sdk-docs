@@ -5,6 +5,7 @@ title: "Store multiple crossword puzzles using a specialized collection in NEAR 
 ---
 
 import bookPagination from '../assets/paging-through-hashes-swing--pierced_staggg.near--pierced_stag.jpg';
+import guardsAroundContract from '../assets/guards-contract-permissions--connoisseur_dane.near--connoisseurdane.png';
 
 # Using collections
 
@@ -81,6 +82,12 @@ https://github.com/near-examples/crossword-tutorial-chapter-2/blob/8ec941c82539e
 Now we're set up to store multiple puzzles!
 
 ## Permissions or permissionless?
+
+<figure>
+    <img src={guardsAroundContract} alt="Guards or bouncers in front of a futuristic club with the label of a NEAR smart contract. Art created by connoisseur_dane.near" width="600"/>
+    <figcaption>Guarding which accounts can enter the smart contract logic.<br/>Art by <a href="https://twitter.com/connoisseurdane" target="_blank">connoisseur_dane.near</a></figcaption>
+</figure>
+<br/>
 
 **Is NEAR permissionless?**
 

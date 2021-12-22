@@ -9,6 +9,7 @@ title: "Adding cross-contract calls, access key shuffling, etc."
 import shuffleKeys from '../assets/shuffle-keys.gif';
 import clionSuggestion from '../assets/clion-suggestion.gif';
 import carpenterAddingKey from '../assets/create-key-carpenter-near--carlcarlkarl.near--CarlCarlKarl.jpg';
+import recycleKey from '../assets/remove-key-recycle--eerie_ram.near--eerie_ram.png';
 
 To reiterate, we'd like anyone to be able to participate in the crossword puzzle, even folks who don't have a NEAR account.
 
@@ -61,6 +62,14 @@ Further down in the `submit_solution` method we'll follow our plan by **adding a
 ```rust reference
 https://github.com/near-examples/crossword-tutorial-chapter-3/blob/db4fb99c6fad52f48ed402be05524a4816d0c89f/contract/src/lib.rs#L182-L192
 ```
+
+The first promise above adds an access key, and the second deletes the access key on the account that was derived from the solution as a seed phrase.
+
+<figure>
+    <img src={recycleKey} alt="Book showing pagination of hashes. Art created by eerie_ram.near" width="600"/>
+    <figcaption>We delete the function-call access key so there is only one winner.<br/>Art by <a href="https://twitter.com/eerie_ram" target="_blank">eerie_ram.near</a></figcaption>
+</figure>
+<br/>
 
 Note that the new function-call access key is able to call two methods we'll be adding:
 
