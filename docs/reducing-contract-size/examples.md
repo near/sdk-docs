@@ -77,7 +77,7 @@ crate-type = ["cdylib"]
   :::tip
 
   ```rust
-  if contract_owner == predecessor_account {
+  if contract_owner != predecessor_account {
     env::panic(b"ERR_NOT_OWNER");
   }
   ```
