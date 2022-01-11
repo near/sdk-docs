@@ -68,7 +68,7 @@ crate-type = ["cdylib"]
   :::caution Adds unnecessary bloat
 
   ```rust
-  assert_eq!(contract_owner, predecessor_account, "ERR_NOT_OWNER");
+  assert_ne!(contract_owner, predecessor_account, "ERR_NOT_OWNER");
   ```
   :::
 
@@ -77,7 +77,7 @@ crate-type = ["cdylib"]
   :::tip
 
   ```rust
-  if contract_owner == predecessor_account {
+  if contract_owner != predecessor_account {
     env::panic(b"ERR_NOT_OWNER");
   }
   ```
