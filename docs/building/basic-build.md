@@ -22,22 +22,24 @@ Notice that your project directory now has a few additional items:
 └── target      ⟵ created during build, holds the compiled wasm
 ```
 # Build and Flags
-We recommend you to optimize your build artifact with the use of the next flags.
+We recommend you to optimize your build artifact with the use of the next flags in your Cargo.toml file. If you are performing a multi-contract build, you should include these settings in the Cargo.toml that is at the root of your project.
 
 ```bash
-env 'RUSTFLAGS=-C link-arg=-s' cargo build --target wasm32-unknown-unknown --release
+[profile.release]
+codegen-units = 1
+# Tell `rustc` to optimize for small code size.
+opt-level = "z"
+lto = true
+debug = false
+panic = "abort"
+# Opt into extra safety checks on arithmetic operations https://stackoverflow.com/a/64136471/249801
+overflow-checks = true
 ```
 
-The above command is essentially setting special flags and optimizing the resulting `.wasm` file. At the end of the day, it's simply a customized `cargo build --release` command.
+The above command is essentially setting special flags and optimizing the resulting `.wasm` file. At the end of the day, this allows you to customize the `cargo build --release` command.
 
-
-**Windows users**: please modify the above command as:
-```bash
-set RUSTFLAGS=-C link-arg=-s
-cargo build --target wasm32-unknown-unknown --release
-```
-
-You can simpify this command by adding this flags to your `ProjectFolder/.cargo/config.toml`.
+# Custom Flags
+If you wish to add custom flags to your build, you can perform this by adding the flags to your `ProjectFolder/.cargo/config.toml`.
 
 ```toml
 [target.wasm32-unknown-unknown]
