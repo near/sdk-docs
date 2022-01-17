@@ -145,7 +145,7 @@ near call crossword.friend.testnet new_puzzle '{
 }' --accountId crossword.friend.testnet
 ```
 
-Note that our contract name and the account we're calling this from are both `crossword.friend.testnet`. That's because we added a check at the top of `new_puzzle` to make sure the predecessor is the `owner_id`. That
+Note that our contract name and the account we're calling this from are both `crossword.friend.testnet`. That's because we added a check at the top of `new_puzzle` to make sure the predecessor is the `owner_id`.
 
 Now our smart contract has information about this second crossword puzzle.
 
