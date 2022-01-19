@@ -39,11 +39,14 @@ overflow-checks = true
 The above command is essentially setting special flags and optimizing the resulting `.wasm` file. At the end of the day, this allows you to customize the `cargo build --release` command.
 
 # Custom Flags
-If you wish to add custom flags to your build, you can perform this by adding the flags to your `ProjectFolder/.cargo/config.toml`.
+If you wish to add custom flags to your build, you can perform this by adding build flags to your `ProjectFolder/.cargo/config.toml` as illustrated in this example.
 
 ```toml
 [target.wasm32-unknown-unknown]
 rustflags = ["-C", "link-arg=-s"]
 ```
+
+A full set of build options can be accessed at https://doc.rust-lang.org/cargo/reference/config.html.
+
 
 You can find an example [here](https://github.com/near/near-sdk-rs/blob/05e4539a8f3db86dd43b768ee9660dd4c8e7ea5c/examples/fungible-token/.cargo/config.toml).
