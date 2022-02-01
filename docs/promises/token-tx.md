@@ -26,7 +26,7 @@ The `AccountId` behavior described throughout this document is a feature of `nea
 
 ```toml
 [dependencies]
-near-sdk = "4.0.0-pre2"
+near-sdk = "4.0.0-pre.2"
 ```
 :::
 
