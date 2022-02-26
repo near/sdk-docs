@@ -126,7 +126,7 @@ crate-type = ["cdylib"]
 
 For a `no_std` approach to minimal contracts, observe the following examples:
 
-- [Tiny contract](https://github.com/near/nearcore/tree/master/runtime/near-test-contracts/tiny-contract-rs)
+- [Tiny contract](https://github.com/near/nearcore/tree/1e7c6613f65c23f87adf2c92e3d877f4ffe666ea/runtime/near-test-contracts/tiny-contract-rs)
 - [NEAR ETH Gateway](https://github.com/ilblackdragon/near-eth-gateway/blob/master/proxy/src/lib.rs)
 - [This YouTube video](https://youtu.be/Hy4VBSCqnsE) where Eugene demonstrates a fungible token in `no_std` mode. The code for this [example lives here](https://github.com/near/core-contracts/pull/88).
 - [Examples using a project called `nesdie`](https://github.com/austinabell/nesdie/tree/main/examples).
