@@ -1,4 +1,6 @@
 /** @type {import('@docusaurus/types').DocusaurusConfig} */
+const lightCodeTheme = require('prism-react-renderer/themes/github');
+const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 module.exports = {
   title: 'NEAR SDK docs',
   tagline: 'Write smart contracts to run on the NEAR blockchain!',
@@ -10,7 +12,8 @@ module.exports = {
   organizationName: 'NEAR',
   projectName: 'sdk-docs',
   themes: [
-    '@saucelabs/theme-github-codeblock'
+    '@saucelabs/theme-github-codeblock',
+    '@docusaurus/theme-live-codeblock'
   ],
   themeConfig: {
     algolia: {
@@ -24,6 +27,8 @@ module.exports = {
     },
     prism: {
       additionalLanguages: ['rust'],
+      theme: lightCodeTheme,
+      darkTheme: darkCodeTheme,
     },
     colorMode: {
       defaultMode: 'dark',
@@ -36,6 +41,11 @@ module.exports = {
         srcDark: 'img/near_logo_white.svg',
       },
       items: [
+        {
+          to: '/editor',
+          label: 'Editor',
+          position: 'right',
+      },
         {
           href: 'https://docs.rs/near-sdk/',
           label: 'docs.rs',
@@ -85,10 +95,10 @@ module.exports = {
       ],
       copyright: `${new Date().getFullYear()} NEAR Protocol | All rights reserved | hello@near.org`,
     },
-    gtag: {
-      trackingID: 'G-NEHEBVDQKL',
-      anonymizeIP: true,
-    },
+    // gtag: {
+      // trackingID: 'G-NEHEBVDQKL',
+      // anonymizeIP: true,
+    // },
   },
   presets: [
     [
