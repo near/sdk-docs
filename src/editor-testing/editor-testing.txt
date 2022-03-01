@@ -1,7 +1,5 @@
 function testing(){
-
 const [data,setData]=useState(null);
-
   getData= async() => {
       try {
 		const params = {"method":"query",

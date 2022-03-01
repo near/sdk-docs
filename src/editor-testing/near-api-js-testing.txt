@@ -1,9 +1,8 @@
 function testing() {
     const [data, setData] = useState(null);
 
-
 async getData= ()=>{
-const near = await ccnnectNear();
+const near = await connectNear();
 
       //========Write code here=========
       const response = await near.connection.provider.block({
