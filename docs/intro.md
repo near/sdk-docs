@@ -25,7 +25,7 @@ rustup target add wasm32-unknown-unknown
 
 ## Create a new project
 
-The best way to create a new NEAR app connected with a frontend is through [create-near-app](https://github.com/near/create-near-app). When initializing the project, be sure to include the `--contract=rust` flag to use the Rust SDK.
+The best way to create a new NEAR app connected with a frontend is through [create-near-app](https://github.com/near/create-near-app). When initializing the project, be sure to include the `--contract=rust` flag to use the Rust SDK. Add `--frontend=react` to use react. Default is vanilla HTML.
 
 ```bash
 npx create-near-app --contract=rust my-project
