@@ -4,7 +4,9 @@ sidebar_position: 2
 
 # Simulation Tests
 
-**Note**: simulation tests are being deprecated in favor of [the Sandbox](https://docs.near.org/docs/develop/contracts/sandbox). Until the Sandbox is ready, simulation tests are still a useful approach to the types of testing described on this page. Please note, however, that there will not be ongoing development for it.  
+:::danger
+Simulation tests are being deprecated in favor of [workspaces-rs](https://github.com/near/workspaces-rs). Please follow [this guide](./workspaces-migration-guide.md) to migrate your NEAR Simulator-powered tests.
+:::
 
 ## Unit tests vs. simulation tests
 
