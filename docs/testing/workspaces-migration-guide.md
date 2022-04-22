@@ -61,7 +61,7 @@ In this guide we will be focusing on `sandbox` since it covers the same use case
 
 One of the ways to initialize simulator and deploy a contract is shown below (the other way is through `deploy!` macro which we will look at in the next section):
 
-```rust
+```rust title="Deployment - near-sdk-sim"
 use near_sdk_sim::{init_simulator, to_yocto};
 
 near_sdk_sim::lazy_static_include::lazy_static_include_bytes! {
@@ -78,14 +78,14 @@ let contract = root.deploy(&WASM_BYTES, ID.parse().unwrap(), to_yocto("5"));
 
 Although `workspaces-rs` provides a way to specify the account id for a contract to be deployed, usually it does not matter in the context of a single test. If you are fine with generating a random developer account and initializing it with 100N, then you can use replace the snippet above with this:
 
-```rust
+```rust title="Deployment - workspaces-rs"
 let worker = workspaces::sandbox().await?;
 let contract = worker.dev_deploy(include_bytes!("../res/contract.wasm")).await?;
 ```
 
 Alternatively, use this if you care about the account id:
 
-```rust
+```rust title="Deployment - workspaces-rs (with explicit account id)"
 let worker = workspaces::sandbox().await?;
 let (_, sk) = worker.dev_generate().await;
 let id: AccountId = "contract-id".parse()?;
@@ -101,7 +101,7 @@ let contract = worker
 
 Or, if you want to create a subaccount with a certain balance:
 
-```rust
+```rust title="Deployment - workspaces-rs (with explicit balance)"
 use near_units::parse_near;
 
 let worker = workspaces::sandbox().await?;
@@ -127,7 +127,7 @@ You might have noticed that `init_simulator` used to accept an optional genesis 
 
 As always, let's take a look at how we used to make calls with NEAR Simulator:
 
-```rust
+```rust title="Calls - near-sdk-sim"
 // Example 1: No Macros
 root.call(
     ft.account_id(),
@@ -175,7 +175,7 @@ Workspaces have a unified way of making all types of calls via a [builder](https
 
 Reference this migration of Example 1 for migrating your own calls:
 
-```rust
+```rust title="Calls - workspaces-rs"
 contract
     .call(&worker, "ft_transfer")
     .args_json((alice.id(), transfer_amount, Option::<bool>::None))?
@@ -184,24 +184,24 @@ contract
     .transact()
     .await?;
 
-let root_balance = contract
+let root_balance: U128 = contract
     .call(&worker, "ft_balance_of")
     .args_json((contract.id(),))?
     .view()
     .await?
-    .json::<U128>()?;
+    .json()?;
 ```
 
 :::note
 Note that you have to pass arguments as any serializable type representing a sequential list. Tuples are usually the best candidate due to their heterogeneous nature (remember that you can construct a unary tuple by placing a comma before the closing bracket like this: `(el,)`).
 :::
 
-### Batched transactions
+### Batch transactions
 
 There is a special builder for making batch transactions that can be instantiated by calling `Contract::batch`. Consider the following snippet making a batch transaction consisting of two calls:
 
 ```rust title="Batch Transaction - near-sdk-sim"
-root
+let res = root
     .create_transaction(contract.account_id())
     .function_call(
         "ft_transfer_call".to_string(),
@@ -231,7 +231,7 @@ root
 There are no caveats here, the snippet can be straightforwardly mapped into the following:
 
 ```rust title="Batch Transaction - workspace-rs"
-contract
+let res = contract
     .batch(&worker)
     .call(
         Function::new("ft_transfer_call")
@@ -251,8 +251,69 @@ contract
 
 ## Inspecting logs
 
-TBD
+:::danger
+TODO: I found some potential inconsistencies in what I wrote about the log inspection behavior, need some time to look at this further
+:::
+
+The API for inspecting logs is fairly close to what it was in NEAR Simulator, but there are still some things you should keep in mind when migrating. Let's take the same transaction we used in the [batch transactions](#batch-transactions) section and try to inspect its logs. This is how one would check that the transaction logged a specific message in a certain position with NEAR Simulator:
+
+```rust title="Logs - near-sdk-sim"
+assert_eq!(
+    res.logs()[1],
+    format!("Closed @{} with {}", contract.account_id(), initial_balance - transfer_amount)
+);
+```
+
+The `workspaces-rs` counterpart might seem almost identical at the first look:
+
+```rust title="Logs - workspaces-rs"
+assert_eq!(
+    res.logs()[1],
+    format!("Closed @{} with {}", contract.id(), initial_balance.0 - transfer_amount.0)
+);
+```
+
+However, it can actually behave differently depending on your use case, because while near-sdk-sim version only returns the logs from the transaction, the workspaces version returns all logs from both the transaction and receipt outcomes. If you want a literal counterpart, please use `res.outcome().logs`.
+
+Another common use case is examining receipt outcome logs like this:
+
+```rust title="Logs - nead-sdk-sim"
+let outcome = res.get_receipt_results().remove(5).unwrap();
+
+assert_eq!(outcome.logs()[0], "The account of the sender was deleted");
+assert_eq!(
+    outcome.logs()[2],
+    format!("Account @{} burned {}", root.account_id(), 10)
+);
+```
+
+Which is straightforwardly replaced with:
+
+```rust title="Logs - workspaces-rs"
+let outcome = &res.receipt_outcomes()[5];
+assert_eq!(outcome.logs[0], "The account of the sender was deleted");
+assert_eq!(outcome.logs[2], format!("Account @{} burned {}", contract.id(), 10));
+```
 
 ## Profiling gas
 
-TBD
+NEAR Simulator has not been providing realistic gas estimates (TODO: needs elaboration - since when and why?), so the `workspaces-rs` gas estimates might come as a surprise. The good news is that they do reflect reality!
+
+
+Let's once again return to the [batch transactions](#batch-transactions) example and see how we would estimate gas burnt by a given transaction:
+
+```rust title="Gas (transaction) - near-sdk-sim"
+println!("Burnt gas (transaction): {}", res.gas_burnt());
+```
+
+Just like with [inspecting logs](#inspecting-logs), one might mistakenly think that
+
+```rust title="Gas (all) - workspaces-rs"
+println!("Burnt gas (all): {}", res.total_gas_burnt);
+```
+
+is the corresponding `workspaces-rs` snippet, but `CallExecutionDetails::total_gas_burnt` includes all gas burnt by call execution, including by receipts. This is exposed as a surface level API since it is a much more commonly used concept, but if you do actually want gas burnt by transaction itself you can do it like this:
+
+```rust title="Gas (transaction) - workspaces-rs"
+println!("Burnt gas (transaction): {}", res.outcome().gas_burnt);
+```
