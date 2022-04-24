@@ -84,7 +84,7 @@ pub fn my_method(&mut self) {
 
 ## Private Methods
 
-Some methods need to be exposed to allow the contract to call a method on itself through a promise, but want to disallow any other contract to call it. For this, use the `#[private]` annotation to panic when this method is called externally. See [private methods](../contract-interface/payable-methods.md) for more information.
+Some methods need to be exposed to allow the contract to call a method on itself through a promise, but want to disallow any other contract to call it. For this, use the `#[private]` annotation to panic when this method is called externally. See [private methods](../contract-interface/private-methods.md) for more information.
 
 This annotation can be applied to any method through the following:
 
