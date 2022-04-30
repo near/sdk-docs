@@ -1,0 +1,31 @@
+function testing(){
+const [data,setData]=useState(null);
+  getData= async() => {
+      try {
+		const params = {"method":"query",
+						"params":{"request_type":"view_access_key_list","account_id":"shiwali.testnet","finality":"optimistic"},
+						"id":124,"jsonrpc":"2.0"}
+
+		   const result = await fetchData('https://rpc.testnet.near.org/','POST',params);
+		   setData(result);
+		   }catch (e) {
+            console.error(e);
+         	alert(e.message)
+            throw e;
+        }
+}
+
+
+    return (
+		<div>
+			<button onClick={this.getData}>View Account</button>
+			{
+			data &&
+			<div class="display-result">
+			<pre>{JSON.stringify(data, null, 2) }</pre>
+			</div>
+			}
+		</div>
+
+    )
+  }
