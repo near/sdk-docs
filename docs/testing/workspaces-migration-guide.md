@@ -12,7 +12,7 @@ NEAR Simulator was meant to be an in-place replacement of a blockchain environme
 TODO: I do not have a whole lot of context here why exactly simtests were not suitable for our purposes, so if anyone wants to elaborate the preceding paragraph please do.
 :::
 
-This guide presumes that you are transitioning from near-sdk-sim `3.2.0` (the last non-deprecated release) to `workspaces-rs` `0.2.1`. Given that near-sdk-sim is deprecated, it is very unlikely that its API is going to ever change, but future releases of `workspaces-rs` might. Hopefully this guide is going to be helpful even if you are migrating your project to a more recent version, but also feel free to migrate your tests to `0.2.1` using this guide first and upgrade to the most recent workspaces-rs version later by looking at the release notes to see how public API has changed since `0.2.1`.
+This guide presumes that you are transitioning from near-sdk-sim `3.2.0` (the last non-deprecated release) to `workspaces-rs` `0.2.1`. Given that near-sdk-sim is deprecated, it is very unlikely that its API will ever change, but future releases of `workspaces-rs` might. Hopefully, this guide will be helpful even if you are migrating your project to a more recent workspaces version. If workspaces have changed, feel free to migrate your tests to `0.2.1` first using this guide and upgrade to the most recent workspaces-rs version later by looking at the release notes to see how public API has changed since `0.2.1`.
 
 ## Async runtime and error handling
 
@@ -76,7 +76,7 @@ let root = init_simulator(...);
 let contract = root.deploy(&WASM_BYTES, ID.parse().unwrap(), to_yocto("5"));
 ```
 
-Although `workspaces-rs` provides a way to specify the account id for a contract to be deployed, usually it does not matter in the context of a single test. If you are fine with generating a random developer account and initializing it with 100N, then you can use replace the snippet above with this:
+Although `workspaces-rs` provides a way to specify the account id for a contract to be deployed, usually it does not matter in the context of a single test. If you are fine with generating a random developer account and initializing it with 100N, then you can replace the snippet above with this:
 
 ```rust title="Deployment - workspaces-rs"
 let worker = workspaces::sandbox().await?;
