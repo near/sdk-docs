@@ -6,7 +6,7 @@ sidebar_position: 2
 
 NEAR Protocol is a sharded, proof-of-stake blockchain that behaves differently than proof-of-work blockchains. When interacting with a native Rust (compiled to Wasm) smart contract, cross-contract calls are asynchronous. Callbacks are used to either get the result of a cross-contract call or tell if a cross-contract call has succeeded or failed.
 
-There are two techniques to write cross-contract calls: [high-level](https://github.com/near/near-sdk-rs/tree/master/examples/cross-contract-high-level) and [low-level](https://github.com/near/near-sdk-rs/tree/master/examples/cross-contract-low-level). This document will mostly focus on the high-level approach. There are two examples in the Rust SDK repository that demonstrate these, as linked above. Note that these examples use cross-contract calls "to itself." We'll show two examples demonstrating the high-level approach.
+There are two techniques to write cross-contract calls: [high-level](https://github.com/near/near-sdk-rs/blob/master/examples/cross-contract-calls/high-level/src/lib.rs) and [low-level](https://github.com/near/near-sdk-rs/blob/master/examples/cross-contract-calls/low-level/src/lib.rs). This document will mostly focus on the high-level approach. There are two examples in the Rust SDK repository that demonstrate these, as linked above. Note that these examples use cross-contract calls "to itself." We'll show two examples demonstrating the high-level approach.
 
 ## Calculator example
 

@@ -117,8 +117,8 @@ Since NEAR's transactions are asynchronous, the use of callbacks may be a new pa
 Feel free to dig into the linkdrop contract and play with the ideas presented in this section.
 
 There are two additional examples that are helpful to look at:
-1. [High-level cross-contract calls](https://github.com/near/near-sdk-rs/tree/master/examples/cross-contract-high-level) — this is similar what we've seen in the linkdrop contract.
-2. [Low-level cross-contract calls](https://github.com/near/near-sdk-rs/tree/master/examples/cross-contract-low-level) — a different approach where you don't use the traits we mentioned.
+1. [High-level cross-contract calls](https://github.com/near/near-sdk-rs/blob/master/examples/cross-contract-calls/high-level/src/lib.rs) — this is similar what we've seen in the linkdrop contract.
+2. [Low-level cross-contract calls](https://github.com/near/near-sdk-rs/blob/master/examples/cross-contract-calls/low-level/src/lib.rs) — a different approach where you don't use the traits we mentioned.
 :::
 
 ---
