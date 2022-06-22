@@ -127,7 +127,7 @@ The two methods in the snippet above are very similar, except they will call sep
 
 ```rust
 #[private]
-pub fn callback_arg_macro(&mut self, #[callback_unwrap] val: bool) -> bool {
+pub fn callback_arg_macro(#[callback_unwrap] val: bool) -> bool {
     val
 }
 
