@@ -19,7 +19,7 @@ For cases like [the change to the `rust-status-message` contract](https://github
 As a reminder, the goal was to change this:
 
 ```rust reference
-https://github.com/near-examples/rust-status-message/blob/master/src/lib.rs#L7-L17
+https://github.com/near-examples/rust-status-message/blob/b5fa6f2a30559d56a3a3ea52da8c26c5d3907606/src/lib.rs#L7-L17
 ```
 
 into this:

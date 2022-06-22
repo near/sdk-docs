@@ -33,7 +33,7 @@ For both cases, let's consider the following example.
 The [rust-status-message](https://github.com/near-examples/rust-status-message) example contract has the following structure:
 
 ```rust reference
-https://github.com/near-examples/rust-status-message/blob/master/src/lib.rs#L5-L29
+https://github.com/near-examples/rust-status-message/blob/b5fa6f2a30559d56a3a3ea52da8c26c5d3907606/src/lib.rs#L5-L29
 ```
 
 Let's say you deploy this contract to testnet, then call it with:
@@ -60,8 +60,8 @@ pub struct StatusMessage {
 impl Default for StatusMessage {
     fn default() -> Self {
         Self {
-            taglines: LookupMap::new(b"r".to_vec()),
-            bios: LookupMap::new(b"b".to_vec()),
+            taglines: LookupMap::new(b"r"),
+            bios: LookupMap::new(b"b"),
         }
     }
 }

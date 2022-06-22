@@ -24,10 +24,10 @@ Example:
 impl Contract {
     #[payable]
     pub fn take_my_money(&mut self) {
-        env::log_str("Thanks!");
+        near_sdk::env::log_str("Thanks!");
     }
     pub fn do_not_take_my_money(&mut self) {
-        env::log_str("Thanks!");
+        near_sdk::env::log_str("Thanks!");
     }
 }
 ```
@@ -38,13 +38,13 @@ is equivalent to:
 #[near_bindgen]
 impl Contract {
     pub fn take_my_money(&mut self) {
-        env::log_str("Thanks!");
+        near_sdk::env::log_str("Thanks!");
     }
     pub fn do_not_take_my_money(&mut self) {
-        if env::attached_deposit() != 0 {
-            env::panic_str("Method do_not_take_my_money doesn't accept deposit");
+        if near_sdk::env::attached_deposit() != 0 {
+            near_sdk::env::panic_str("Method do_not_take_my_money doesn't accept deposit");
         }
-        env::log_str("Thanks!");
+        near_sdk::env::log_str("Thanks!");
     }
 }
 ```

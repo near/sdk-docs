@@ -46,17 +46,14 @@ mod ext_calculator {
 Let's assume the calculator is deployed on `calc.near`, we can use the following:
 
 ```rust
-const BASE_GAS: Gas = Gas(5_000_000_000_000);
-
 #[near_bindgen]
 impl Contract {
     pub fn sum_a_b(&mut self, a: U128, b: U128) -> Promise {
         let calculator_account_id: AccountId = "calc.near".parse().unwrap();
-        // Call the method `sum` on the calculator contract. Attach static GAS equal to BASE_GAS.
-        // Any unused GAS will be added as well since the default GAS weight is 1.
+        // Call the method `sum` on the calculator contract.
+        // Any unused GAS will be attached since the default GAS weight is 1.
         // Attached deposit is defaulted to 0.
         ext_calculator::ext(calculator_account_id)
-            .with_static_gas(BASE_GAS)
             .sum(a, b)
     }
 }
@@ -92,12 +89,11 @@ fn get_account_to_check() -> AccountId {
 ```rust
 #[near_bindgen]
 impl Contract {
-    pub fn xcc_use_promise_result(&mut self) -> Promise {
-        // Call the method `is_allowlisted` on the allowlisted contract. Attach static GAS equal to XCC_GAS.
+    pub fn xcc_use_promise_result() -> Promise {
+        // Call the method `is_allowlisted` on the allowlisted contract. Static GAS is only attached to the callback.
         // Any unused GAS will be split between the function call and the callback since both have a default unused GAS weight of 1
         // Attached deposit is defaulted to 0 for both the function call and the callback.
         ext_allowlist::ext(get_allowlist_contract())
-            .with_static_gas(XCC_GAS)
             .is_allowlisted(get_account_to_check())
         .then(
             Self::ext(env::current_account_id())
@@ -107,11 +103,10 @@ impl Contract {
     }
 
     pub fn xcc_use_arg_macro(&mut self) -> Promise {
-        // Call the method `is_allowlisted` on the allowlisted contract. Attach static GAS equal to XCC_GAS.
+        // Call the method `is_allowlisted` on the allowlisted contract. Attach static GAS equal to XCC_GAS only for the callback.
         // Any unused GAS will be split between the function call and the callback since both have a default unused GAS weight of 1
         // Attached deposit is defaulted to 0 for both the function call and the callback.
         ext_allowlist::ext(get_allowlist_contract())
-            .with_static_gas(XCC_GAS)
             .is_allowlisted(get_account_to_check())
         .then(
             Self::ext(env::current_account_id())
@@ -132,7 +127,7 @@ The two methods in the snippet above are very similar, except they will call sep
 
 ```rust
 #[private]
-pub fn callback_promise_result(&mut self) -> bool {
+pub fn callback_promise_result() -> bool {
     assert_eq!(env::promise_results_count(), 1, "ERR_TOO_MANY_RESULTS");
     match env::promise_result(0) {
         PromiseResult::NotReady => unreachable!(),
