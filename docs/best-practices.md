@@ -13,28 +13,28 @@ It's usually helpful to panic on integer overflow. To enable it, add the followi
 overflow-checks = true
 ```
 
-## Use `assert!` early
+## Use `require!` early
 
-Try to validate the input, context, state and access first before taking any actions. The earlier you panic, the more [gas](https://docs.near.org/docs/concepts/gas) you will save for the caller.
-
-```rust
-#[near_bindgen]
-impl Contract {
-    pub fn set_fee(&mut self, new_fee: Fee) {
-        assert_eq!(env::predecessor_account_id(), self.owner_id, "Owner's method");
-        new_fee.assert_valid();
-        self.internal_set_fee(new_fee);
-    }
-}
-```
-
-**Note**: as of the SDK version `4.0.0-pre.2`, there is a more lightweight version of the Rust `assert!` macro called `require!`.
+Try to validate the input, context, state and access using `require!` before taking any actions. The earlier you panic, the more [gas](https://docs.near.org/docs/concepts/gas) you will save for the caller.
 
 ```rust
 #[near_bindgen]
 impl Contract {
     pub fn set_fee(&mut self, new_fee: Fee) {
         require!(env::predecessor_account_id() == self.owner_id, "Owner's method");
+        new_fee.assert_valid();
+        self.internal_set_fee(new_fee);
+    }
+}
+```
+
+**Note**: Before the SDK version `4.0.0-pre.2`, `require!` a more lightweight version of the Rust `assert!` macro was not available so the standard macro was used.
+
+```rust
+#[near_bindgen]
+impl Contract {
+    pub fn set_fee(&mut self, new_fee: Fee) {
+        assert_eq!(env::predecessor_account_id(), self.owner_id, "Owner's method");
         new_fee.assert_valid();
         self.internal_set_fee(new_fee);
     }
