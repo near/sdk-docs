@@ -33,7 +33,7 @@ For both cases, let's consider the following example.
 The [rust-status-message](https://github.com/near-examples/rust-status-message) example contract has the following structure:
 
 ```rust reference
-https://github.com/near-examples/rust-status-message/blob/61de649d8311bef5957c129e6ad1407101a0f873/src/lib.rs#L7-L31
+https://github.com/near-examples/rust-status-message/blob/b5fa6f2a30559d56a3a3ea52da8c26c5d3907606/src/lib.rs#L5-L29
 ```
 
 Let's say you deploy this contract to testnet, then call it with:
@@ -49,8 +49,43 @@ At this point the contract is deployed and has some state.
 
 Now let's say you change the contract to store two kinds of data for each account:
 
-```rust reference
-https://github.com/near-examples/rust-status-message/blob/a39e1fc55ee018b631e3304ba6f0884b7558873e/src/lib.rs#L7-L42
+```rust
+#[near_bindgen]
+#[derive(BorshDeserialize, BorshSerialize)]
+pub struct StatusMessage {
+    taglines: LookupMap<AccountId, String>,
+    bios: LookupMap<AccountId, String>,
+}
+
+impl Default for StatusMessage {
+    fn default() -> Self {
+        Self {
+            taglines: LookupMap::new(b"r"),
+            bios: LookupMap::new(b"b"),
+        }
+    }
+}
+
+#[near_bindgen]
+impl StatusMessage {
+    pub fn set_tagline(&mut self, message: String) {
+        let account_id = env::signer_account_id();
+        self.taglines.insert(&account_id, &message);
+    }
+
+    pub fn get_tagline(&self, account_id: AccountId) -> Option<String> {
+        return self.taglines.get(&account_id);
+    }
+
+    pub fn set_bio(&mut self, message: String) {
+        let account_id = env::signer_account_id();
+        self.bios.insert(&account_id, &message);
+    }
+
+    pub fn get_bio(&self, account_id: AccountId) -> Option<String> {
+        return self.bios.get(&account_id);
+    }
+}
 ```
 
 You build & deploy the contract again, thinking that maybe because the new `taglines` LookupMap has the same prefix as the old `records` LookupMap (the prefix is `r`, set by `LookupMap::new(b"r".to_vec())`), the tagline for `you.testnet` should be `"lol"`. But when you `near view` the contract, you get the "Cannot deserialize" message. What to do?
