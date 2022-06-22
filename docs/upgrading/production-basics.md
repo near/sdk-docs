@@ -19,21 +19,37 @@ For cases like [the change to the `rust-status-message` contract](https://github
 As a reminder, the goal was to change this:
 
 ```rust reference
-https://github.com/near-examples/rust-status-message/blob/61de649d8311bef5957c129e6ad1407101a0f873/src/lib.rs#L9-L19
+https://github.com/near-examples/rust-status-message/blob/master/src/lib.rs#L7-L17
 ```
 
 into this:
 
-```rust reference
-https://github.com/near-examples/rust-status-message/blob/a39e1fc55ee018b631e3304ba6f0884b7558873e/src/lib.rs#L9-L21
+```rust
+pub struct StatusMessage {
+    taglines: LookupMap<AccountId, String>,
+    bios: LookupMap<AccountId, String>,
+}
+
+impl Default for StatusMessage {
+    fn default() -> Self {
+        Self {
+            taglines: LookupMap::new(b"r".to_vec()),
+            bios: LookupMap::new(b"b".to_vec()),
+        }
+    }
+}
 ```
 
 The NEAR Runtime looks at your current code as well as your contract's data, which is serialized and saved on-disk. When it executes the code, it tries to match these up. If you change the code but the data stays the same, it can't figure out how to do this. Previously we "solved" this by removing old serialized data. Now let's see how to update the data instead.
 
 First, keep the old `struct` around for at least one deploy:
 
-```rust reference
-https://github.com/near-examples/rust-status-message/blob/7f6afcc5ce414271fdf9bc750f666c062a6d697e/src/lib.rs#L7-L10
+```rust
+#[derive(BorshDeserialize, BorshSerialize)]
+pub struct OldStatusMessage {
+    records: LookupMap<AccountId, String>,
+}
+
 ```
 
 And add a `migrate` method to the main struct:

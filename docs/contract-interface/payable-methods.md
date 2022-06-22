@@ -41,8 +41,8 @@ impl Contract {
         env::log_str("Thanks!");
     }
     pub fn do_not_take_my_money(&mut self) {
-        if near_sdk::env::attached_deposit() != 0 {
-            near_sdk::env::panic(b"Method do_not_take_my_money doesn't accept deposit");
+        if env::attached_deposit() != 0 {
+            env::panic_str("Method do_not_take_my_money doesn't accept deposit");
         }
         env::log_str("Thanks!");
     }
