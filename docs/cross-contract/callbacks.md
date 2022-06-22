@@ -123,9 +123,14 @@ There are a couple things to note when doing these function calls:
 2. You can attach a static amount of GAS by specifying the `.with_static_gas()` method but it is defaulted to 0.
 3. You can attach an unused GAS weight by specifying the `.with_unused_gas_weight()` method but it is defaulted to 1. The unused GAS will be split amongst all the functions in the current execution depending on their weights. If there is only 1 function, any weight above 1 will result in all the unused GAS being attached to that function. If you specify a weight of 0, however, the unused GAS will **not** be attached to that function. If you have two functions, one with a weight of 3, and one with a weight of 1, the first function will get `3/4` of the unused GAS and the other function will get `1/4` of the unused GAS.
 
-The two methods in the snippet above are very similar, except they will call separate callbacks in the smart contract, `callback_promise_result` and `callback_arg_macro`. 
+The two methods in the snippet above are very similar, except they will call separate callbacks in the smart contract, `callback_promise_result` and `callback_arg_macro`. These two callbacks show how a value can be obtained. 
 
 ```rust
+#[private]
+pub fn callback_arg_macro(&mut self, #[callback_unwrap] val: bool) -> bool {
+    val
+}
+
 #[private]
 pub fn callback_promise_result() -> bool {
     assert_eq!(env::promise_results_count(), 1, "ERR_TOO_MANY_RESULTS");
@@ -141,14 +146,9 @@ pub fn callback_promise_result() -> bool {
         PromiseResult::Failed => env::panic_str("ERR_CALL_FAILED"),
     }
 }
-
-#[private]
-pub fn callback_arg_macro(&mut self, #[callback_unwrap] val: bool) -> bool {
-    val
-}
 ```
 
-These two callbacks show how a value can be obtained. The first method gets the value from the promise result, while the second uses a macro on the argument to cast the value into what's desired. In the second approach, if the value is unable to be casted, it will panic. If you'd like to gracefully handle the error, you can either use the first approach, or use the `#[callback_result]` macro instead. An example of this can be seen below.
+The first method uses a macro on the argument to cast the value into what's desired. In this approach, if the value is unable to be casted, it will panic. If you'd like to gracefully handle the error, you can either use the first approach, or use the `#[callback_result]` macro instead. An example of this can be seen below.
 
 ```rust
 #[private]
@@ -161,5 +161,7 @@ pub fn handle_callbacks(
     }
 }
 ```
+
+The second method gets the value from the promise result and is essentially the expanded version of the `#[callback_result]` macro.
 
 And that's it! Understanding how to make a cross-contract call and receive a result is an important part of developing smart contracts on NEAR. Two interesting references for using cross-contract calls can be found in the [fungible token](https://github.com/near-examples/FT) and [non-fungible token](https://github.com/near-examples/NFT) examples.
