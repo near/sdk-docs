@@ -46,7 +46,7 @@ The previous chapter [we discussed enums](/zero-to-hero/beginner/structs-enums#u
 First, let's see how the `submit_solution` will verify the correct solution.
 
 ```rust reference
-https://github.com/near-examples/crossword-tutorial-chapter-3/blob/85bfe37824f9137faa1918b9a2dfb5eee3611d9b/contract/src/lib.rs#L152-L158
+https://github.com/near-examples/crossword-tutorial-chapter-3/blob/ec07e1e48285d31089b7e8cec9e9cf32a7e90c35/contract/src/lib.rs#L145-L151
 ```
 
 Instead of hashing the plaintext, we simply check that the public key matches what we know the answer is. (The answer being the series of words representing the solution to the crossword puzzle, used as a seed phrase to create a key pair, including a public key.)
@@ -60,7 +60,7 @@ Further down in the `submit_solution` method we'll follow our plan by **adding a
 <br/>
 
 ```rust reference
-https://github.com/near-examples/crossword-tutorial-chapter-3/blob/db4fb99c6fad52f48ed402be05524a4816d0c89f/contract/src/lib.rs#L182-L192
+https://github.com/near-examples/crossword-tutorial-chapter-3/blob/ec07e1e48285d31089b7e8cec9e9cf32a7e90c35/contract/src/lib.rs#L175-L181
 ```
 
 The first promise above adds an access key, and the second deletes the access key on the account that was derived from the solution as a seed phrase.
@@ -82,13 +82,15 @@ Both functions will do cross-contract calls and use callbacks to see the result.
 
 ### The traits
 
-We're going to be making a cross-contract call to the linkdrop account deployed to the `testnet` account. We're also going to have callbacks for that, and for a simple transfer to a (potentially existing) account. For both of these, we'll want to add our special traits like we saw on the [linkdrop contract before](/zero-to-hero/intermediate/linkdrop#the-trait).
+We're going to be making a cross-contract call to the linkdrop account deployed to the `testnet` account. We're also going to have callbacks for that, and for a simple transfer to a (potentially existing) account. We'll create the traits that define both those methods.
 
 ```rust reference
-https://github.com/near-examples/crossword-tutorial-chapter-3/blob/3eb1701fe536c766a9bac3c59f880e573da61e63/contract/src/lib.rs#L15-L65
+https://github.com/near-examples/crossword-tutorial-chapter-3/blob/ec07e1e48285d31089b7e8cec9e9cf32a7e90c35/contract/src/lib.rs#L19-L45
 ```
 
-So we'll use `ext_linkdrop` for making the cross-contract call and `ext_self` to call "ourselves" at a callback.
+:::tip
+It's not necessary to create the trait for the callback as we could have just implemented the functions `callback_after_transfer` and `callback_after_create_account` in our `Crossword` struct implementation. We chose to define the trait and implement it to make the code a bit more readable.
+:::
 
 ### `claim_reward`
 
@@ -108,18 +110,19 @@ pub fn claim_reward(
     memo: String,
     ) -> Promise {
         let signer_pk = env::signer_account_pk();
-        // Logic we'll skip
-        Promise::new(receiver_acc_id.parse().unwrap()) // Let your IDE help you here
-            .transfer(puzzle.reward)
-            .then(ext_self::callback_after_transfer(
-                crossword_pk,
-                receiver_acc_id,
-                memo,
-                env::signer_account_pk(),
-                env::current_account_id(),
-                0,
-                GAS_FOR_ACCOUNT_CALLBACK,
-            ))
+        ...
+        Promise::new(receiver_acc_id.parse().unwrap())
+            .transfer(reward_amount)
+            .then(
+                Self::ext(env::current_account_id())
+                    .with_static_gas(GAS_FOR_ACCOUNT_CALLBACK)
+                    .callback_after_transfer(
+                        crossword_pk,
+                        receiver_acc_id,
+                        memo,
+                        env::signer_account_pk(),
+                    ),
+            )
     }
 ```
 
@@ -129,8 +132,6 @@ Oftentimes, the IDE can help you.
 
 For instance, in the above snippet we have `receiver_acc_id.parse().unwrap()` which might look confusing. You can lean on code examples or documentation to see how this is done, or you can utilize the suggestions from your IDE.
 
-<img src={clionSuggestion} width="600"/>
-
 :::
 
 This `claim_reward` method will attempt to use the `Transfer` Action to send NEAR to the account specified. It might fail on a protocol level (as opposed to a smart contract failure), which would indicate the account doesn't exist.
@@ -138,7 +139,7 @@ This `claim_reward` method will attempt to use the `Transfer` Action to send NEA
 Let's see how we check this in the callback:
 
 ```rust reference
-https://github.com/near-examples/crossword-tutorial-chapter-3/blob/3eb1701fe536c766a9bac3c59f880e573da61e63/contract/src/lib.rs#L380-L410
+https://github.com/near-examples/crossword-tutorial-chapter-3/blob/ec07e1e48285d31089b7e8cec9e9cf32a7e90c35/contract/src/lib.rs#L381-L411
 ```
 
 :::info The `#[private]` macro
@@ -169,86 +170,59 @@ pub fn claim_reward_new_account(
     new_pk: PublicKey,
     memo: String,
 ) -> Promise {
-    // Logic we'll skip
-    ext_linkdrop::create_account(
-        new_acc_id.parse().unwrap(),
-        new_pk,
-        AccountId::from(self.creator_account.clone()),
-        reward_amount,
-        GAS_FOR_ACCOUNT_CREATION,
-    )
-    .then(
-        // Chain a promise callback to ourselves
-        ext_self::callback_after_create_account(
-            crossword_pk, // First parameter
-            new_acc_id, // Second parameter
-            memo, // Third parameter
-            env::signer_account_pk(), // Fourth parameter
-            env::current_account_id(), // Which contract? "me"
-            0, // Deposit (in yoctoNEAR)
-            GAS_FOR_ACCOUNT_CALLBACK, // Gas
-        ),
-    )
+    ...
+    ext_linkdrop::ext(AccountId::from(self.creator_account.clone()))
+        .with_attached_deposit(reward_amount)
+        .with_static_gas(GAS_FOR_ACCOUNT_CREATION) // This amount of gas will be split
+        .create_account(new_acc_id.parse().unwrap(), new_pk)
+        .then(
+            // Chain a promise callback to ourselves
+            Self::ext(env::current_account_id())
+                .with_static_gas(GAS_FOR_ACCOUNT_CALLBACK)
+                .callback_after_create_account(
+                    crossword_pk,
+                    new_acc_id,
+                    memo,
+                    env::signer_account_pk(),
+                ),
+        )
 }
 ```
 
 Then the callback:
 
 ```rust
-#[private]
-fn callback_after_create_account(
-    &mut self,
-    crossword_pk: PublicKey, // First parameter
-    account_id: String, // Second parameter
-    memo: String, // Third parameter
-    signer_pk: PublicKey, // Fourth parameter
-) -> bool {
-    // Skipping logic
-    match env::promise_result(0) {
-        PromiseResult::NotReady => {
-            unreachable!()
-        }
-        // NOTE: we capture the result from the linkdrop contract here
-        PromiseResult::Successful(creation_result) => {
-            // NOTE: Now we turn it into a boolean
-            let creation_succeeded: bool = serde_json::from_slice(&creation_result)
-                .expect("Could not turn result from account creation into boolean.");
-            if creation_succeeded {
-                // New account created and reward transferred successfully.
-                self.finalize_puzzle(crossword_pk, account_id, memo, signer_pk);
-                true
-            } else {
-                // Something went wrong trying to create the new account.
-                false
-            }
-        }
-        PromiseResult::Failed => {
-            // Problem with the creation transaction, reward money has been returned to this contract.
-            false
-        }
-    }
-}
+https://github.com/near-examples/crossword-tutorial-chapter-3/blob/ec07e1e48285d31089b7e8cec9e9cf32a7e90c35/contract/src/lib.rs#L413-L448
 ```
 
 In the above snippet, there's one difference from the callback we saw in `claim_reward`: we capture the value returned from the smart contract we just called. Since the linkdrop contract returns a bool, we can expect that type. (See the comments with "NOTE:" above, highlighting this.)
 
 ## Callbacks
 
-The previous callback for the `callback_after_create_account` has comments around the parameters. ("First parameter", "second parameter", etc.)
+The way that the callback works is that you start with the `Self::ext()` and pass in the current acount ID using `env::current_account_id()`. This is essentially saying that you want to call a function that lives on the current account ID.
 
-It might feel odd at first to do cross-contract calls because of the three "magic" parameters.
+You then have a couple of config options that each start with `.with_*`:
 
-This is how the callback parameters need to be for a callback that takes two parameters:
+1. You can attach a deposit of Ⓝ, in yoctoⓃ to the call by specifying the `.with_attached_deposit()` method but it is defaulted to 0 (1 Ⓝ = 1000000000000000000000000 yoctoⓃ, or 1^24 yoctoⓃ).
+2. You can attach a static amount of GAS by specifying the `.with_static_gas()` method but it is defaulted to 0.
+3. You can attach an unused GAS weight by specifying the `.with_unused_gas_weight()` method but it is defaulted to 1. The unused GAS will be split amongst all the functions in the current execution depending on their weights. If there is only 1 function, any weight above 1 will result in all the unused GAS being attached to that function. If you specify a weight of 0, however, the unused GAS will not be attached to that function. If you have two functions, one with a weight of 3, and one with a weight of 1, the first function will get 3/4 of the unused GAS and the other function will get 1/4 of the unused GAS.
+
+After you've added the desired configurations to the call, you execute the function and pass in the parameters. In this case, we call the function `callback_after_create_account` and pass in the crossword public key, the new account ID, the memo, and the signer's public key.
+
+This function will be called with static GAS equal to `GAS_FOR_ACCOUNT_CALLBACK` and will have no deposit attached. In addition, since the `with_unused_gas_weight()` method wasn't called, it will default to a weight of 1 meaning that it will split all the unused GAS with the `create_account` function to be added on top of the `GAS_FOR_ACCOUNT_CALLBACK`.
 
 ```rust
 .then(
-    ext_self::my_callback(
-        first_parameter,
-        second_parameter,
-        env::current_account_id(), // MAGIC: Which contract? "me"
-        0, // MAGIC: Deposit (in yoctoNEAR)
-        GAS_FOR_ACCOUNT_CALLBACK, // MAGIC: Gas
-    ),
+    // Chain a promise callback to ourselves
+    Self::ext(env::current_account_id())
+        .with_static_gas(GAS_FOR_ACCOUNT_CALLBACK)
+        .callback_after_create_account(
+            crossword_pk,
+            new_acc_id,
+            memo,
+            env::signer_account_pk(),
+        ),
+)
 ```
 
 :::tip Consider changing contract state in callback
@@ -298,8 +272,8 @@ pub fn claim_reward(
     memo: String,
 ) -> Promise {
     let signer_pk = env::signer_account_pk();
-    // Logic skipped
-    /* check if puzzle is already solved and set `Claimed` status */
+    ...
+    // Check that puzzle is solved and the signer has the right public key
     match puzzle.status {
         PuzzleStatus::Solved {
             solver_pk: puzzle_pk,
@@ -307,4 +281,10 @@ pub fn claim_reward(
             // Check to see if signer_pk matches
             assert_eq!(signer_pk, puzzle_pk, "You're not the person who can claim this, or else you need to use your function-call access key, friend.");
         }
+        _ => {
+            env::panic_str("puzzle should have `Solved` status to be claimed");
+        }
+    };
+    ...
+}
 ```
