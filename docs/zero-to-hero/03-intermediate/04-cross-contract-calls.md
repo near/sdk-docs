@@ -191,7 +191,7 @@ pub fn claim_reward_new_account(
 
 Then the callback:
 
-```rust
+```rust reference
 https://github.com/near-examples/crossword-tutorial-chapter-3/blob/ec07e1e48285d31089b7e8cec9e9cf32a7e90c35/contract/src/lib.rs#L413-L448
 ```
 
