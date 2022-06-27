@@ -27,7 +27,7 @@ As mentioned in the first section of this **Basics** chapter, our smart contract
 We'll add a dependency to the [hex crate](https://crates.io/crates/hex) to make things easier. As you may remember, dependencies live in the manifest file.
 
 ```rust reference
-https://github.com/near-examples/crossword-tutorial-chapter-1/blob/94f42e75cf70ed2aafb9c29a1faa1e21f079a49e/contract/Cargo.toml#L10-L12
+https://github.com/near-examples/crossword-tutorial-chapter-1/blob/481a83f0c90398f3234ce8006af4e232d6c779d7/contract/Cargo.toml#L10-L12
 ```
 
 Let's write a unit test that acts as a helper during development. This unit test will sha256 hash the input **"near nomicon ref finance"** and print it in a human-readable, hex format. (We'll typically put unit tests at the bottom of the `lib.rs` file.)
