@@ -136,7 +136,7 @@ For a full example, see the [`examples/src/spooning.rs`](https://github.com/near
 `workspaces` testing offers support for forwarding the state of the blockchain to the future. This means contracts which require time sensitive data do not need to sit and wait the same amount of time for blocks on the sandbox to be produced. We can simply just call `worker.fast_forward` to get us further in time:
 
 ```rust reference
-https://github.com/near-daos/sputnik-dao-contract/blob/d2819811ddde08c32592d484804b410348dd81ce/sputnikdao2/tests/utils/mod.rs#L30-L35
+https://github.com/near/workspaces-rs/blob/c14fe2aa6cdf586028b2993c6a28240f78484d3e/examples/src/fast_forward.rs#L12-44
 ```
 
 For a full example, take a look at [examples/src/fast_forward.rs](https://github.com/near/workspaces-rs/blob/main/examples/src/fast_forward.rs).
