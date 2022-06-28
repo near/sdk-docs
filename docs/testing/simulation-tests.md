@@ -118,7 +118,7 @@ https://github.com/near-examples/rust-counter/blob/6a7af5a32c630e0298c09c24eab87
 ### Create Helper Functions
 
 ```rust reference
-https://github.com/near-examples/nft-tutorial/blob/7fb267b83899d1f65f1bceb71804430fab62c7a7/integration-tests/rs/src/helpers.rs#L148-161
+https://github.com/near-examples/nft-tutorial/blob/7fb267b83899d1f65f1bceb71804430fab62c7a7/integration-tests/rs/src/helpers.rs#L148-L161
 ```
 
 ### Spooning - Pulling Existing State and Contracts from Mainnet/Testnet
@@ -126,7 +126,7 @@ https://github.com/near-examples/nft-tutorial/blob/7fb267b83899d1f65f1bceb718044
 This example showcases spooning state from a testnet contract into our local sandbox environment:
 
 ```rust reference
-https://github.com/near/workspaces-rs/blob/c14fe2aa6cdf586028b2993c6a28240f78484d3e/examples/src/spooning.rs#L64-122
+https://github.com/near/workspaces-rs/blob/c14fe2aa6cdf586028b2993c6a28240f78484d3e/examples/src/spooning.rs#L64-L122
 ```
 
 For a full example, see the [examples/src/spooning.rs](https://github.com/near/workspaces-rs/blob/main/examples/src/spooning.rs) example.
@@ -136,7 +136,7 @@ For a full example, see the [examples/src/spooning.rs](https://github.com/near/w
 `workspaces` testing offers support for forwarding the state of the blockchain to the future. This means contracts which require time sensitive data do not need to sit and wait the same amount of time for blocks on the sandbox to be produced. We can simply just call `worker.fast_forward` to get us further in time:
 
 ```rust reference
-https://github.com/near/workspaces-rs/blob/c14fe2aa6cdf586028b2993c6a28240f78484d3e/examples/src/fast_forward.rs#L12-44
+https://github.com/near/workspaces-rs/blob/c14fe2aa6cdf586028b2993c6a28240f78484d3e/examples/src/fast_forward.rs#L12-L44
 ```
 
 For a full example, take a look at [examples/src/fast_forward.rs](https://github.com/near/workspaces-rs/blob/main/examples/src/fast_forward.rs).
@@ -144,5 +144,5 @@ For a full example, take a look at [examples/src/fast_forward.rs](https://github
 ### Handle Errors
 
 ```rust reference
-https://github.com/near-examples/FT/blob/98b85297a270cbcb8ef3901c29c17701e1cab698/integration-tests/rs/src/tests.rs#L199-225
+https://github.com/near-examples/FT/blob/98b85297a270cbcb8ef3901c29c17701e1cab698/integration-tests/rs/src/tests.rs#L199-L225
 ```
