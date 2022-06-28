@@ -129,7 +129,7 @@ This example showcases spooning state from a testnet contract into our local san
 https://github.com/near/workspaces-rs/blob/c14fe2aa6cdf586028b2993c6a28240f78484d3e/examples/src/spooning.rs#L64-122
 ```
 
-For a full example, see the [`examples/src/spooning.rs`](https://github.com/near/workspaces-rs/blob/main/examples/src/spooning.rs) example.
+For a full example, see the [examples/src/spooning.rs](https://github.com/near/workspaces-rs/blob/main/examples/src/spooning.rs) example.
 
 ### Fast Forwarding - Fast Forward to a Future Block
 
