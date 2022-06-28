@@ -28,7 +28,8 @@ impl Contract {
 }
 ```
 
-**Note**: Before the SDK version `4.0.0-pre.2`, `require!` a more lightweight version of the Rust `assert!` macro was not available so the standard macro was used.
+**Note**: If you want debug information in the panic message or if you are using an SDK version before `4.0.0-pre.2`, 
+the Rust `assert!` macro can be used instead of `require!`.
 
 ```rust
 #[near_bindgen]
