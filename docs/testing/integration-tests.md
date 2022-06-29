@@ -24,56 +24,59 @@ You'll probably want to use integration tests when:
 
 ## Setup
 
-Unlike unit tests in Rust (which would often live in the `src/lib.rs` file of the contract), integration tests are conventionally in a separate subdirectory of the contract, with a name of your liking (such as `tests`). Refer to this folder structure below:
+Unlike unit tests (which would often live in the `src/lib.rs` file of the contract), integration tests in Rust are located in a separate directory at the same level as `/src`, called `/tests` ([read more](https://doc.rust-lang.org/cargo/reference/cargo-targets.html#integration-tests)). Refer to this folder structure below:
 
 ```sh
-├── Cargo.toml
+├── Cargo.toml                  ⟵ contains `dependencies` for contract and `dev-dependencies` for workspaces-rs tests
 ├── src
-│  └── lib.rs         ⟵ contract code
+│  └── lib.rs                   ⟵ contract code
 ├── target
-└── tests             ⟵ integration test directory
-   └── src            ⟵ optional directory for convention
-      └── tests.rs    ⟵ integration test file
-    Cargo.toml        ⟵ Cargo.toml file specifying run configuration
+└── tests                       ⟵ integration test directory 
+   └── integration-tests.rs     ⟵ integration test file
 ```
 
-Notice we have 2 `Cargo.toml` files in this project. The first is the main `Cargo.toml` file which is used to specify the dependencies of the project, and the second which is used to specify the dependencies of the integration tests. A sample configuration for the integration tests is shown below:
+A sample configuration for theis project's `Cargo.toml` is shown below:
 
-```toml
+```toml 
 [package]
-name = "non-fungible-token-integration-tests"
-version = "1.0.0"
-publish = false
-edition = "2018"
+name = "fungible-token-wrapper"
+version = "0.0.2"
+authors = ["Near Inc <hello@nearprotocol.com>"]
+edition = "2021"
 
 [dev-dependencies]
-near-sdk = "4.0.0"
 anyhow = "1.0"
-borsh = "0.9"
-maplit = "1.0"
+near-primitives = "0.5.0"
+near-sdk = { path = "../../near-sdk" }
 near-units = "0.2.0"
-# arbitrary_precision enabled for u128 types that workspaces requires for Balance types
-serde_json = { version = "1.0", features = ["arbitrary_precision"] }
-tokio = { version = "1.18.1", features = ["full"] }
-tracing = "0.1"
-tracing-subscriber = { version = "0.3.11", features = ["env-filter"] }
+serde_json = "1.0"
+tokio = { version = "1.14", features = ["full"] }
 workspaces = "0.3.1"
-pkg-config = "0.3.1"
 
-[[example]]
-name = "integration-tests"
-path = "src/tests.rs"
+# remember to include a line for each contract
+fungible-token = { path = "./ft" }
+defi = { path = "./test-contract-defi" }
+
+[profile.release]
+codegen-units = 1
+# Tell `rustc` to optimize for small code size.
+opt-level = "z"
+lto = true
+debug = false
+panic = "abort"
+overflow-checks = true
+
+[workspace]
+# remember to include a member for each contract
+members = [
+  "ft",
+  "test-contract-defi",
+]
 ```
 
-The `tests.rs` file above will contain the integration tests, which will preserve state after each run if they are run in one file as in this setup. These can be run with the following command from the same level as the test `Cargo.toml` file:
+The `integration-tests.rs` file above will contain the integration tests. These can be run with the following command from the same level as the test `Cargo.toml` file:
 
-    cargo run --example integration-tests
-
-:::note
-In case you wish for a new state for a test run, you can create an additional `.rs` file in `tests/src` which you can reference as an additional `[[example]]` in the `Cargo.toml` file. You would similarly run these tests with the following command:
-
-    cargo run --example <name of the example>
-:::
+    cargo test --test integration-tests
 
 ## Comparing an Example
 
@@ -81,30 +84,34 @@ In case you wish for a new state for a test run, you can create an additional `.
 
 Let's take a look at a very simple unit test and integration test that accomplish the same thing. Normally you wouldn't duplicate efforts like this (as integration tests are intended to be broader in scope), but it will be informative.
 
-One of the simple examples on the <a href="https://near.dev" target="_blank">NEAR Examples landing page</a> is the <a href="https://examples.near.org/rust-counter" target="_blank">Rust counter</a>. We'll be using snippets from this repository to demonstrate simulation tests.
+We'll be using snippets from the [fungible-token example](https://github.com/near/near-sdk-rs/blob/master/examples/fungible-token) from the `near-sdk-rs` repository to demonstrate simulation tests.
 
-First, note this unit test that tests the functionality of the `increment` method:
+First, note this unit test that tests the functionality of the `test_transfer` method:
 
 ```rust reference
-https://github.com/near-examples/rust-counter/blob/dad0cfd918fcc4c25611307aa07ad377b97ea52b/contract/src/lib.rs#L128-L139
+https://github.com/near/near-sdk-rs/blob/6d4045251c63ec875dc55f43b065b33a36d94792/examples/fungible-token/ft/src/lib.rs#L100-L165
 ```
 
-The test above sets up the testing context, instantiates the smart contract's struct called `Counter`, calls the `increment` method, and makes an assertion that a number field on the struct is now `1`.
+The test above sets up the testing context, instantiates the test environment through `get_context()`, calls the `test_transfer` method, and performs the `storage_deposit()` initialization call (to register with the fungible token contract) and the `ft_transfer()` fungible token transfer call.
 
 Let's look at how this might be written with workspaces tests. The snippet below is a bit longer as it demonstrates a couple of things worth noting.
 
 ### Workspaces Test
 
 ```rust reference
-https://github.com/near-examples/rust-counter/blob/6a7af5a32c630e0298c09c24eab87267746552b2/integration-tests/rs/src/tests.rs#L6-L58
+https://github.com/near/near-sdk-rs/blob/master/examples/fungible-token/tests/workspaces.rs#L25-L115
 ```
 
-In the test above, we initialize the local blockchain environment with the `sandbox` constructor. Then the compiled smart contract `.wasm` file (which we compiled into the `/out` directory) for the Rust Counter example is dev-deployed (newly created account) to the environment. The `root` account is fetched from the local environment later which is used to create accounts. This specific file's format has only one test entry point (`main`) and it was written in a way that shares a single state between all function calls. Tests are then listed sequentially, starting with the `increment` case.
+In the test above, the compiled smart contract `.wasm` file (which we compiled into the `/out` directory) for the Fungible Token example is dev-deployed (newly created account) to the environment. The `ft_contract` account is created as a result from the environment which is used to create accounts. This specific file's format has only one test entry point (`main`), and every test is declared with `#[tokio::test]`. Tests do not share state between runs.
 
-Notice that the layout within `test_increment()`. Every `.call()` obtains its required gas from the account performing it. Unlike the unit test, there is no mocking being performed before the call as the context is provided by the environment initialized during `main()`. Every call interacts with this environment to either fetch or change state. 
+Notice the layout within `test_total_supply`. `.call()` obtains its required gas from the account performing it. Unlike the unit test, there is no mocking being performed before the call as the context is provided by the environment initialized during `init()`. Every call interacts with this environment to either fetch or change state. 
 
 :::info
 **Pitfall**: you must compile your contract before running simulation tests. Because workspaces tests use the `.wasm` files to deploy the contracts to the network. If changes are made to the smart contract code, the smart contract wasm should be rebuilt before running these tests again.
+:::
+
+:::note
+In case you wish to preserve state between runs, you can call multiple sequences within one `#[tokio::test]`. 
 :::
 
 ## Helpful Snippets
