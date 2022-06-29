@@ -105,22 +105,6 @@ let contract = worker
     .result;
 ```
 
-Or, if you want to create a subaccount with a certain balance:
-
-```rust title="Deployment - workspaces-rs (with explicit balance)"
-use near_units::parse_near;
-
-let worker = workspaces::sandbox().await?;
-let id: AccountId = "contract-id".parse()?;
-let contract = worker
-    .root_account()
-    .create_subaccount(&worker, id)
-    .initial_balance(parse_near!("5 N"))
-    .transact()
-    .await?
-    .result;
-```
-
 :::danger
 'dev_deploy' can't supply the initial balance since testnet controls this amount in the helper contract which is what we're using to create dev accounts on testnet. So, to make it simple, we don't supply it at all (sandbox included). If someone wants to supply an amount in sandbox, they can grab the root account and do:
 
