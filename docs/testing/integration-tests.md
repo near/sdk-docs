@@ -154,6 +154,10 @@ For a full example, take a look at [examples/src/fast_forward.rs](https://github
 https://github.com/near-examples/FT/blob/98b85297a270cbcb8ef3901c29c17701e1cab698/integration-tests/rs/src/tests.rs#L199-L225
 ```
 
+:::note
+Returning `Err(msg)` is also a viable (and arguably simpler) implementation.
+:::
+
 ### Batch Transactions
 
 ```rust title="Batch Transaction - workspace-rs"
