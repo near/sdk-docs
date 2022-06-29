@@ -99,9 +99,7 @@ Let's look at how this might be written with workspaces tests. The snippet below
 https://github.com/near-examples/rust-counter/blob/6a7af5a32c630e0298c09c24eab87267746552b2/integration-tests/rs/src/tests.rs#L6-L58
 ```
 
-In the test above, we initialize the local blockchain environment with the `sandbox` constructor. Then the compiled smart contract `.wasm` file (which we compiled into the `/out` directory) for the Rust Counter example is dev-deployed (newly created account) to the environment. The `root` account is fetched from the local environment later which is used to create accounts. This specific file's format has only one test entry point (`main`) and it was written in a way that shares a single state between all function calls. 
-
-This environment offers a similar environment to how a NEAR network node interacts. Next we see calls to a view and change method (with the `view!` and `call!` macros) along with an assertion checking the expected value. Tests are then listed sequentially, starting with the `increment` case.
+In the test above, we initialize the local blockchain environment with the `sandbox` constructor. Then the compiled smart contract `.wasm` file (which we compiled into the `/out` directory) for the Rust Counter example is dev-deployed (newly created account) to the environment. The `root` account is fetched from the local environment later which is used to create accounts. This specific file's format has only one test entry point (`main`) and it was written in a way that shares a single state between all function calls. Tests are then listed sequentially, starting with the `increment` case.
 
 Notice that the layout within `test_increment()`. Every `.call()` obtains its required gas from the account performing it. Unlike the unit test, there is no mocking being performed before the call as the context is provided by the environment initialized during `main()`. Every call interacts with this environment to either fetch or change state. 
 
