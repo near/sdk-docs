@@ -4,8 +4,8 @@ sidebar_position: 2
 
 # Integration Tests
 
-**Note**: simulation tests are no longer actively supported.
-
+**Note:** Simulation tests are no longer actively supported. NEAR Simulator was meant to be an in-place replacement of a blockchain environment for the purpose of testing NEAR contracts. However, simulating NEAR ledger turned out to be a much more complex endeavour than was anticipated. Eventually, the idea of workspaces was born - a library for automating workflows and writing tests for NEAR smart contracts using a real NEAR network (localnet, testnet or mainnet). Thus, NEAR Simulator is being deprecated in favor of [`workspaces-rs`](https://github.com/near/workspaces-rs), the Rust edition of workspaces. As the two libraries have two vastly different APIs [this guide](workspaces-migration-guide.md) was created to ease the migration process for developers. 
+ 
 ## Unit Tests vs. Integration Tests
 
 Unit tests are great for ensuring that functionality works as expected at an insolated, functional-level. This might include checking that function `get_nth_fibonacci(n: u8)` works as expected, handles invalid input gracefully, etc. Unit tests in smart contracts might similarly test public functions, but can get unruly if there are several calls between accounts. As mentioned in the [unit tests](unit-tests.md) section, there is a `VMContext` object used by unit tests to mock some aspects of a transaction. One might, for instance, modify the testing context to have the `predecessor_account_id` of `"bob.near"`. The limits of unit tests become obvious with certain interactions, like transferring tokens. Since `"bob.near"` is simply a string and not an account object, there is no way to write a unit test that confirms that Alice sent Bob 6 NEAR (Ⓝ). Furthermore, there is no way to write a unit test that executes cross-contract calls. Additionally, there is no way of profiling gas usage and the execution of the call (or set of calls) on the blockchain.
@@ -145,4 +145,56 @@ For a full example, take a look at [examples/src/fast_forward.rs](https://github
 
 ```rust reference
 https://github.com/near-examples/FT/blob/98b85297a270cbcb8ef3901c29c17701e1cab698/integration-tests/rs/src/tests.rs#L199-L225
+```
+
+### Batch Transactions
+
+```rust title="Batch Transaction - workspace-rs"
+let res = contract
+    .batch(&worker)
+    .call(
+        Function::new("ft_transfer_call")
+            .args_json((defi_contract.id(), transfer_amount, Option::<String>::None, "10"))?
+            .gas(300_000_000_000_000 / 2)
+            .deposit(1),
+    )
+    .call(
+        Function::new("storage_unregister")
+            .args_json((Some(true),))?
+            .gas(300_000_000_000_000 / 2)
+            .deposit(1),
+    )
+    .transact()
+    .await?;
+```
+
+### Inspecting Logs
+
+```rust title="Logs - workspaces-rs"
+assert_eq!(
+    res.logs()[1],
+    format!("Closed @{} with {}", contract.id(), initial_balance.0 - transfer_amount.0)
+);
+```
+
+Examining receipt outcomes: 
+
+```rust title="Logs - workspaces-rs"
+let outcome = &res.receipt_outcomes()[5];
+assert_eq!(outcome.logs[0], "The account of the sender was deleted");
+assert_eq!(outcome.logs[2], format!("Account @{} burned {}", contract.id(), 10));
+```
+
+### Profiling Gas
+
+`CallExecutionDetails::total_gas_burnt` includes all gas burnt by call execution, including by receipts. This is exposed as a surface level API since it is a much more commonly used concept:
+
+```rust title="Gas (all) - workspaces-rs"
+println!("Burnt gas (all): {}", res.total_gas_burnt);
+```
+
+If you do actually want gas burnt by transaction itself you can do it like this:
+
+```rust title="Gas (transaction) - workspaces-rs"
+println!("Burnt gas (transaction): {}", res.outcome().gas_burnt);
 ```
