@@ -106,7 +106,7 @@ let contract = worker
 ```
 
 :::danger
-'dev_deploy' can't supply the initial balance since testnet controls this amount in the helper contract which is what we're using to create dev accounts on testnet. So, to make it simple, we don't supply it at all (sandbox included). If someone wants to supply an amount in sandbox, they can grab the root account and do:
+'dev_deploy' can't supply the initial balance since testnet controls this amount in the helper contract which is what we're using to create dev accounts on testnet. So, to make it simple, we don't supply it at all (sandbox included). It is however possible to create a **subaccount** with a certain balance in sandbox, they can grab the root account and do:
 
 ```rust title="Deployment - workspaces-rs (with initial balance)"
 let root = worker.root_acount();
