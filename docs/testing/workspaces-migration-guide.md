@@ -294,7 +294,7 @@ assert_eq!(outcome.logs[2], format!("Account @{} burned {}", contract.id(), 10))
 NEAR Simulator never had accurate gas estimations since it only tried to mirror nearcore, but nearcore has extra functionality on top which consumes gas (like cross-contract calls are processed separately from the same transaction and that incurs gas fees). Workspaces offers the better experience here and aligns very well with what you can do on testnet and mainnet. It provides the added benefit of allowing the developer to accurately profile gas usage before deploying to `mainnet`.
 
 :::warning
-Since `workspaces-rs` is now using accurate gas measurements, some contracts that were previously being tested with sdk-sim might not work the same. You should do your due diligence if you plan to deploy to `mainnet`.
+Since `workspaces-rs` is now using accurate gas measurements, some testing flows that were previously being tested with sdk-sim that would depend on gas reports might not work anymore. You should do your due diligence if you plan to deploy to `mainnet`.
 :::
 
 Let's once again return to the [batch transactions](#batch-transactions) example and see how we would estimate gas burnt by a given transaction:
