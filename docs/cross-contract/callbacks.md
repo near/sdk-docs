@@ -108,11 +108,11 @@ impl Contract {
         // Attached deposit is defaulted to 0 for both the function call and the callback.
         ext_allowlist::ext(get_allowlist_contract())
             .is_allowlisted(get_account_to_check())
-        .then(
-            Self::ext(env::current_account_id())
-            .with_static_gas(XCC_GAS)
-            .callback_arg_macro()
-        )
+            .then(
+                Self::ext(env::current_account_id())
+                    .with_static_gas(XCC_GAS)
+                    .callback_arg_macro()
+            )
     }
 ```
 
