@@ -111,7 +111,7 @@ Notice the layout within `test_total_supply`. `.call()` obtains its required gas
 :::
 
 :::note
-In case you wish to preserve state between runs, you can call multiple sequences within one `#[tokio::test]`. 
+In case you wish to preserve state between runs, you can call multiple tests within one function, passing the worker around from a `workspaces::sandbox()` call.
 :::
 
 ## Helpful Snippets
