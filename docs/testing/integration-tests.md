@@ -4,8 +4,8 @@ sidebar_position: 2
 
 # Integration Tests
 
-**Note:** Simulation tests are no longer actively supported. NEAR Simulator was meant to be an in-place replacement of a blockchain environment for the purpose of testing NEAR contracts. However, simulating NEAR ledger turned out to be a much more complex endeavour than was anticipated. Eventually, the idea of workspaces was born - a library for automating workflows and writing tests for NEAR smart contracts using a real NEAR network (localnet, testnet or mainnet). Thus, NEAR Simulator is being deprecated in favor of [`workspaces-rs`](https://github.com/near/workspaces-rs), the Rust edition of workspaces. As the two libraries have two vastly different APIs [this guide](workspaces-migration-guide.md) was created to ease the migration process for developers. 
- 
+**Note:** Simulation tests are no longer actively supported. NEAR Simulator was meant to be an in-place replacement of a blockchain environment for the purpose of testing NEAR contracts. However, simulating NEAR ledger turned out to be a much more complex endeavour than was anticipated. Eventually, the idea of workspaces was born - a library for automating workflows and writing tests for NEAR smart contracts using a real NEAR network (localnet, testnet or mainnet). Thus, NEAR Simulator is being deprecated in favor of [`workspaces-rs`](https://github.com/near/workspaces-rs), the Rust edition of workspaces. As the two libraries have two vastly different APIs [this guide](workspaces-migration-guide.md) was created to ease the migration process for developers.
+
 ## Unit Tests vs. Integration Tests
 
 Unit tests are great for ensuring that functionality works as expected at an insolated, functional-level. This might include checking that function `get_nth_fibonacci(n: u8)` works as expected, handles invalid input gracefully, etc. Unit tests in smart contracts might similarly test public functions, but can get unruly if there are several calls between accounts. As mentioned in the [unit tests](unit-tests.md) section, there is a `VMContext` object used by unit tests to mock some aspects of a transaction. One might, for instance, modify the testing context to have the `predecessor_account_id` of `"bob.near"`. The limits of unit tests become obvious with certain interactions, like transferring tokens. Since `"bob.near"` is simply a string and not an account object, there is no way to write a unit test that confirms that Alice sent Bob 6 NEAR (Ⓝ). Furthermore, there is no way to write a unit test that executes cross-contract calls. Additionally, there is no way of profiling gas usage and the execution of the call (or set of calls) on the blockchain.
@@ -20,7 +20,7 @@ You'll probably want to use integration tests when:
 - There are multiple users with balance changes.
 - You'd like to gather information about gas usage and execution outcomes on-chain.
 - You want to assert the use-case execution flow of your smart contract logic works as expected.
-- You want to assert given execution patterns do not work (as expected). 
+- You want to assert given execution patterns do not work (as expected).
 
 ## Setup
 
@@ -31,13 +31,13 @@ Unlike unit tests (which would often live in the `src/lib.rs` file of the contra
 ├── src
 │  └── lib.rs                   ⟵ contract code
 ├── target
-└── tests                       ⟵ integration test directory 
+└── tests                       ⟵ integration test directory
    └── integration-tests.rs     ⟵ integration test file
 ```
 
 A sample configuration for theis project's `Cargo.toml` is shown below:
 
-```toml 
+```toml
 [package]
 name = "fungible-token-wrapper"
 version = "0.0.2"
@@ -104,14 +104,14 @@ https://github.com/near/near-sdk-rs/blob/master/examples/fungible-token/tests/wo
 
 In the test above, the compiled smart contract `.wasm` file (which we compiled into the `/out` directory) for the Fungible Token example is dev-deployed (newly created account) to the environment. The `ft_contract` account is created as a result from the environment which is used to create accounts. This specific file's format has only one test entry point (`main`), and every test is declared with `#[tokio::test]`. Tests do not share state between runs.
 
-Notice the layout within `test_total_supply`. `.call()` obtains its required gas from the account performing it. Unlike the unit test, there is no mocking being performed before the call as the context is provided by the environment initialized during `init()`. Every call interacts with this environment to either fetch or change state. 
+Notice the layout within `test_total_supply`. `.call()` obtains its required gas from the account performing it. Unlike the unit test, there is no mocking being performed before the call as the context is provided by the environment initialized during `init()`. Every call interacts with this environment to either fetch or change state.
 
 :::info
 **Pitfall**: you must compile your contract before running simulation tests. Because workspaces tests use the `.wasm` files to deploy the contracts to the network. If changes are made to the smart contract code, the smart contract wasm should be rebuilt before running these tests again.
 :::
 
 :::note
-In case you wish to preserve state between runs, you can call multiple sequences within one `#[tokio::test]`. 
+In case you wish to preserve state between runs, you can call multiple sequences within one `#[tokio::test]`.
 :::
 
 ## Helpful Snippets
@@ -188,7 +188,7 @@ assert_eq!(
 );
 ```
 
-Examining receipt outcomes: 
+Examining receipt outcomes:
 
 ```rust title="Logs - workspaces-rs"
 let outcome = &res.receipt_outcomes()[5];
@@ -208,4 +208,12 @@ If you do actually want gas burnt by transaction itself you can do it like this:
 
 ```rust title="Gas (transaction) - workspaces-rs"
 println!("Burnt gas (transaction): {}", res.outcome().gas_burnt);
+```
+
+If you want to see the gas burnt by each receipt, you can do it like this:
+
+```rust title="Gas (receipt) - workspaces-rs"
+for receipt in res.receipt_outcomes() {
+   println!("Burnt gas (receipt): {}", receipt.gas_burnt);
+}
 ```
