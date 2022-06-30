@@ -10,7 +10,7 @@ sidebar_position: 2
 
 Unit tests are great for ensuring that functionality works as expected at an insolated, functional-level. This might include checking that function `get_nth_fibonacci(n: u8)` works as expected, handles invalid input gracefully, etc. Unit tests in smart contracts might similarly test public functions, but can get unruly if there are several calls between accounts. As mentioned in the [unit tests](unit-tests.md) section, there is a `VMContext` object used by unit tests to mock some aspects of a transaction. One might, for instance, modify the testing context to have the `predecessor_account_id` of `"bob.near"`. The limits of unit tests become obvious with certain interactions, like transferring tokens. Since `"bob.near"` is simply a string and not an account object, there is no way to write a unit test that confirms that Alice sent Bob 6 NEAR (Ⓝ). Furthermore, there is no way to write a unit test that executes cross-contract calls. Additionally, there is no way of profiling gas usage and the execution of the call (or set of calls) on the blockchain.
 
-Integration tests provide the ability to have end-to-end testing that includes cross-contract calls, proper user accounts, access to state, structured execution outcomes, and more. In NEAR, we can make use of the `workspaces` libraries in both [Rust](https://github.com/near/workspaces-rs) and [JavaScript](https://github.com/near/workspaces-js) for this type of testing on a locally-run blockchain, testnet or mainnet.
+Integration tests provide the ability to have end-to-end testing that includes cross-contract calls, proper user accounts, access to state, structured execution outcomes, and more. In NEAR, we can make use of the `workspaces` libraries in both [Rust](https://github.com/near/workspaces-rs) and [JavaScript](https://github.com/near/workspaces-js) for this type of testing on a locally-run blockchain or testnet.
 
 ## When to Use Integration Tests
 
@@ -107,11 +107,11 @@ In the test above, the compiled smart contract `.wasm` file (which we compiled i
 Notice the layout within `test_total_supply`. `.call()` obtains its required gas from the account performing it. Unlike the unit test, there is no mocking being performed before the call as the context is provided by the environment initialized during `init()`. Every call interacts with this environment to either fetch or change state.
 
 :::info
-**Pitfall**: you must compile your contract before running simulation tests. Because workspaces tests use the `.wasm` files to deploy the contracts to the network. If changes are made to the smart contract code, the smart contract wasm should be rebuilt before running these tests again.
+**Pitfall**: you must compile your contract before running integration tests. Because workspaces tests use the `.wasm` files to deploy the contracts to the network. If changes are made to the smart contract code, the smart contract wasm should be rebuilt before running these tests again.
 :::
 
 :::note
-In case you wish to preserve state between runs, you can call multiple sequences within one `#[tokio::test]`.
+In case you wish to preserve state between runs, you can call multiple tests within one function, passing the worker around from a `workspaces::sandbox()` call.
 :::
 
 ## Helpful Snippets
