@@ -107,7 +107,7 @@ In the test above, the compiled smart contract `.wasm` file (which we compiled i
 Notice the layout within `test_total_supply`. `.call()` obtains its required gas from the account performing it. Unlike the unit test, there is no mocking being performed before the call as the context is provided by the environment initialized during `init()`. Every call interacts with this environment to either fetch or change state. 
 
 :::info
-**Pitfall**: you must compile your contract before running simulation tests. Because workspaces tests use the `.wasm` files to deploy the contracts to the network. If changes are made to the smart contract code, the smart contract wasm should be rebuilt before running these tests again.
+**Pitfall**: you must compile your contract before running integration tests. Because workspaces tests use the `.wasm` files to deploy the contracts to the network. If changes are made to the smart contract code, the smart contract wasm should be rebuilt before running these tests again.
 :::
 
 :::note
