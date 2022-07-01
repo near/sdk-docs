@@ -45,35 +45,23 @@ We'll want to write a smart contract that calls that same method. However, thing
 
 ## A simple callback
 
-### The trait
-
-At the top of the linkdrop smart contract, we define a trait that's used for cross-contract calls and callbacks.
-
-The snippet below defines a trait for a callback to the same contract, but the same pattern is used when calling external contracts. Using `ext_self` is simply a convention and not a magic keyword.
-
-```rust
-use near_sdk::ext_contract; // This import simplified for clarity
-
-#[ext_contract(ext_self)] // We'll use "ext_self" for the callback 
-pub trait ExtLinkDrop {
-    /// Callback after plain account creation.
-    fn on_account_created(&mut self, predecessor_account_id: AccountId, amount: U128) -> bool;
-}
-```
-
 ### The `create_account` method
 
-Next, we'll show the implementation of the `create_account` method. Note the [`#[payable]` macro](/contract-interface/payable-methods), which allows this function to accept an attached deposit. (Remember in the CLI command we were attaching 15 Ⓝ.)
+Here, we'll show the implementation of the `create_account` method. Note the [`#[payable]` macro](/contract-interface/payable-methods), which allows this function to accept an attached deposit. (Remember in the CLI command we were attaching 15 Ⓝ.)
 
 ```rust reference
-https://github.com/near/near-linkdrop/blob/f24f2608e1558db773f2408a28849d330abb3881/src/lib.rs#L121-L144
+https://github.com/near/near-linkdrop/blob/ba94a9c7292d3b48a0a8ba380fb0e7ff6b24efc6/src/lib.rs#L125-L149
 ```
 
 The most important part of the snippet above is around the middle where there's:
 
-```
-Promise::new(…)
-    .then(ext_self::on_account_created(…)
+```rs
+Promise::new(...)
+    ...
+    .then(
+        Self::ext(env::current_account_id())
+            .on_account_created(...)
+    )
 ```
 
 This translates to, "we're going to attempt to perform an Action, and when we're done, please call myself at the method `on_account_created` so we can see how that went."
@@ -85,7 +73,10 @@ Not infrequently, developers will attempt to do this in a smart contract:
 ```rust
 let creation_result = Promise::new("aloha.mike.near")
   .create_account();
+
 // Check creation_result variable (can't do it!)
+if creation_result {...}
+
 ```
 
 In other programming languages promises might work like this, but we must use callbacks instead. 
@@ -96,13 +87,13 @@ In other programming languages promises might work like this, but we must use ca
 Now let's look at the callback:
 
 ```rust reference
-https://github.com/near/near-linkdrop/blob/f24f2608e1558db773f2408a28849d330abb3881/src/lib.rs#L146-L159
+https://github.com/near/near-linkdrop/blob/ba94a9c7292d3b48a0a8ba380fb0e7ff6b24efc6/src/lib.rs#L151-L164
 ```
 
 This calls the private helper method `is_promise_success`, which basically checks to see that there was only one promise result, because we only attempted one Promise:
 
 ```rust reference
-https://github.com/near/near-linkdrop/blob/f24f2608e1558db773f2408a28849d330abb3881/src/lib.rs#L35-L45
+https://github.com/near/near-linkdrop/blob/ba94a9c7292d3b48a0a8ba380fb0e7ff6b24efc6/src/lib.rs#L32-L42
 ```
 
 Note that the callback returns a boolean. This means when we modify our crossword puzzle to call the linkdrop contract on `testnet`, we'll be able to determine if the account creation succeeded or failed.
@@ -117,8 +108,8 @@ Since NEAR's transactions are asynchronous, the use of callbacks may be a new pa
 Feel free to dig into the linkdrop contract and play with the ideas presented in this section.
 
 There are two additional examples that are helpful to look at:
-1. [High-level cross-contract calls](https://github.com/near/near-sdk-rs/tree/master/examples/cross-contract-high-level) — this is similar what we've seen in the linkdrop contract.
-2. [Low-level cross-contract calls](https://github.com/near/near-sdk-rs/tree/master/examples/cross-contract-low-level) — a different approach where you don't use the traits we mentioned.
+1. [High-level cross-contract calls](https://github.com/near/near-sdk-rs/blob/master/examples/cross-contract-calls/high-level/src/lib.rs) — this is similar what we've seen in the linkdrop contract.
+2. [Low-level cross-contract calls](https://github.com/near/near-sdk-rs/blob/master/examples/cross-contract-calls/low-level/src/lib.rs) — a different approach where you don't use the traits we mentioned.
 :::
 
 ---

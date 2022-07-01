@@ -59,7 +59,7 @@ To call this with NEAR CLI, use a command similar to this:
 
     near call rust-status-message.demo.testnet set_status_borsh --base64 'DAAAAEFsb2hhIGhvbnVhIQ==' --accountId demo.testnet
 
-See more details in [this GitHub gist](https://gist.github.com/mfornet/d8a94af333a68d67affd8cb78464c7c0) from [Marcelo](https://twitter.com/mfornet94).
+See more details in [this GitHub gist](https://gist.github.com/mfornet/d8a94af333a68d67affd8cb78464c7c0) from [Marcelo](https://gist.github.com/mfornet).
 
 ### JSON wrapper types
 

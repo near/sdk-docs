@@ -23,13 +23,13 @@ Read more [about it here](/contract-interface/serialization-interface#base64vecu
 First we'll set up a struct for the arguments we're expecting:
 
 ```rust reference
-https://github.com/near-examples/crossword-tutorial-chapter-3/blob/db365a61994d7f8e51f344d98d2d6c861f6c0151/contract/src/lib.rs#L136-L142
+https://github.com/near-examples/crossword-tutorial-chapter-3/blob/ec07e1e48285d31089b7e8cec9e9cf32a7e90c35/contract/src/lib.rs#L111-L117
 ```
 
 Then we modify our `new_puzzle` method like so:
 
 ```rust reference
-https://github.com/near-examples/crossword-tutorial-chapter-3/blob/db365a61994d7f8e51f344d98d2d6c861f6c0151/contract/src/lib.rs#L319-L329
+https://github.com/near-examples/crossword-tutorial-chapter-3/blob/ec07e1e48285d31089b7e8cec9e9cf32a7e90c35/contract/src/lib.rs#L290-L297
 ```
 
 We can take our original arguments and base64 encode them, using whatever method you prefer. There are plenty of online tool, Terminal commands, and open source applications like [Boop](https://boop.okat.best).

@@ -1,20 +1,26 @@
 ---
 sidebar_position: 3
 sidebar_label: Workspaces Migration Guide
-title: "Workspaces Migration Guide"
+title: "Migrating from Simulation Testing to Workspaces"
 ---
 
-# Workspaces Migration Guide
+# Migrating from Simulation Testing to Workspaces
 
-NEAR Simulator was meant to be an in-place replacement of a blockchain environment for the purpose of testing NEAR contracts. However, simulating NEAR ledger turned out to be a much more complex endeavour than was anticipated. Eventually, the idea of workspaces was born - a library for automating workflows and writing tests for NEAR smart contracts using a real NEAR network (localnet, testnet or mainnet). Thus, NEAR Simulator is being deprecated in favor of [`workspaces-rs`](https://github.com/near/workspaces-rs), the Rust edition of workspaces. As the two libraries have two vastly different APIs this guide was created to ease the migration process for developers.
+### Why did we stop supporting Simulation Testing?
 
-:::danger
-TODO: I do not have a whole lot of context here why exactly simtests were not suitable for our purposes, so if anyone wants to elaborate the preceding paragraph please do.
+Simulation tests were not suitable for purpose for a few reasons, namely:
+
+- `near-sdk-sim` was hooking into parts of nearcore that were not meant to be released, in the most recent version those crates aren't released so `near-sdk-sim` is currently using duplicate dependencies (maintenance nightmare).
+- Not a fully accurate simulation because it just used a subset of the runtime in a specific way - we can't rely on this. And thus couldn't measure gas burnt accurately. Also, all the intricacies of nearcore (like protocol features) wouldn't be one-to-one with the runtime since the runtime was just code built on top of VM logic. People would also need to write their own automation scripts to deploy to testnet, so we'd end up with very split workflows for testing.
+- Bulky dependencies pulled in (drastically increases compile time).
+- Unergonomic API, not specific to this strategy, but likely would have had to be re-built.
+- Can't test parallel transactions easily - current pattern would process blocks until a transaction succeeded but you can't create specific conditions, which is required for a strategy like this that isn't fully simulated.
+
+:::info
+This guide presumes that you are transitioning from near-sdk-sim `3.2.0` (the last non-deprecated release) to `workspaces-rs` `0.2.1`. Given that near-sdk-sim is deprecated, it is very unlikely that its API will ever change, but future releases of `workspaces-rs` might. Hopefully, this guide will be helpful even if you are migrating your project to a more recent workspaces version. If workspaces have changed, feel free to migrate your tests to `0.2.1` first using this guide and upgrade to the most recent workspaces-rs version later by looking at the release notes to see how public API has changed since `0.2.1`.
 :::
 
-This guide presumes that you are transitioning from near-sdk-sim `3.2.0` (the last non-deprecated release) to `workspaces-rs` `0.2.1`. Given that near-sdk-sim is deprecated, it is very unlikely that its API will ever change, but future releases of `workspaces-rs` might. Hopefully, this guide will be helpful even if you are migrating your project to a more recent workspaces version. If workspaces have changed, feel free to migrate your tests to `0.2.1` first using this guide and upgrade to the most recent workspaces-rs version later by looking at the release notes to see how public API has changed since `0.2.1`.
-
-## Async runtime and error handling
+## Async Runtime and Error Handling
 
 In this section we will be working purely with test signatures, so it applies to pretty much all NEAR contract tests regardless of what is written inside. We will walk through each change one by one. Let's start with how your tests look like right now; chances are something like this:
 
@@ -34,7 +40,6 @@ async fn test_transfer() {
 }
 ```
 
-
 :::note
 If you are using another attribute on top of the standard `#[test]`, make sure it plays nicely with the async runtime of your choosing. For example, if you are using [`test-env-log`](https://crates.io/crates/test-env-log) and `tokio`, then you need to mark your tests with <br/> `#[test_env_log::test(tokio::test)]`.
 :::
@@ -50,12 +55,13 @@ async fn test_transfer() -> anyhow::Result<()> {
 
 This way you can use `?` anywhere inside the test to safely unpack any `anyhow::Result<R>` type to `R` (will be very useful further down the guide). Note that the test will fail if `anyhow::Result<R>` cannot be unpacked.
 
-## Initialization and deploying contracts
+## Initialization and Deploying Contracts
 
 Unlike NEAR Simulator, `workspaces-rs` uses an actual NEAR node and makes all calls through it. First, you need to decide which network you want your tests to be run on:
-* `sandbox` - perfect choice if you are just interested in local development and testing; `workspaces-rs` will instantiate a [sandbox](https://github.com/near/sandbox) instance on your local machine which will run an isolated NEAR node.
-* `testnet` - an environment much closer to the real world; you can test integrations with other deployed contracts on testnet without bearing any financial risk.
-* `mainnet` - a network with reduced amount of features due to how dangerous it can be to do transactions there, but can still be useful for automating deployments and pulling deployed contracts.
+
+- `sandbox` - perfect choice if you are just interested in local development and testing; `workspaces-rs` will instantiate a [sandbox](https://github.com/near/sandbox) instance on your local machine which will run an isolated NEAR node.
+- `testnet` - an environment much closer to the real world; you can test integrations with other deployed contracts on testnet without bearing any financial risk.
+- `mainnet` - a network with reduced amount of features due to how dangerous it can be to do transactions there, but can still be useful for automating deployments and pulling deployed contracts.
 
 In this guide we will be focusing on `sandbox` since it covers the same use cases NEAR Simulator did. But of course feel free to explore whether other networks can be of potential use to you when writing new tests/workflows.
 
@@ -99,31 +105,23 @@ let contract = worker
     .result;
 ```
 
-Or, if you want to create a subaccount with a certain balance:
+:::danger
+'dev_deploy' can't supply the initial balance since testnet controls this amount in the helper contract which is what we're using to create dev accounts on testnet. So, to make it simple, we don't supply it at all (sandbox included). It is however possible to create a **subaccount** with a certain balance in sandbox, they can grab the root account and do:
 
-```rust title="Deployment - workspaces-rs (with explicit balance)"
-use near_units::parse_near;
-
-let worker = workspaces::sandbox().await?;
-let id: AccountId = "contract-id".parse()?;
-let contract = worker
-    .root_account()
-    .create_subaccount(&worker, id)
-    .initial_balance(parse_near!("5 N"))
-    .transact()
-    .await?
-    .result;
+```rust title="Deployment - workspaces-rs (with initial balance)"
+let root = worker.root_acount();
+root.create_subaccount(...)
+   .initial_balance(...)
+   ...
 ```
 
-:::danger
-TODO: Is there a reason why we can't control the initial balance with `dev_deploy`?
 :::
 
 :::caution
 You might have noticed that `init_simulator` used to accept an optional genesis config. Unfortunately, `workspaces-rs` does not support this feature yet, but we are trying to understand the need for this and properly design it. Please feel free to share your use case [here](https://github.com/near/workspaces-rs/issues/68).
 :::
 
-## Making transactions and view calls
+## Making Transactions and View Calls
 
 As always, let's take a look at how we used to make calls with NEAR Simulator:
 
@@ -193,10 +191,10 @@ let root_balance: U128 = contract
 ```
 
 :::note
-Note that you have to pass arguments as any serializable type representing a sequential list. Tuples are usually the best candidate due to their heterogeneous nature (remember that you can construct a unary tuple by placing a comma before the closing bracket like this: `(el,)`).
+Note that you have to pass arguments as any serializable type representing a sequential list. Tuples are usually the best candidate due to their heterogeneous nature (remember that you can construct a unary tuple by placing a comma before the closing bracket like this: `(el,)`). Passing in an object formatted with the `json!()` macro is also supported.
 :::
 
-### Batch transactions
+### Batch Transactions
 
 There is a special builder for making batch transactions that can be instantiated by calling `Contract::batch`. Consider the following snippet making a batch transaction consisting of two calls:
 
@@ -249,11 +247,7 @@ let res = contract
     .await?;
 ```
 
-## Inspecting logs
-
-:::danger
-TODO: I found some potential inconsistencies in what I wrote about the log inspection behavior, need some time to look at this further
-:::
+## Inspecting Logs
 
 The API for inspecting logs is fairly close to what it was in NEAR Simulator, but there are still some things you should keep in mind when migrating. Let's take the same transaction we used in the [batch transactions](#batch-transactions) section and try to inspect its logs. This is how one would check that the transaction logged a specific message in a certain position with NEAR Simulator:
 
@@ -295,10 +289,13 @@ assert_eq!(outcome.logs[0], "The account of the sender was deleted");
 assert_eq!(outcome.logs[2], format!("Account @{} burned {}", contract.id(), 10));
 ```
 
-## Profiling gas
+## Profiling Gas
 
-NEAR Simulator has not been providing realistic gas estimates (TODO: needs elaboration - since when and why?), so the `workspaces-rs` gas estimates might come as a surprise. The good news is that they do reflect reality!
+NEAR Simulator never had accurate gas estimations since it only tried to mirror nearcore, but nearcore has extra functionality on top which consumes gas (like cross-contract calls are processed separately from the same transaction and that incurs gas fees). Workspaces offers the better experience here and aligns very well with what you can do on testnet and mainnet. It provides the added benefit of allowing the developer to accurately profile gas usage before deploying to `mainnet`.
 
+:::warning
+Since `workspaces-rs` is now using accurate gas measurements, some testing flows that were previously being tested with sdk-sim that would depend on gas reports might not work anymore. You should do your due diligence if you plan to deploy to `mainnet`.
+:::
 
 Let's once again return to the [batch transactions](#batch-transactions) example and see how we would estimate gas burnt by a given transaction:
 

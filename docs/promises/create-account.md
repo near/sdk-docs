@@ -5,7 +5,7 @@ sidebar_position: 3
 # Creating Accounts
 
 You might want to create an account from a contract for many reasons. One example:
-You want to [progressively onboard](https://www.youtube.com/watch?v=7mO4yN1zjbs&t=2s) users, hiding the whole concept of NEAR from them at the beginning, and automatically create accounts for them (these could be child accounts of your main contract, such as `user123.some-cool-game.near`).
+You want to [progressively onboard](https://www.youtube.com/watch?v=7mO4yN1zjbs&t=2s) users, hiding the whole concept of NEAR from them at the beginning, and automatically create accounts for them (these could be sub-accounts of your main contract, such as `user123.some-cool-game.near`).
 
 Since an account with no balance is almost unusable, you probably want to combine this with the token transfer from [the last page](./token-tx.md). You will also need to give the account an access key. Here's a way do it:
 
@@ -15,15 +15,6 @@ Promise::new("subaccount.example.near".parse().unwrap())
     .add_full_access_key(env::signer_account_pk())
     .transfer(250_000_000_000_000_000_000_000); // 2.5e23yN, 0.25N
 ```
-
-:::caution Prerelease!
-The `AccountId` behavior described throughout this document, including the `parse().unwrap()` on the argument passed to `Promise::new`, is a feature of `near-sdk-rs` **v4**. The functionality is [still possible](https://docs.rs/near-sdk/3.1.0/near_sdk/json_types/struct.ValidAccountId.html) using v3, but if you want to use the cleaner v4 syntax, use this in your `Cargo.toml`:
-
-```toml
-[dependencies]
-near-sdk = "4.0.0-pre.2"
-```
-:::
 
 In the context of a full contract:
 
