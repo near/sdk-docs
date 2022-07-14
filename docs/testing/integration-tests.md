@@ -126,6 +126,13 @@ In case you wish to preserve state between runs, you can call multiple tests wit
 https://github.com/near-examples/rust-counter/blob/6a7af5a32c630e0298c09c24eab87267746552b2/integration-tests/rs/src/tests.rs#L16-L21
 ```
 
+:::note 
+You can also create a `dev_account` without having to deploy a contract as follows: 
+```rust reference
+https://github.com/near/workspaces-rs/blob/8f12f3dc3b0251ac3f44ddf6ab6fc63003579139/workspaces/tests/create_account.rs#L7-L8
+```
+:::
+
 ### Create Helper Functions
 
 ```rust reference
