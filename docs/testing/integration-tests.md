@@ -35,7 +35,7 @@ Unlike unit tests (which would often live in the `src/lib.rs` file of the contra
    └── integration-tests.rs     ⟵ integration test file
 ```
 
-A sample configuration for theis project's `Cargo.toml` is shown below:
+A sample configuration for this project's `Cargo.toml` is shown below:
 
 ```toml
 [package]
