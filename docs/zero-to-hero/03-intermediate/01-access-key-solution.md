@@ -42,7 +42,7 @@ It would be pretty long if we wrote it down, so it's often made human-readable w
 
 A seed phrase is a series of words (usually 12 or 24 words) that create a private key. (There's actually a [bit more to it](https://learnmeabitcoin.com/technical/mnemonic).)
 
-Seed phrases typically use a [BIP-30 wordlist](https://github.com/bitcoin/bips/blob/master/bip-0039/bip-0039-wordlists.md), but *they do not need to* use a wordlist or have a certain number of words. As long as the words create entropy, a crossword puzzle solution can act as a deterministic seed phrase.
+[Seed phrases typically use](https://github.com/near/near-seed-phrase/blob/d0f7671261edba57c6fcb2768994c533a635fc55/index.js#L9) a [BIP-39 wordlist](https://github.com/bitcoin/bips/blob/master/bip-0039/bip-0039-wordlists.md), but *they do not need to* use a wordlist or have a certain number of words. As long as the words create entropy, a crossword puzzle solution can act as a deterministic seed phrase.
 :::
 
 So when we add a new puzzle, we'll use the `AddKey` Action to add a limited, function-call access key can that *only* call the `submit_solution` method.
