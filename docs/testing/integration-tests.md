@@ -35,6 +35,10 @@ Unlike unit tests (which would often live in the `src/lib.rs` file of the contra
    └── integration-tests.rs     ⟵ integration test file
 ```
 
+:::info
+These tests don't have to be placed in their own `/tests` directory. Instead, you can place them in the `/src` directory which can be beneficial since then you can use the non-exported types for serialization within the test case. 
+:::
+
 A sample configuration for this project's `Cargo.toml` is shown below:
 
 ```toml
