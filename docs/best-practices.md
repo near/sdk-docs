@@ -138,9 +138,7 @@ impl Contract {
 - `env::panic` directly calls the host method to panic the contract.
   It doesn't provide any other extra debugging information except for the passed message.
 
-## Use simulation testing
+## Use workspaces
 
-**Note**: simulation testing is deprecated in favor of [Sandbox testing](https://github.com/near/sandbox).
-
-Simulation testing allows you to run tests for multiple contracts and cross-contract calls in a simulated runtime environment.
-Read more, [near-sdk-sim](https://github.com/near/near-sdk-rs/tree/master/near-sdk-sim)
+Workspaces allow you to automate workflows and run tests for multiple contracts and cross-contract calls in a sandbox or testnet environment.
+Read more, [workspaces-rs](https://github.com/near/workspaces-rs) or [workspaces-js](https://github.com/near/workspaces-js).
