@@ -1,5 +1,8 @@
-/** @type {import('@docusaurus/types').DocusaurusConfig} */
-module.exports = {
+// @ts-check
+// Note: type annotations allow type checking and IDEs autocompletion
+
+/** @type {import('@docusaurus/types').Config} */
+const config = {
   title: 'NEAR SDK docs',
   tagline: 'Write smart contracts to run on the NEAR blockchain!',
   url: 'https://near-sdk.io/',
@@ -12,7 +15,8 @@ module.exports = {
   themes: [
     '@saucelabs/theme-github-codeblock'
   ],
-  themeConfig: {
+  themeConfig: ({
+    /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     algolia: {
       appId: "QPBQ67WNIG",
       apiKey: "b590ae1153bf574215ca1605c19eb1fe",
@@ -85,25 +89,35 @@ module.exports = {
       ],
       copyright: `${new Date().getFullYear()} NEAR Protocol | All rights reserved | hello@near.org`,
     },
-  },
+  }),
   presets: [
     [
-      '@docusaurus/preset-classic',
-      {
+      'classic',
+      /** @type {import('@docusaurus/preset-classic').Options} */
+      ({
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
           editUrl:
             'https://github.com/near/sdk-docs/edit/main/',
           routeBasePath: '/',
+          "showLastUpdateAuthor": true,
+          "showLastUpdateTime": true,
+          "path": "./docs",
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
+        },
+        sitemap: {
+          changefreq: 'weekly',
+          priority: 0.5,
         },
         gtag: {
           trackingID: 'G-NEHEBVDQKL',
           anonymizeIP: true,
         },
-      },
+      }),
     ],
   ],
 };
+
+module.exports = config;
