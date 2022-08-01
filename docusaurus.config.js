@@ -85,10 +85,6 @@ module.exports = {
       ],
       copyright: `${new Date().getFullYear()} NEAR Protocol | All rights reserved | hello@near.org`,
     },
-    gtag: {
-      trackingID: 'G-NEHEBVDQKL',
-      anonymizeIP: true,
-    },
   },
   presets: [
     [
@@ -102,6 +98,10 @@ module.exports = {
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
+        },
+        gtag: {
+          trackingID: 'G-NEHEBVDQKL',
+          anonymizeIP: true,
         },
       },
     ],
