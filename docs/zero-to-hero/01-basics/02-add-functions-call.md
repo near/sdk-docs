@@ -193,7 +193,7 @@ As you can imagine, the above command will show something similar, except the lo
 
 ## Reset the account's contract and state
 
-We'll be iterating on this smart contract during this tutorial, and in some cases it's best to start fresh with the NEAR subaccount we created. The pattern to follow is to **delete** the account (sending all remaining testnet Ⓝ to a recipient) and the **create the account** again.
+We'll be iterating on this smart contract during this tutorial, and in some cases it's best to start fresh with the NEAR subaccount we created. The pattern to follow is to **delete** the account (sending all remaining testnet Ⓝ to a recipient) and then **create the account** again.
 
 <video autoPlay controls loop>
     <source src={chalkboardErase} type="video/mp4" />
