@@ -117,7 +117,7 @@ The [overview section](/zero-to-hero/basics/overview) of this chapter tells us w
 
 Let's have the solution be set once, right after deploying the smart contract.
 
-Here we'll use the [`#[init]` macro](https://docs.rs/near-sdk/latest/near_sdk/attr.init.html) on a function called `new`, which is a common pattern.
+Here we'll use the [`#[near_bindgen]` macro](https://docs.rs/near-sdk/latest/near_sdk/attr.near_bindgen.html) on a function called `new`, which is a common pattern.
 
 ```rust reference
 https://github.com/near-examples/crossword-tutorial-chapter-1/blob/94f42e75cf70ed2aafb9c29a1faa1e21f079a49e/contract/src/lib.rs#L10-L17

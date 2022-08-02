@@ -159,7 +159,7 @@ We can move on from this topic, but suffice it to say, sometimes it's helpful to
 
 Don't be alarmed if this section feels confusing at this point, but know we'll cover Promises and callbacks later.
 
-Without getting into detail, a contract may want to make a cross-contract call and "do something" with the return value. Sometimes this return value is an object we're expecting, so we can define a struct with the expected fields to capture the value. In other programming languages this may be referred to as "casting" or "marshalling" the value.
+Without getting into detail, a contract may want to make a cross-contract call and "do something" with the return value. Sometimes this return value is an object we're expecting, so we can define a struct with the expected fields to capture the value. In other programming languages this may be referred to as "casting" or "marshaling" the value.
 
 A real-world example of this might be the [Storage Management standard](https://nomicon.io/Standards/StorageManagement.html), as used in a [fungible token](https://github.com/near-examples/FT).
 
