@@ -18,12 +18,11 @@ const config = {
   themeConfig: ({
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     algolia: {
-      appId: "QPBQ67WNIG",
-      apiKey: "b590ae1153bf574215ca1605c19eb1fe",
+      appId: "0LUM67N2P2",
+      apiKey: "129d0f429e1bb0510f0261dda1e88ed4",
       indexName: "near",
+      contextualSearch: true,
       searchParameters: {
-        // search only on near-sdk.io
-        facetFilters: ["tags:sdk"]
       }
     },
     prism: {
