@@ -22,8 +22,9 @@ const config = {
       apiKey: "129d0f429e1bb0510f0261dda1e88ed4",
       indexName: "near",
       contextualSearch: true,
-      searchParameters: {
-      }
+      externalUrlRegex: "near\\.org|near-sdk\\.io",
+      // Optional: Algolia search parameters
+      searchParameters: {},
     },
     prism: {
       additionalLanguages: ['rust'],
