@@ -36,8 +36,8 @@ In this chapter we'll:
 As we implement the list above, we'll learn key concepts about NEAR:
 
 - [Actions](https://nomicon.io/RuntimeSpec/Actions.html)
-- Full and function-call [access keys](https://docs.near.org/docs/concepts/account#access-keys)
-- NEAR's specialized [Collections](https://docs.near.org/docs/concepts/data-storage#rust-collection-types) that are generally preferable to, say, Rust's standard HashMap 
+- Full and function-call [access keys](https://docs.near.org/concepts/basics/account#access-keys)
+- NEAR's specialized [Collections](https://docs.near.org/concepts/storage/data-storage#rust-collection-types) that are generally preferable to, say, Rust's standard HashMap 
 - The flow of logging in to a decentralized app (dApp)
 - more…
 

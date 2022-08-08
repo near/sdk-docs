@@ -28,7 +28,7 @@ You may now run:
 
     near
 
-to see various commands, which are covered [in detail here](https://docs.near.org/docs/tools/near-cli).
+to see various commands, which are covered [in detail here](https://docs.near.org/tools/near-cli).
 
 We'll start by "logging in" with this command:
 

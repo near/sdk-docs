@@ -117,7 +117,7 @@ The [overview section](/zero-to-hero/basics/overview) of this chapter tells us w
 
 Let's have the solution be set once, right after deploying the smart contract.
 
-Here we'll use the [`#[init]` macro](https://docs.rs/near-sdk/latest/near_sdk/attr.init.html) on a function called `new`, which is a common pattern.
+Here we'll use the [`#[near_bindgen]` macro](https://docs.rs/near-sdk/latest/near_sdk/attr.near_bindgen.html) on a function called `new`, which is a common pattern.
 
 ```rust reference
 https://github.com/near-examples/crossword-tutorial-chapter-1/blob/94f42e75cf70ed2aafb9c29a1faa1e21f079a49e/contract/src/lib.rs#L10-L17
@@ -163,7 +163,7 @@ https://github.com/near/core-contracts/blob/1720c0cfee238974ebeae8ad43076abeb951
 We'll get into Actions later in this tutorial, but in the meantime here's a handy [reference from the spec](https://nomicon.io/RuntimeSpec/Actions.html).
 :::
 
-As you can see in the info bubble above, we can batch [Deploy](https://docs.rs/near-sdk/3.1.0/near_sdk/struct.Promise.html#method.deploy_contract) and [FunctionCall](https://docs.rs/near-sdk/3.1.0/near_sdk/struct.Promise.html#method.function_call) Actions. This is exactly what we want to do for our crossword puzzle, and luckily, NEAR CLI has a [flag especially for this](https://docs.near.org/docs/tools/near-cli#near-deploy).
+As you can see in the info bubble above, we can batch [Deploy](https://docs.rs/near-sdk/3.1.0/near_sdk/struct.Promise.html#method.deploy_contract) and [FunctionCall](https://docs.rs/near-sdk/3.1.0/near_sdk/struct.Promise.html#method.function_call) Actions. This is exactly what we want to do for our crossword puzzle, and luckily, NEAR CLI has a [flag especially for this](https://docs.near.org/tools/near-cli#near-deploy).
 
 Let's run this again with the handy `--initFunction` and `--initArgs` flags:
 

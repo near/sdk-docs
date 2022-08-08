@@ -16,9 +16,9 @@ When your contract is executed, the NEAR Runtime reads the serialized state from
 
 How can you avoid such errors?
 
-When you're still in the Research & Development phase, building a prototype and deploying it locally or on [testnet](https://docs.near.org/docs/concepts/networks), you can just delete all previous contract state when you make a breaking change. See below for a couple ways to do this.
+When you're still in the Research & Development phase, building a prototype and deploying it locally or on [testnet](https://docs.near.org/concepts/basics/networks), you can just delete all previous contract state when you make a breaking change. See below for a couple ways to do this.
 
-When you're ready to deploy a more stable contract, there are a couple [production strategies](./production-basics.md) that will help you update contract state without deleting it all. And once your contract graduates from "trusted mode" (when maintainers control a [Full Access key](https://docs.near.org/docs/concepts/account#access-keys)) to community-governed mode (no more Full Access keys), you'll need to know how to upgrade your contract code itself [via a DAO vote](./via-dao-vote.md).
+When you're ready to deploy a more stable contract, there are a couple [production strategies](./production-basics.md) that will help you update contract state without deleting it all. And once your contract graduates from "trusted mode" (when maintainers control a [Full Access key](https://docs.near.org/concepts/basics/account#access-keys)) to community-governed mode (no more Full Access keys), you'll need to know how to upgrade your contract code itself [via a DAO vote](./via-dao-vote.md).
 
 
 ## Rapid Prototyping: Delete Everything All The Time

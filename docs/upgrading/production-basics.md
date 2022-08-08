@@ -173,7 +173,7 @@ For a more complete DAO example, check out [SputnikDAO](https://github.com/near-
 
 Say you want to update the structure of `Proposal` but keep `DAO` unchanged.
 
-The first thing to note is that the contract could be storing a huge number of proposals, which makes it impossible to migrate all of them in one transaction due to [the gas limit](https://docs.near.org/docs/concepts/gas#thinking-in-gas). In an off-chain script, you could query the full state of the contract and update every single one of them via multiple transactions. But that may be prohibitively expensive, so you might opt to upgrade proposals to the new structure during the next interaction with them, rather than all at once (this disperses the upgrade cost to users of the contract).
+The first thing to note is that the contract could be storing a huge number of proposals, which makes it impossible to migrate all of them in one transaction due to [the gas limit](https://docs.near.org/concepts/basics/transactions/gas#thinking-in-gas). In an off-chain script, you could query the full state of the contract and update every single one of them via multiple transactions. But that may be prohibitively expensive, so you might opt to upgrade proposals to the new structure during the next interaction with them, rather than all at once (this disperses the upgrade cost to users of the contract).
 
 In either case, your contract can end up with proposals using the original structure and the new structure at the same time, and the `DAO` struct needs to know how to load both of them. How do you do that?
 

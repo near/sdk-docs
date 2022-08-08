@@ -68,7 +68,7 @@ It's only allowed to perform the `FunctionCall` Action.
 
 ### Example account with keys
 
-Let's look at this testnet account that has one full-access key and two function-call access keys. As you can see, we use the NEAR CLI [command `keys`](https://docs.near.org/docs/tools/near-cli#near-keys) to print this info.
+Let's look at this testnet account that has one full-access key and two function-call access keys. As you can see, we use the NEAR CLI [command `keys`](https://docs.near.org/tools/near-cli#near-keys) to print this info.
 
 <img src={tutorialAccessKeys} alt="Terminal screen showing the access keys for an account, there is one full-access key and two function-call access keys"/>
 
