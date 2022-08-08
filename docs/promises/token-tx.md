@@ -39,7 +39,7 @@ impl Contract {
 
 Most of this is boilerplate you're probably familiar with by now – imports, setting up [`near_bindgen`](../contract-structure/near-bindgen.md), [borsh](../contract-interface/serialization-interface.md), etc. Some interesting details related to the transfer itself:
 
-* `U128` with a capital `U`: The `pay` method defined here accepts JSON as input, and JSON numbers [cannot be larger than 2^53](https://tools.ietf.org/id/draft-ietf-json-rfc4627bis-09.html#rfc.section.6), which is about 9 followed by a mere 15 zeroes. Since the `transfer` method takes a number in [yocto](https://en.wikipedia.org/wiki/Yocto-)NEAR, it's likely to need numbers much larger than 2^53.
+* `U128` with a capital `U`: The `pay` method defined here accepts JSON as input, and numbers in JS [cannot be larger than 2^53-1](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/MAX_SAFE_INTEGER), so for compatibility with deserializing JSON to JS, the integer is serialized as a decimal string. Since the `transfer` method takes a number in [yocto](https://en.wikipedia.org/wiki/Yocto-)NEAR, it's likely to need numbers much larger than 2^53.
 
   When a function takes `U128` as input, it means that callers need to specify the number a a string. near-sdk-rs will then cast it to `U128` type, which wraps Rust's native [`u128`](https://doc.rust-lang.org/std/primitive.u128.html). The underlying `u128` can be retrieved with `.0` – used in `transfer(amount.0)`.
 
