@@ -111,13 +111,9 @@ impl Contract {
 
 Persistent collections such as `UnorderedMap`, `UnorderedSet` and `Vector` may
 contain more elements than the amount of gas available to read them all.
-In order to expose them all through view calls, we can implement pagination.
+In order to expose them all through view calls, we can use pagination.
 
-`Vector` returns elements by index natively using `.get(index)`.
-
-To access elements by index in `UnorderedSet` we can use `.as_vector()` that will return a `Vector` of elements.
-
-For `UnorderedMap` we need to get keys and values as `Vector` collections, using `.keys_as_vector()` and `.values_as_vector()` respectively.
+This can be done using iterators with [`Skip`](https://doc.rust-lang.org/std/iter/struct.Skip.html) and [`Take`](https://doc.rust-lang.org/std/iter/struct.Take.html). This will only load elements from storage within the range.
 
 Example of pagination for `UnorderedMap`:
 
@@ -133,11 +129,11 @@ impl Contract {
     /// Retrieves multiple elements from the `UnorderedMap`.
     /// - `from_index` is the index to start from.
     /// - `limit` is the maximum number of elements to return.
-    pub fn get_updates(&self, from_index: u64, limit: u64) -> Vec<(AccountId, String)> {
-        let keys = self.status_updates.keys_as_vector();
-        let values = self.status_updates.values_as_vector();
-        (from_index..std::cmp::min(from_index + limit, self.status_updates.len()))
-            .map(|index| (keys.get(index).unwrap(), values.get(index).unwrap()))
+    pub fn get_updates(&self, from_index: usize, limit: usize) -> Vec<(AccountId, String)> {
+        self.status_updates
+            .iter()
+            .skip(from_index)
+            .take(limit)
             .collect()
     }
 }
