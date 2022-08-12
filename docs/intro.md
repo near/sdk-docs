@@ -45,6 +45,9 @@ cd my-project
 If you would like to generate a new crate manually with `cargo new --lib <crate-name>`, make sure you include the following configuration in the generated `Cargo.toml`:
 
 ```toml
+[dependencies]
+near-sdk = "4.0.0"
+
 [lib]
 crate-type = ["cdylib"]
 
