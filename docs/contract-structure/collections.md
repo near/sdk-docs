@@ -107,6 +107,79 @@ impl Contract {
 }
 ```
 
+## Error prone patterns
+
+Because the values are not kept in memory and are lazily loaded from storage, it's important to make sure if a collection is replaced or removed, that the storage is cleared. In addition, it is important that if the collection is modified, the collection itself is updated in state because most collections will store some metadata.
+
+Some error-prone patterns to avoid that cannot be restricted at the type level are:
+
+```rust
+use near_sdk::store::UnorderedMap;
+
+let mut m = UnorderedMap::<u8, String>::new(b"m");
+m.insert(1, "test".to_string());
+assert_eq!(m.len(), 1);
+assert_eq!(m.get(&1), Some(&"test".to_string()));
+
+// Bug 1: Should not replace any collections without clearing state, this will reset any
+// metadata, such as the number of elements, leading to bugs. If you replace the collection
+// with something with a different prefix, it will be functional, but you will lose any
+// previous data and the old values will not be removed from storage.
+m = UnorderedMap::new(b"m");
+assert!(m.is_empty());
+assert_eq!(m.get(&1), Some(&"test".to_string()));
+
+// Bug 2: Should not use the same prefix as another collection
+// or there will be unexpected side effects.
+let m2 = UnorderedMap::<u8, String>::new(b"m");
+assert!(m2.is_empty());
+assert_eq!(m2.get(&1), Some(&"test".to_string()));
+
+// Bug 3: forgetting to save the collection in storage. When the collection is attached to
+// the contract state (`self` in `#[near_bindgen]`) this will be done automatically, but if
+// interacting with storage manually or working with nested collections, this is relevant.
+use near_sdk::store::Vector;
+
+// Simulate roughly what happens during a function call that initializes state.
+{
+    let v = Vector::<u8>::new(b"v");
+    near_sdk::env::state_write(&v);
+}
+
+// Simulate what happens during a function call that just modifies the collection
+// but does not store the collection itself.
+{
+    let mut v: Vector<u8> = near_sdk::env::state_read().unwrap();
+    v.push(1);
+    // The bug is here that the collection itself if not written back
+}
+
+let v: Vector<u8> = near_sdk::env::state_read().unwrap();
+// This will report as if the collection is empty, even though the element exists
+assert!(v.get(0).is_none());
+assert!(
+    near_sdk::env::storage_read(&[b"v".as_slice(), &0u32.to_le_bytes()].concat()).is_some()
+);
+
+// Bug 4 (only relevant for `near_sdk::store`): These collections will cache writes as well
+// as reads, and the writes are performed on [`Drop`](https://doc.rust-lang.org/std/ops/trait.Drop.html)
+// so if the collection is kept in static memory, something like `std::mem::forget` is used,
+// the changes will not be persisted.
+use near_sdk::store::LookupSet;
+
+let mut m: LookupSet<u8> = LookupSet::new(b"l");
+m.insert(1);
+assert!(m.contains(&1));
+
+// This would be the fix, manually flushing the intermediate changes to storage.
+// m.flush();
+std::mem::forget(m);
+
+m = LookupSet::new(b"l");
+assert!(!m.contains(&1));
+}
+```
+
 ## Pagination with persistent collections
 
 Persistent collections such as `UnorderedMap`, `UnorderedSet` and `Vector` may
