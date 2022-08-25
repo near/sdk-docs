@@ -122,7 +122,7 @@ near-sdk = "3.1.0"
 crate-type = ["cdylib"]
 ```
 
-When you perform a build, both of the .wasm files for the contracts will be generated to the target/release directory if the builds are successful. The cargo command for performing the build does not change:
+When you perform a build, both of the .wasm files for the contracts will be generated to the target/wasm32-unknown-unknown/release directory if the builds are successful. The cargo command for performing the build does not change:
 
 ```
 cargo build --target wasm32-unknown-unknown --release
