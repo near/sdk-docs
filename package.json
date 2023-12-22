@@ -19,7 +19,7 @@
     "@docusaurus/preset-classic": "^2.0.0-beta.15",
     "@docusaurus/plugin-ideal-image": "^2.0.0-beta.15",
     "@mdx-js/react": "^1.6.21",
-    "@saucelabs/theme-github-codeblock": "^0.1.1",
+    "@saucelabs/theme-github-codeblock": "^0.2.3",
     "clsx": "^1.1.1",
     "gleap": "^7.0.29",
     "hast-util-is-element": "1.1.0",
