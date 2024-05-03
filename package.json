@@ -17,7 +17,7 @@
     "@docusaurus/core": "^2.0.0-beta.15",
     "@docusaurus/plugin-sitemap": "^2.0.0-beta.15",
     "@docusaurus/preset-classic": "^2.0.0-beta.15",
-    "@docusaurus/plugin-ideal-image": "^2.0.0-beta.15",
+    "@docusaurus/plugin-ideal-image": "^2.4.3",
     "@mdx-js/react": "^1.6.21",
     "@saucelabs/theme-github-codeblock": "^0.1.1",
     "clsx": "^1.1.1",
